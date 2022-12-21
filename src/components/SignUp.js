@@ -48,7 +48,6 @@ function SignUp() {
         }
       }
   }, [currentScrollArea, clientHeight]);
-  console.log('contentTStyle',contentTStyle)
   return (
     <Container>
       <Content tStyle={contentTStyle}>

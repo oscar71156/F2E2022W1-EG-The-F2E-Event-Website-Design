@@ -34,7 +34,6 @@ function LayoutProvider({ children }) {
       ({ height, scrollStart }) =>
         scrollTop > scrollStart && scrollTop <= scrollStart + height
     );
-    console.log('currentScrollAreaElement',currentScrollAreaElement)
     if (currentScrollAreaElement) {
       setCurrentScrollArea({
         name: currentScrollAreaElement.name,
@@ -44,7 +43,6 @@ function LayoutProvider({ children }) {
     }
   }, [scrollTopsArray, scrollTop]);
 
-  console.log('scrollTopsArray',scrollTopsArray);
   return (
     <LayoutContext.Provider
       value={{

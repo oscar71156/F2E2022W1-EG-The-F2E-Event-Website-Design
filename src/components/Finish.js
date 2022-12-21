@@ -10,7 +10,6 @@ const Container = styled.div`
   @media screen and (min-width: 1200px) {
     display: block;
     height: 9000px;
-    background: #e6eed6;
     overflow: hidden;
     position: relative;
     /**For on top of Competiton */
