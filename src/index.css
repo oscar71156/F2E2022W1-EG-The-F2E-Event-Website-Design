@@ -1,13 +1,88 @@
+@font-face {
+  font-family: "GenJyuuGothic-P";
+  src: local("GenJyuuGothic-P"),
+    url(./assets/fonts/GenJyuuGothic-P-Bold.ttf) format("truetype");
+}
+html {
+  overflow: hidden;
+}
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: "GenJyuuGothic-P";
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 140%;
+  overflow: hidden;
+  cursor: url(./assets/cursor.png), auto;
+
+  /* minus scrollbar */
+  width: calc(100vw - (100vw - 100%));
+  
+}
+body *{
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+h1,
+h2,
+h3,
+h4,
+h5 {
+  line-height: 140%;
+  font-weight: 700;
+}
+h1,
+h4 {
+  font-size: 20px;
+}
+h2 {
+  font-size: 28px;
+}
+h3 {
+  font-size: 24px;
+}
+h5 {
+  font-size: 18px;
+}
+
+@media screen and (min-width: 1200px) {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    /* line-height: 140%; */
+  }
+  h1,
+  h4 {
+    font-size: 32px;
+  }
+  h2 {
+    font-size: 60px;
+  }
+  h3 {
+    font-size: 44px;
+  }
+  h5 {
+    font-size: 24px;
+  }
+  body {
+    font-size: 18px;
+  }
+}
+
+button {
+  border: none;
+}
+
+:root {
+  --primary-color-default: #007fab;
+  --primary-color-dark: #003a4f;
+  --primary-color-tint: #b0d2de;
+  --secondary-color-default: #ffc37d;
+  --secondary-color-dark: #a46039;
+  --secondary-color-tint: #ffe2a9;
+  --highlight-color-default: #ff5136;
+  --highlight-color-dark: #cd331a;
+  --highlight-color-tint: #ffb5a4;
 }

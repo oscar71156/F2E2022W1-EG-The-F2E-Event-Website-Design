@@ -1,0 +1,110 @@
+import styled from "styled-components";
+import { useContext } from "react";
+import CompetitonContext from "../../contexts/Competiton";
+import iconTrafficLightFrame from "../../assets/ready_frame.png";
+import iconLightGreen from "../../assets/ready_1.png";
+import iconLightOrange from "../../assets/ready_2.png";
+import iconLightRed from "../../assets/ready_3.png";
+const TrafficLightCon = styled.div`
+  position: absolute;
+  height: max-content;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  right: 0;
+  visibility: ${(props) => (props.readyStatus > 3 ? "hidden" : "visible")};
+  display: none;
+  @media screen and (min-width: 1431px) {
+    top: -10%;
+    position: fixed;
+    ${"" /* right: calc(715px - 50vw); */}
+    right:0;
+  }
+  @media screen and (min-width: 1200px) {
+    display: block;
+  }
+`;
+
+const Title = styled.span`
+  display: block;
+  font-size: 13px;
+  line-height: 140%;
+  font-weight: 700;
+  color: var(--highlight-color-default);
+  transform: translateX(29px);
+  letter-spacing: 0.05em;
+  @media screen and (min-width: 1200px) {
+    font-size: 32px;
+  }
+`;
+const TraficLightFrame = styled.div`
+  width: 120px;
+  height: 48px;
+  position: relative;
+  background-image: url(${iconTrafficLightFrame});
+  background-size: contain;
+  background-repeat: no-repeat;
+  @media screen and (min-width: 1200px) {
+    width: 275px;
+    height: 108px;
+  }
+`;
+
+const ImageLight = styled.img`
+  height: 19px;
+  width: 19px;
+  position: absolute;
+  top: 15px;
+  @media screen and (min-width: 1200px) {
+    top: 33px;
+    width: 44px;
+    height: 44px;
+  }
+`;
+
+const ImageLightRed = styled(ImageLight)`
+  left: 16px;
+  opacity: ${(props) =>
+    props.readyStatus === 1 || props.readyStatus === 0 ? 1 : 0};
+  @media screen and (min-width: 1200px) {
+    left: 37px;
+  }
+`;
+const ImageLightOrange = styled(ImageLight)`
+  left: 44px;
+  opacity: ${(props) =>
+    props.readyStatus === 2 || props.readyStatus === 0 ? 1 : 0};
+  @media screen and (min-width: 1200px) {
+    left: 101px;
+  }
+`;
+const ImageLightGreen = styled(ImageLight)`
+  left: 72px;
+  opacity: ${(props) =>
+    props.readyStatus >= 3 || props.readyStatus === 0 ? 1 : 0};
+  @media screen and (min-width: 1200px) {
+    left: 166px;
+  }
+`;
+
+const TrafficLight = ({ runningState = 0 }) => {
+  const getTitle = () => {
+    if (runningState < 3) {
+      return "READY!";
+    } else if (runningState >= 3) {
+      return "GO!!";
+    }
+  };
+  return (
+    <TrafficLightCon readyStatus={runningState} id="trafficLight">
+      <Title>{getTitle()}</Title>
+      <TraficLightFrame>
+        <ImageLightRed src={iconLightRed} readyStatus={runningState} />
+        <ImageLightOrange src={iconLightOrange} readyStatus={runningState} />
+        <ImageLightGreen src={iconLightGreen} readyStatus={runningState} />
+      </TraficLightFrame>
+    </TrafficLightCon>
+  );
+};
+
+export default TrafficLight;
