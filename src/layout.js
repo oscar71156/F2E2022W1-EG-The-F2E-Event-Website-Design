@@ -138,4 +138,12 @@ export const getPreScreenByName = (name) => {
   }
 };
 
+export const getScrollBarWidth=(scrollAreaId)=>{
+  const scrollAreaElement=document.getElementById(scrollAreaId);
+  if(scrollAreaElement){
+    return scrollAreaElement.offsetWidth-scrollAreaElement.clientWidth;
+  }
+  return 17;
+}
+
 export default layout;

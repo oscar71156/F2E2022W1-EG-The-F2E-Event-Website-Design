@@ -14,12 +14,13 @@ const Container = styled.div`
     top: 0;
     /**Three role types animations(3*300) + reserve spave for showing Competiton(600) */
     height: calc(100vh + 1200px);
+
+    /**cut overflow part */
+    clip-path: inset(0 0 0 0);
+    
     > * {
       top: 0;
       position: ${(props) => (props.isChildSticky ? "sticky" : "relative")};
-      transform: translateY(
-        ${(props) => (props.isChildSticky ? 0 : "calc( 100vh + 200px)")}
-      );
     }
   }
 `;
@@ -195,8 +196,8 @@ const Botheryou = () => {
           <ImageComplex src={iconComplex} />
         </QuestionComplex>
       </QuestionsCon>
-      <LBgD9 src={iconBgDecorate9} />
-      <RBgD9 src={iconBgDecorate9} />
+      <LBgD9 src={iconBgDecorate9}/>
+      <RBgD9 src={iconBgDecorate9}/>
     </Container>
   );
 };

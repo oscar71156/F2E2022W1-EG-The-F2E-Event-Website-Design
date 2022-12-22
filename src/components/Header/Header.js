@@ -21,9 +21,6 @@ const HeaderC = styled.div`
   /**normal flow will take up space */
   position: sticky;
   @media screen and (min-width: 1200px) {
-    /**will not take up space */
-    position: fixed;
-
     height: 300px;
   }
 `;

@@ -26,19 +26,10 @@ import Menu from "./components/Menu/Menu";
 import LayoutContext from "./contexts/Layout";
 const ScrollCon = styled.div`
   height: 100vh;
-  width: 100vw;
-  overflow-x: hidden;
-  ${
-    "" /* overflow-y: ${(props) => (props.readyStatus > 4 ? "auto" : "hidden")}; */
-  }
-  ${"" /* overflow-y: hidden; */}
   overflow-y: auto;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  -ms-overflow-style: none; /* IE and Edge */
-  /*scrollbar-width: none;*/
-  /* Firefox */
+
+  /**Make content dont exceed the window*/
+  overflow-x: hidden;
 `;
 
 const AppCon = styled.div`
@@ -50,30 +41,8 @@ const AppCon = styled.div`
 `;
 
 const App = () => {
-  const [questionEnviousMX, setQuestionEnviousMX] = useState(-120);
-  const [questionWishOpacity, setQuestionWishOpacity] = useState(0);
-  const [questionComplexMX, setQuestionComplexMX] = useState(120);
-  const [topicf2eX, setTopicf2eX] = useState(120);
-  const [topicUIX, setTopicUIX] = useState(-120);
-  const [topicTeamX, setTopicTeamX] = useState(120);
-  const [topic1Style, setTopic1Style] = useState({
-    opacity: 1,
-    positionY: 120,
-  });
-  const [topic2Style, setTopic2Style] = useState({
-    opacity: 1,
-    positionY: 120,
-  });
-  const [topic3Style, setTopic3Style] = useState({
-    opacity: 1,
-    positionY: 120,
-  });
-
-  const profileImageRef = useRef(null);
-
   const scrollRef = useRef(null);
 
-  const [currentScrollTop, setCurrentScrollTop] = useState(0);
   const { changeReadyStatus, readyStatus } = useContext(competitionContext);
   const { setClientHeight, setScrollTop } = useContext(LayoutContext);
 
@@ -110,6 +79,7 @@ const App = () => {
 
   return (
     <ScrollCon
+      id="scrollArea"
       ref={scrollRef}
       readyStatus={readyStatus}
       // onWheel={ttGetWheel.bind(null, scrollRef)}
@@ -117,20 +87,13 @@ const App = () => {
         const currentScrollTop = e.target.scrollTop;
         const clientHeight = e.target.clientHeight;
         ttGetScrollPosition(currentScrollTop, clientHeight);
-        // console.log(
-        //   "currentScrollTop",
-        //   currentScrollTop,
-        //   "scrollheight",
-        //   e.target.scrollHeight,
-        //   "clientHeight",
-        //   e.target.clientHeight
-        // );
+        console.log("onScroll");
       }}
     >
       <AppCon>
+        <Header />
         <Competition />
         <Menu />
-        <Header />
 
         <StartScreen />
         <Botheryou />

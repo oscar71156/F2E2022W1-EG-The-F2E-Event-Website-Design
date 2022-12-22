@@ -17,6 +17,7 @@ const Container = styled.div`
   overflow: hidden;
 
   z-index: 0;
+
   @media screen and (min-width: 1200px) {
     height: 1800px;
     display: flex;

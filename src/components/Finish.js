@@ -10,14 +10,16 @@ const Container = styled.div`
   @media screen and (min-width: 1200px) {
     display: block;
     height: 9000px;
-    overflow: hidden;
     position: relative;
     /**For on top of Competiton */
+    overflow: hidden;
     z-index: 0;
+
+    ${'' /* clip-path:inset(0 0 0 0); */}
     &::after {
       content: "";
       visibility: ${(props) => (props.isShowRailing ? "visible" : "hidden")};
-      ${"" /* display:block; */}
+      display: block;
       position: fixed;
       bottom: 0;
 
@@ -229,7 +231,7 @@ function Finish() {
   return (
     <Container isShowRailing={isShowRailing} tStyle={railingTStyle}>
       <ImageBgDecorate1 src={bgDecorate01} tStyle={bg1TStyle} />
-      <ImageBgDecorate5 src={bgDecorate01} tStyle={bg5TStyle} />
+      <ImageBgDecorate5 src={bgDecorate05} tStyle={bg5TStyle} />
     </Container>
   );
 }

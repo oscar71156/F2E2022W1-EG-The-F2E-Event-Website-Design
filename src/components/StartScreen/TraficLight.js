@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useContext } from "react";
-import CompetitonContext from "../../contexts/Competiton";
+import LayoutContext from "../../contexts/Layout";
 import iconTrafficLightFrame from "../../assets/ready_frame.png";
 import iconLightGreen from "../../assets/ready_1.png";
 import iconLightOrange from "../../assets/ready_2.png";
@@ -18,7 +18,7 @@ const TrafficLightCon = styled.div`
     top: -10%;
     position: fixed;
     ${"" /* right: calc(715px - 50vw); */}
-    right:0;
+    right:${props=>props.scrollBarWidth}px;
   }
   @media screen and (min-width: 1200px) {
     display: block;
@@ -88,6 +88,8 @@ const ImageLightGreen = styled(ImageLight)`
 `;
 
 const TrafficLight = ({ runningState = 0 }) => {
+
+  const {scrollBarWidth}=useContext(LayoutContext);
   const getTitle = () => {
     if (runningState < 3) {
       return "READY!";
@@ -96,7 +98,7 @@ const TrafficLight = ({ runningState = 0 }) => {
     }
   };
   return (
-    <TrafficLightCon readyStatus={runningState} id="trafficLight">
+    <TrafficLightCon readyStatus={runningState} id="trafficLight" scrollBarWidth={scrollBarWidth}>
       <Title>{getTitle()}</Title>
       <TraficLightFrame>
         <ImageLightRed src={iconLightRed} readyStatus={runningState} />

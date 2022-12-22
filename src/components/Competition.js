@@ -12,9 +12,7 @@ import iconFinishLineR from "../assets/finishLine_r.png";
 import layout, { getPreScreenByName } from "../layout";
 
 const CompetitionEnvir = styled.div`
-  displpay: block;
-  left: 0;
-  right: 0;
+  right: -50%;
   margin: 0 auto;
   bottom: 0;
   position: fixed;
@@ -25,24 +23,19 @@ const CompetitionEnvir = styled.div`
   transform: ${(props) => "scale( " + props.reducedRatio + " )"};
 
   transform-origin: bottom;
+
   @media screen and (min-width: 1200px) {
     bottom: 0;
     position: sticky;
-    height: 100%;
     max-height: 1080px;
     max-width: 1430px;
-
     width: 100%;
-    height: 100vh;
     height: 600px;
-    ${"" /* background: green; */}
     top: calc(100vh - 600px);
   }
 
   @media screen and (min-width: 1800px) {
     width: 74.48vw;
-  }
-  @media screen and (min-height: 1080px) {
   }
 `;
 
@@ -108,7 +101,7 @@ const ImageCharacterTeam = styled(ImageCharacter)`
   bottom: 0px;
   transform: translateX(120px);
   @media screen and (min-width: 1200px) {
-    height: 47.87%;
+    height: 88%;
     transform: translateX(102%) scale(${(props) => props.tStyle.scale})
       translateY(${(props) => props.tStyle.translateY}px);
     transform-origin: left bottom;
@@ -116,13 +109,12 @@ const ImageCharacterTeam = styled(ImageCharacter)`
     bottom: 20px;
     opacity: ${(props) => props.tStyle.opacity};
   }
-  @media screen and (min-width: 1200px) {
-    height: 88%;
-  }
 `;
 
 const FinishLine = styled.div`
+  display: none;
   @media screen and (min-width: 1200px) {
+    display:block;
     visibility: ${(props) => (props.isShow ? "visible" : "hidden")};
     position: fixed;
     width: 100%;
@@ -177,7 +169,7 @@ const Competition = () => {
   const { clientHeight, scrollTop, currentScrollArea } =
     useContext(LayoutContext);
 
-  const [isShowCharacter, setIsShowCharacter] = useState(true);
+  const [isVisibleCharacter, setIsVisibleCharacter] = useState(true);
   const [cF2eTStyle, setCF2eTStyle] = useState({
     scale: 1,
     translateY: 0,
@@ -209,12 +201,6 @@ const Competition = () => {
   useEffect(() => {
     let lastCompetitionP = 1;
     let currenttCompetitionP = 1;
-    console.log(
-      "currenttCompetitionP currentScrollArea",
-      currentScrollArea,
-      "scrollTop",
-      scrollTop
-    );
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
 
@@ -276,7 +262,7 @@ const Competition = () => {
           rTanslateXOffset: 0 + (50 * (scrollAreaOffset - 2000)) / 2000,
           rTranslateY: 0 + (100 * (scrollAreaOffset - 2000)) / 2000,
           rRotate: 0 + (5 * (scrollAreaOffset - 2000)) / 2000,
-          opacity:1,
+          opacity: 1,
         };
       } else if (scrollAreaOffset > 4000 && scrollAreaOffset <= 6000) {
         newAddedCharTStyle = {
@@ -298,11 +284,16 @@ const Competition = () => {
         newAddedCharTStyle = {
           scale: 1.5 + (1 * (scrollAreaOffset - 6000)) / 2000,
           opacity: 1 - (1 * (scrollAreaOffset - 6000)) / 2000,
-          // translateY: 100 + (800 * (scrollAreaOffset - 6000)) / 2000,
+          translateY: 100, //scroll up will stay the same position
         };
-        setIsShowCharacter(true);
+        setIsVisibleCharacter(true);
       } else if (scrollAreaName === "finish" && scrollAreaOffset > 8000) {
-        setIsShowCharacter(false);
+        //For prevent character overflow in the end
+        newAddedCharTStyle = {
+          scale: 1,
+          translateY: 0, //prevent overflow
+        };
+        setIsVisibleCharacter(false);
       }
     } else {
       setIsShowFinishLine(false);
@@ -323,17 +314,17 @@ const Competition = () => {
       <ImageCharacterf2e
         src={iconCharacterf2e}
         tStyle={cF2eTStyle}
-        isShow={isShowCharacter}
+        isShow={isVisibleCharacter}
       />
       <ImageCharacterUI
         src={iconCharacterUI}
         tStyle={cUITStyle}
-        isShow={isShowCharacter}
+        isShow={isVisibleCharacter}
       />
       <ImageCharacterTeam
         src={iconCharacterTeam}
         tStyle={cTeamTStyle}
-        isShow={isShowCharacter}
+        isShow={isVisibleCharacter}
       />
       <ImageRoad src={iconRoad} />
       <FinishLine isShow={isShowFinishLine} tStyle={finishLineTStyle} />
