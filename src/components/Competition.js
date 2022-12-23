@@ -25,7 +25,6 @@ const CompetitionEnvir = styled.div`
   transform-origin: bottom;
 
   @media screen and (min-width: 1200px) {
-    bottom: 0;
     position: sticky;
     max-height: 1080px;
     max-width: 1430px;
@@ -114,11 +113,11 @@ const ImageCharacterTeam = styled(ImageCharacter)`
 const FinishLine = styled.div`
   display: none;
   @media screen and (min-width: 1200px) {
-    display:block;
-    visibility: ${(props) => (props.isShow ? "visible" : "hidden")};
+    display: ${(props) => (props.isShow ? "block" : "none")};
     position: fixed;
+    bottom: 20%;
+    height: 200px;
     width: 100%;
-    bottom: 60%;
 
     /**For on top of finish.png */
     z-index: 1;
@@ -195,7 +194,7 @@ const Competition = () => {
     opacity: 1,
   });
 
-  const [isShowFinishLine, setIsShowFinishLine] = useState(false);
+  const [isRenderFL, setIsRenderFL] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -224,7 +223,6 @@ const Competition = () => {
       (scrollAreaName === "finish" && scrollAreaOffset >= 2000)
     ) {
       setReducedRatio(1);
-      setIsShowFinishLine(true);
     } else {
       setReducedRatio(scaleNumber);
     }
@@ -233,10 +231,11 @@ const Competition = () => {
     let newAddedFLTStyle = {};
     if (scrollAreaName === "finish") {
       if (scrollAreaOffset <= 400) {
-        setIsShowFinishLine(false);
+        setIsRenderFL(false);
       }
 
       if (scrollAreaOffset <= 2000) {
+        setIsRenderFL(true);
         newAddedCharTStyle = {
           scale: 1,
           translateY: 0,
@@ -265,6 +264,8 @@ const Competition = () => {
           opacity: 1,
         };
       } else if (scrollAreaOffset > 4000 && scrollAreaOffset <= 6000) {
+        setIsRenderFL(true);
+
         newAddedCharTStyle = {
           scale: 1.3 + (0.2 * (scrollAreaOffset - 4000)) / 2000,
           opacity: 1,
@@ -287,6 +288,7 @@ const Competition = () => {
           translateY: 100, //scroll up will stay the same position
         };
         setIsVisibleCharacter(true);
+        setIsRenderFL(false);
       } else if (scrollAreaName === "finish" && scrollAreaOffset > 8000) {
         //For prevent character overflow in the end
         newAddedCharTStyle = {
@@ -296,7 +298,6 @@ const Competition = () => {
         setIsVisibleCharacter(false);
       }
     } else {
-      setIsShowFinishLine(false);
     }
 
     setCF2eTStyle((pre) => ({ ...pre, ...newAddedCharTStyle }));
@@ -327,7 +328,7 @@ const Competition = () => {
         isShow={isVisibleCharacter}
       />
       <ImageRoad src={iconRoad} />
-      <FinishLine isShow={isShowFinishLine} tStyle={finishLineTStyle} />
+      <FinishLine isShow={isRenderFL} tStyle={finishLineTStyle} />
     </CompetitionEnvir>
   );
 };

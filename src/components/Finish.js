@@ -15,7 +15,7 @@ const Container = styled.div`
     overflow: hidden;
     z-index: 0;
 
-    ${'' /* clip-path:inset(0 0 0 0); */}
+    clip-path:inset(0 0 0 0);
     &::after {
       content: "";
       visibility: ${(props) => (props.isShowRailing ? "visible" : "hidden")};
