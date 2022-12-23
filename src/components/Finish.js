@@ -15,7 +15,11 @@ const Container = styled.div`
     overflow: hidden;
     z-index: 0;
 
-    clip-path:inset(0 0 0 0);
+    /**
+      For overflow,
+      Cloud will not be clipped when scrolling up, and others will be clipped
+     */
+    clip-path: inset(-500px 0 0 0);
     &::after {
       content: "";
       visibility: ${(props) => (props.isShowRailing ? "visible" : "hidden")};
