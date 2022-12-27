@@ -1,3 +1,15 @@
+/**
+ * currentPositoin:
+ * startScreen: 2px, 52px
+ * botherYou: 44px,1px
+ * thisYearTopic: 114px, 12px
+ * comingTopic: 194px, 12px
+ * scheduleDate: 183px, 62px
+ * dissatisfactory, rules: 129px, 87px
+ * sponsors: 84px, 122px
+ * finish: 29px, 107px
+ */
+
 const layout = {
   competition: {
     height: {
@@ -7,6 +19,10 @@ const layout = {
     },
     order: 0,
     realContentH: 480,
+    mapPosition: {
+      x: 2,
+      y: 52,
+    },
   },
   startScreen: {
     height: {
@@ -15,46 +31,82 @@ const layout = {
     },
     order: 1,
     realContentH: 480,
+    mapPosition: {
+      x: 2,
+      y: 52,
+    },
   },
   botherYou: {
     height: { number: 1200, vh: 1 },
     order: 2,
     realContentH: 690,
+    mapPosition: {
+      x: 44,
+      y: 1,
+    },
   },
   thisYearTopic: {
     height: { number: 900, vh: 1 },
     order: 3,
     realContentH: 520,
+    mapPosition: {
+      x: 114,
+      y: 12,
+    },
   },
   comingTopic: {
     height: { number: 1040, vh: 1 },
     order: 4,
     realContentH: 850,
+    mapPosition: {
+      x: 194,
+      y: 12,
+    },
   },
   scheduleDate: {
     height: { number: 2500, vh: 2 },
     order: 5,
     realContentH: 570,
+    mapPosition: {
+      x: 183,
+      y: 62,
+    },
   },
   dissatisfactory: {
     height: { number: 2400, vh: 1 },
     order: 6,
     realContentH: 520,
+    mapPosition: {
+      x: 129,
+      y: 87,
+    },
   },
   rules: {
     height: { number: 0, vh: 3 },
     order: 7,
     realContentH: 650,
+    mapPosition: {
+      x: 129,
+      y: 87,
+    },
   },
   sponsors: {
     height: { number: 1000, vh: 1 },
     order: 8,
     realContentH: 630,
+    mapPosition: {
+      x: 84,
+      y: 122,
+    },
   },
   finish: {
     height: { number: 9000, vh: 0 },
     order: 9,
     realContentH: 480,
+    mapPosition: {
+      x: 29,
+      y: 107,
+    },
   },
   signUp: {
     height: { number: 1000, vh: 1 },
@@ -138,12 +190,12 @@ export const getPreScreenByName = (name) => {
   }
 };
 
-export const getScrollBarWidth=(scrollAreaId)=>{
-  const scrollAreaElement=document.getElementById(scrollAreaId);
-  if(scrollAreaElement){
-    return scrollAreaElement.offsetWidth-scrollAreaElement.clientWidth;
+export const getScrollBarWidth = (scrollAreaId) => {
+  const scrollAreaElement = document.getElementById(scrollAreaId);
+  if (scrollAreaElement) {
+    return scrollAreaElement.offsetWidth - scrollAreaElement.clientWidth;
   }
   return 17;
-}
+};
 
 export default layout;

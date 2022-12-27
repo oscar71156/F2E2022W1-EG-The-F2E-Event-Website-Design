@@ -23,6 +23,7 @@ import Finish from "./components/Finish";
 import SignUp from "./components/SignUp";
 import StartScreen from "./components/StartScreen/StartScreen";
 import Menu from "./components/Menu/Menu";
+import Map from './components/Map';
 import LayoutContext from "./contexts/Layout";
 const ScrollCon = styled.div`
   height: 100vh;
@@ -95,6 +96,7 @@ const App = () => {
         <Competition />
         <Menu />
 
+        <Map/>
         <StartScreen />
         <Botheryou />
         <ThisYearTopic />

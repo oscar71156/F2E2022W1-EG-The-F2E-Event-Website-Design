@@ -27,6 +27,7 @@ import { ReactComponent as LogoBlockStudio } from "./logoBlockStudio.svg";
 import { ReactComponent as LogoKDANMobile } from "./logoKDANMobile.svg";
 import { ReactComponent as LogoTitanSoft } from "./logoTitanSoft.svg";
 import { ReactComponent as BTNMenuInfo } from "./btnMenuInfo.svg";
+import { ReactComponent as RaceMap } from "./map.svg";
 const icons = {
   Title,
   Profile,
@@ -56,6 +57,7 @@ const icons = {
   LogoTitanSoft,
   LogoBlockStudio,
   LogoKDANMobile,
-  BTNMenuInfo
+  BTNMenuInfo,
+  RaceMap
 };
 export default icons;
