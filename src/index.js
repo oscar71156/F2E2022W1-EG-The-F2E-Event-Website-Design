@@ -3,15 +3,12 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { CompetitionStore } from "./contexts/Competiton";
 import { LayoutProvider } from "./contexts/Layout";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <LayoutProvider>
-      <CompetitionStore>
-        <App />
-      </CompetitionStore>
+      <App />
     </LayoutProvider>
   </React.StrictMode>
 );

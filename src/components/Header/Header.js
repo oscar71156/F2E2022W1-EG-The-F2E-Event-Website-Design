@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
-import CompetitionContext from "../../contexts/Competiton";
 import LayoutContext from "../../contexts/Layout";
 import Menu from "../Menu/Menu";
 import Profile from "./Profile/Profile";
@@ -18,16 +17,16 @@ const HeaderC = styled.div`
   flex-direction: row;
   /*under Competition(2) and on top of content(0)*/
   z-index: 1;
-  /**normal flow will take up space */
-  position: sticky;
+  position: fixed;
   @media screen and (min-width: 1200px) {
     height: 300px;
+    /**For scrollable, normal flow will take up space */
+    position: sticky;
   }
 `;
 
 const Title = styled.div`
   display: inline-block;
-  visibility: ${(props) => (props.isReadyToRun ? "hidden" : "visible")};
   @media screen and (min-width: 1200px) {
     display: none;
   }
@@ -63,19 +62,12 @@ const ImageBigLogo = styled.img`
     width: 200px;
     height: auto;
     display: block;
-    ${
-      "" /* visibility: ${(props) => (props.isReadyToRun ? "visible" : "hidden")}; */
-    }
     visibility: visible;
     opacity: ${(props) => props.tStyle.opacity};
   }
 `;
 
 const Header = () => {
-  const { readyStatus } = useContext(CompetitionContext);
-
-  const isReadyToRun = readyStatus > 4;
-
   const [bigLogoTStyle, setBigLogoTStyle] = useState({ opacity: 1 });
   const { clientHeight, currentScrollArea } = useContext(LayoutContext);
   useEffect(() => {
@@ -101,7 +93,7 @@ const Header = () => {
   return (
     <HeaderC>
       <ImageBigLogo src={iconLogo} tStyle={bigLogoTStyle} />
-      <Title isReadyToRun={isReadyToRun}>
+      <Title>
         <TitleImage src={iconLogoText} />
         {/* <LogoTextL /> */}
       </Title>
