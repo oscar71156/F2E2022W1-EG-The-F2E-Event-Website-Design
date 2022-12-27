@@ -115,35 +115,7 @@ const layout = {
   },
 };
 
-export const getPreScreenHeightByName = (name, clientHeight = 0) => {
-  let currentScreen = layout[name];
-  if (currentScreen) {
-    const currentOrder = currentScreen.order;
-    return Object.values(layout)
-      .filter(({ order }) => order < currentOrder)
-      .reduce((acc, { number, vh }) => acc + number + clientHeight * vh);
-  }
-  return 0;
-};
 
-export const getScreenHeightByName = (name, clientHeight = 0) => {
-  let currentScreen = layout[name];
-  if (currentScreen) {
-    let { number, vh } = currentScreen.height;
-    return number + clientHeight * vh;
-  }
-  return 0;
-};
-
-export const getScreenHeights = (clientHeight = 0) => {
-  return Object.entries(layout).reduce(
-    (acc, [name, { height }]) => ({
-      ...acc,
-      [name]: height.number + height.vh * clientHeight,
-    }),
-    {}
-  );
-};
 
 export const getScreenTopsArray = (clientHeight = 0) => {
   let accHeight = -clientHeight;

@@ -1,5 +1,5 @@
 import { createContext, useEffect, useLayoutEffect, useState } from "react";
-import { getScreenHeights, getScreenTopsArray,getScrollBarWidth } from "../layout";
+import { getScreenTopsArray,getScrollBarWidth } from "../layout";
 
 const LayoutContext = createContext({});
 
@@ -31,6 +31,7 @@ function LayoutProvider({ children }) {
     setScrollTopsArray(getScreenTopsArray(clientHeight));
   }, [clientHeight]);
 
+  console.log('scrollTopsArray',scrollTopsArray,'scrollTop',scrollTop)
   useEffect(() => {
     const currentScrollAreaElement = scrollTopsArray.find(
       ({ height, scrollStart }) =>

@@ -40,12 +40,10 @@ const ImageCurrentPosition = styled.img`
 function Map() {
   const { currentScrollArea } = useContext(LayoutContext);
   const [currentPosition, setCurrentPosition] = useState({ x: 0, y: 0 });
-  console.log('currentPosition',currentPosition)
   useEffect(() => {
     const { name: scrollAreaName } = currentScrollArea;
     if(layout[scrollAreaName]){
       const {mapPosition}=layout[scrollAreaName];
-      console.log('mapPosition',mapPosition)
       setCurrentPosition((pre)=>({...pre,...mapPosition}));
     }
   }, [currentScrollArea]);
