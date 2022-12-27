@@ -1,17 +1,16 @@
 import { createContext, useEffect, useLayoutEffect, useState } from "react";
-import { getScreenTopsArray,getScrollBarWidth } from "../layout";
+import { getScreenTopsArray, getScrollBarWidth } from "../layout";
 
 const LayoutContext = createContext({});
 
 function LayoutProvider({ children }) {
-  const [clientHeight, setClientHeight] = useState(0);
+  const [clientHeight, setClientHeight] = useState(null);
   const [scrollTop, setScrollTop] = useState(0);
   const [currentScrollArea, setCurrentScrollArea] = useState({
     name: "competition",
     offset: 0,
   });
-  const [scrollBarWidth,setScrollBarWidth]=useState(0);
-
+  const [scrollBarWidth, setScrollBarWidth] = useState(0);
 
   const [scrollTopsArray, setScrollTopsArray] = useState([]);
 
@@ -22,7 +21,7 @@ function LayoutProvider({ children }) {
   useLayoutEffect(() => {
     setClientHeight(window.innerHeight);
     window.addEventListener("resize", handleSizeChange);
-    setScrollBarWidth(getScrollBarWidth('scrollArea'));
+    setScrollBarWidth(getScrollBarWidth("scrollArea"));
     return () => {
       window.removeEventListener("resize", handleSizeChange);
     };
@@ -31,7 +30,6 @@ function LayoutProvider({ children }) {
     setScrollTopsArray(getScreenTopsArray(clientHeight));
   }, [clientHeight]);
 
-  console.log('scrollTopsArray',scrollTopsArray,'scrollTop',scrollTop)
   useEffect(() => {
     const currentScrollAreaElement = scrollTopsArray.find(
       ({ height, scrollStart }) =>
@@ -54,7 +52,7 @@ function LayoutProvider({ children }) {
         scrollTop,
         setScrollTop,
         currentScrollArea,
-        scrollBarWidth
+        scrollBarWidth,
       }}
     >
       {children}
