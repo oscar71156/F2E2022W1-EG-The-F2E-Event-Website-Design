@@ -47,7 +47,9 @@ const Profile = () => {
       onMouseDown={() => (profileImageRef.current.src = iconBTNUserP)}
       onMouseUp={() => (profileImageRef.current.src = iconBTNUserH)}
     >
-      <Image ref={profileImageRef} src={iconBTNUser} />
+      <a href="https://2022.thef2e.com/users" target="_blank" rel="noreferrer">
+        <Image ref={profileImageRef} src={iconBTNUser} />
+      </a>
     </Button>
   );
 };
