@@ -30,6 +30,7 @@ const CompetitionEnvir = styled.div`
     max-width: 1430px;
     width: 100%;
     height: 600px;
+    bottom: initial;
     top: calc(100vh - 600px);
   }
 
@@ -209,6 +210,12 @@ const Competition = () => {
         getPreScreenByName(scrollAreaName);
       lastCompetitionP = (clientHeight - preRealContentH) / 600;
       currenttCompetitionP = (clientHeight - realContentH) / 600;
+      if (
+        scrollAreaName === "initialScreen" ||
+        scrollAreaName === "startScreen"
+      ) {
+        lastCompetitionP = 1;
+      }
     }
 
     const maxScrollAreaOffset =
@@ -218,10 +225,7 @@ const Competition = () => {
       ((currenttCompetitionP - lastCompetitionP) * maxScrollAreaOffset) /
         clientHeight;
 
-    if (
-      scrollTop < 10 ||
-      (scrollAreaName === "finish" && scrollAreaOffset >= 2000)
-    ) {
+    if (scrollAreaName === "finish" && scrollAreaOffset >= 2000) {
       setReducedRatio(1);
     } else {
       setReducedRatio(scaleNumber);
@@ -308,7 +312,7 @@ const Competition = () => {
       ...pre,
       ...newAddedFLTStyle,
     }));
-  }, [scrollTop]);
+  }, [scrollTop, clientHeight]);
 
   return (
     <CompetitionEnvir ref={ref} id="test" reducedRatio={reducedRatio}>

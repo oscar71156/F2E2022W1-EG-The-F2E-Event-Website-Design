@@ -10,19 +10,14 @@
  * finish: 29px, 107px
  */
 
+//Header+EmptySlot+Competition=100vh(initialScreen)
 const layout = {
-  competition: {
+  initialScreen: {
     height: {
-      vh: 0,
-      number: 600,
-      max: 600,
+      vh: 1,
     },
     order: 0,
     realContentH: 480,
-    mapPosition: {
-      x: 2,
-      y: 52,
-    },
   },
   startScreen: {
     height: {
@@ -115,14 +110,15 @@ const layout = {
   },
 };
 
-
-
 export const getScreenTopsArray = (clientHeight = 0) => {
   let accHeight = -clientHeight;
   return Object.entries(layout)
     .sort(({ order: orderA }, { order: orderB }) => orderA - orderB)
     .reduce((acc, [name, { height, order }]) => {
-      let screenHeight = height.number + height.vh * clientHeight;
+      let { vh, number } = height;
+      number = typeof number === "number" ? number : 0;
+      vh = typeof vh === "number" ? vh : 0;
+      let screenHeight = number + vh * clientHeight;
       let preAccHeight = accHeight;
 
       screenHeight = screenHeight > height.max ? height.max : screenHeight;
@@ -142,11 +138,12 @@ export const getPreScreenByName = (name) => {
     ({ name: keyName }) => keyName === name
   );
   if (currentScreen) {
-    const { order: currentScreenOrder, name: currentScreenName } =
-      currentScreen;
+    const { order: currentScreenOrder } = currentScreen;
 
     ///order less than 1 have no preScreen
-    if (currentScreenOrder < 1) {
+    if (currentScreenOrder <= 1) {
+      //Competition or Header
+      //no realContentH=>Competition has fixed original height 600px
       return {};
     }
     const preScreens = layoutOrderMappingArray.filter(

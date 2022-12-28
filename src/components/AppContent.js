@@ -32,6 +32,17 @@ const Container = styled.div`
   width: 100%;
 `;
 
+const EmptySlot = styled.div`
+  height: calc(100vh - 900px);
+  position: sticky;
+  top: calc(100vh - 300px);
+  ${'' /* width:10px; */}
+  right:0;
+`;
+
+/***
+ * Header+EmptySlot+Competition=100vh(initialScreen)
+ */
 const AppContent = () => {
   const scrollRef = useRef(null);
 
@@ -82,7 +93,9 @@ const AppContent = () => {
     >
       <Container>
         <Header />
+        <EmptySlot/>
         <Competition />
+
         <Menu />
         <Map />
         <StartScreen />

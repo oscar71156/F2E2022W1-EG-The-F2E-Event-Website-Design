@@ -169,7 +169,9 @@ function StartScreen() {
   useEffect(() => {
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
-    if (scrollAreaName === "startScreen") {
+    if (scrollAreaName === "initialScreen") {
+      setRunningState(0);
+    } else if (scrollAreaName === "startScreen") {
       setRunningState(Math.floor(scrollAreaOffset / 300));
     } else {
       setRunningState(5);

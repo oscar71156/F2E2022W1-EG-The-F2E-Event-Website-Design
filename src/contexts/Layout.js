@@ -7,7 +7,7 @@ function LayoutProvider({ children }) {
   const [clientHeight, setClientHeight] = useState(null);
   const [scrollTop, setScrollTop] = useState(0);
   const [currentScrollArea, setCurrentScrollArea] = useState({
-    name: "competition",
+    name: "initialScreen",
     offset: 0,
   });
   const [scrollBarWidth, setScrollBarWidth] = useState(0);
@@ -17,7 +17,6 @@ function LayoutProvider({ children }) {
   const handleSizeChange = () => {
     setClientHeight(window.innerHeight);
   };
-
   useLayoutEffect(() => {
     setClientHeight(window.innerHeight);
     window.addEventListener("resize", handleSizeChange);
