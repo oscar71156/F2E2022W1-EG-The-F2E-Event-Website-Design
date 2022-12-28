@@ -44,8 +44,8 @@ const SponsorIconBTN = styled.button`
   margin: 0;
   :hover {
     background-image: url(${iconBTNSponsorH});
-    > svg {
-      transform: translate(0);
+    img {
+      transform: translate(2px, 2px);
     }
   }
 `;
@@ -183,9 +183,9 @@ const Sponsors = () => {
   });
 
   /**
-   * 
+   *
    * like running through tree
-   * 
+   *
    * ovh
    *      title not show
    *      content not show
@@ -325,19 +325,25 @@ const Sponsors = () => {
       <Content isSticky={isSticky}>
         <SponsorBS isShow={isShowContent}>
           <SponsorIconBTN>
-            <ImageLogoBS src={iconLogoBS} />
+            <a href="https://kdanmobile.teamdoor.io/" target="_blank" rel="noopener noreferrer">
+              <ImageLogoBS src={iconLogoBS} />
+            </a>
           </SponsorIconBTN>
           <SponsorTitle>#版塊設計</SponsorTitle>
         </SponsorBS>
         <SponsorTS isShow={isShowContent}>
           <SponsorIconBTN>
-            <ImageLogoKDAN src={iconLogoKDAN} />
+            <a href="https://www.titansoft.com/tw/" target="_blank" rel="noopener noreferrer">
+              <ImageLogoKDAN src={iconLogoKDAN} />
+            </a>
           </SponsorIconBTN>
           <SponsorTitle>#鈦坦科技</SponsorTitle>
         </SponsorTS>
         <SponsorKM isShow={isShowContent}>
           <SponsorIconBTN>
-            <ImageLogoTitan src={iconLogoTS} />
+            <a href="https://blockstudio.tw/career/" target="_blank" rel="noopener noreferrer">
+              <ImageLogoTitan src={iconLogoTS} />
+            </a>
           </SponsorIconBTN>
           <SponsorTitle>#凱鈿科技</SponsorTitle>
         </SponsorKM>
