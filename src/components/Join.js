@@ -19,11 +19,13 @@ const ScheduleGIFImage = styled.img`
   visibility: ${(props) => (props.isShowHand ? "visible" : "hidden")};
 `;
 
-const JoinButton = ({ isShowHand = false }) => {
+const JoinButton = ({ isShowHand = false,className }) => {
   return (
-    <JoinButtonCon>
+    <JoinButtonCon className={className}>
       <ScheduleGIFImage src={iconJoinHand} isShowHand={isShowHand} />
-      <IconBTNJoin />
+      <a href="https://2022.thef2e.com/signup" target="_blank" rel="noreferrer">
+        <IconBTNJoin />
+      </a>
     </JoinButtonCon>
   );
 };

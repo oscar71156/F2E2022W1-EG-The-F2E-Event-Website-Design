@@ -15,6 +15,7 @@ import SignUp from "../components/SignUp";
 import StartScreen from "../components/StartScreen/StartScreen";
 import Menu from "../components/Menu/Menu";
 import Map from "../components/Map";
+import JoinButton from "./Join";
 import LayoutContext from "../contexts/Layout";
 const ScrollContainer = styled.div`
   height: 100vh;
@@ -36,8 +37,20 @@ const EmptySlot = styled.div`
   height: calc(100vh - 900px);
   position: sticky;
   top: calc(100vh - 300px);
-  ${'' /* width:10px; */}
+  ${"" /* width:10px; */}
   right:0;
+  z-index:-1;
+`;
+
+const FixedJoinBTN = styled(JoinButton)`
+display:none;
+  @media screen and (min-width: 1200px) {
+    position: fixed;
+    display:flex;
+    width:min-content;
+    right:40px;
+    bottom:40px;
+  }
 `;
 
 /***
@@ -93,9 +106,9 @@ const AppContent = () => {
     >
       <Container>
         <Header />
-        <EmptySlot/>
+        <EmptySlot />
         <Competition />
-
+        <FixedJoinBTN isShowHand/>
         <Menu />
         <Map />
         <StartScreen />
