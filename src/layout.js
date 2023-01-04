@@ -167,4 +167,12 @@ export const getScrollBarWidth = (scrollAreaId) => {
   return 17;
 };
 
+export const getScreenAreaWidth = (scrollAreaId) => {
+  const scrollAreaElement = document.getElementById(scrollAreaId);
+  if (scrollAreaElement) {
+    return scrollAreaElement.offsetWidth - scrollAreaElement.clientWidth;
+  }
+  return 400;
+};
+
 export default layout;

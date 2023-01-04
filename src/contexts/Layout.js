@@ -4,7 +4,17 @@ import { getScreenTopsArray, getScrollBarWidth } from "../layout";
 const LayoutContext = createContext({});
 
 function LayoutProvider({ children }) {
+  /**
+   * window.innerHeight
+   * including scrollbar height, padding
+   */
   const [clientHeight, setClientHeight] = useState(null);
+  /**
+   * window.innerWidth
+   * including scrollbar width, padding
+   */
+  const [screenWidth, setScreenWidth] = useState(null);
+
   const [scrollTop, setScrollTop] = useState(0);
   const [currentScrollArea, setCurrentScrollArea] = useState({
     name: "initialScreen",
@@ -16,9 +26,11 @@ function LayoutProvider({ children }) {
 
   const handleSizeChange = () => {
     setClientHeight(window.innerHeight);
+    setScreenWidth(window.innerWidth);
   };
   useLayoutEffect(() => {
     setClientHeight(window.innerHeight);
+    setScreenWidth(window.innerWidth);
     window.addEventListener("resize", handleSizeChange);
     setScrollBarWidth(getScrollBarWidth("scrollArea"));
     return () => {
@@ -43,6 +55,7 @@ function LayoutProvider({ children }) {
     }
   }, [scrollTopsArray, scrollTop]);
 
+  console.log("scrollTopsArray", scrollTopsArray);
   return (
     <LayoutContext.Provider
       value={{
@@ -52,6 +65,7 @@ function LayoutProvider({ children }) {
         setScrollTop,
         currentScrollArea,
         scrollBarWidth,
+        screenWidth,
       }}
     >
       {children}

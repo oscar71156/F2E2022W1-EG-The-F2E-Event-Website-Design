@@ -10,13 +10,13 @@ const TrafficLightCon = styled.div`
   height: max-content;
   margin: auto 0;
   right: 0;
-  visibility: ${(props) => (props.readyStatus > 3 ? "hidden" : "visible")};
   bottom: 200px;
   @media screen and (min-width: 1431px) {
     top: 0;
     bottom: 0;
     top: -10%;
     position: fixed;
+    visibility: ${(props) => (props.readyStatus > 3 ? "hidden" : "visible")};
     right: ${(props) => props.scrollBarWidth}px;
   }
   @media screen and (min-width: 1200px) {
@@ -63,26 +63,27 @@ const ImageLight = styled.img`
 
 const ImageLightRed = styled(ImageLight)`
   left: 16px;
-  opacity: ${(props) =>
-    props.readyStatus === 1 || props.readyStatus === 0 ? 1 : 0};
+
   @media screen and (min-width: 1200px) {
     left: 37px;
+    opacity: ${(props) =>
+      props.readyStatus === 1 || props.readyStatus === 0 ? 1 : 0};
   }
 `;
 const ImageLightOrange = styled(ImageLight)`
   left: 44px;
-  opacity: ${(props) =>
-    props.readyStatus === 2 || props.readyStatus === 0 ? 1 : 0};
   @media screen and (min-width: 1200px) {
     left: 101px;
+    opacity: ${(props) =>
+      props.readyStatus === 2 || props.readyStatus === 0 ? 1 : 0};
   }
 `;
 const ImageLightGreen = styled(ImageLight)`
   left: 72px;
-  opacity: ${(props) =>
-    props.readyStatus >= 3 || props.readyStatus === 0 ? 1 : 0};
   @media screen and (min-width: 1200px) {
     left: 166px;
+    opacity: ${(props) =>
+      props.readyStatus >= 3 || props.readyStatus === 0 ? 1 : 0};
   }
 `;
 
