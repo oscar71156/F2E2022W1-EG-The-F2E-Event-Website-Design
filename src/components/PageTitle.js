@@ -1,6 +1,13 @@
 import styled from "styled-components";
 import iconTalking from "../assets/bg_talking.png";
 const Container = styled.div`
+  /**make margin top valid,  block will  Collapsing margins*/
+  display: inline-block;
+  color: var(--primary-color-default);
+  width: 100%;
+  position: relative;
+  margin: 40px auto;
+  z-index: 0;
   @media screen and (min-width: 1200px) {
     opacity: ${(props) => (props.isShow ? 1 : 0)};
     transition: opacity 1s;
@@ -12,13 +19,9 @@ const Container = styled.div`
   }
 `;
 const Title = styled.h2`
-  /**make margin top valid,  block will  Collapsing margins*/
-  display: inline-block;
-  color: var(--primary-color-default);
-  width: ${(props) => props.width + "px"};
-  position: relative;
-  margin: 40px auto;
-  z-index: 0;
+  margin: 0 auto;
+  text-align:center;
+  padding:5px 0 15px;
   &::before {
     content: "";
     display: block;
@@ -39,6 +42,7 @@ const Title = styled.h2`
   @media screen and (min-width: 1200px) {
     width: ${(props) => (props.titleLength + 4) * 60 + "px"};
     margin-top: 40px;
+    padding:0;
   }
 `;
 
