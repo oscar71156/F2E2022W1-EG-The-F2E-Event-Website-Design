@@ -8,17 +8,16 @@ import iconLightRed from "../../assets/ready_3.png";
 const TrafficLightCon = styled.div`
   position: absolute;
   height: max-content;
-  top: 0;
-  bottom: 0;
   margin: auto 0;
   right: 0;
   visibility: ${(props) => (props.readyStatus > 3 ? "hidden" : "visible")};
-  display: none;
+  bottom: 200px;
   @media screen and (min-width: 1431px) {
+    top: 0;
+    bottom: 0;
     top: -10%;
     position: fixed;
-    ${"" /* right: calc(715px - 50vw); */}
-    right:${props=>props.scrollBarWidth}px;
+    right: ${(props) => props.scrollBarWidth}px;
   }
   @media screen and (min-width: 1200px) {
     display: block;
@@ -88,8 +87,7 @@ const ImageLightGreen = styled(ImageLight)`
 `;
 
 const TrafficLight = ({ runningState = 0 }) => {
-
-  const {scrollBarWidth}=useContext(LayoutContext);
+  const { scrollBarWidth } = useContext(LayoutContext);
   const getTitle = () => {
     if (runningState < 3) {
       return "READY!";
@@ -98,7 +96,7 @@ const TrafficLight = ({ runningState = 0 }) => {
     }
   };
   return (
-    <TrafficLightCon readyStatus={runningState} id="trafficLight" scrollBarWidth={scrollBarWidth}>
+    <TrafficLightCon readyStatus={runningState} scrollBarWidth={scrollBarWidth}>
       <Title>{getTitle()}</Title>
       <TraficLightFrame>
         <ImageLightRed src={iconLightRed} readyStatus={runningState} />

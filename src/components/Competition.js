@@ -12,19 +12,16 @@ import iconFinishLineR from "../assets/finishLine_r.png";
 import layout, { getPreScreenByName } from "../layout";
 
 const CompetitionEnvir = styled.div`
-  right: -50%;
   margin: 0 auto;
   bottom: 0;
   position: fixed;
-
+  width: 100%;
   /**On top of all the content PageTitle */
   z-index: 2;
   height: 200px;
-  transform: ${(props) => "scale( " + props.reducedRatio + " )"};
-
-  transform-origin: bottom;
-
   @media screen and (min-width: 1200px) {
+    transform-origin: bottom;
+    transform: ${(props) => "scale( " + props.reducedRatio + " )"};
     position: sticky;
     max-height: 1080px;
     max-width: 1430px;
@@ -204,6 +201,13 @@ const Competition = () => {
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
 
+    console.log(
+      "scrollAreaName",
+      scrollAreaName,
+      "scrollAreaOffset",
+      scrollAreaOffset
+    );
+
     if (scrollAreaName) {
       const { realContentH } = layout[scrollAreaName];
       const { realContentH: preRealContentH } =
@@ -312,7 +316,7 @@ const Competition = () => {
       ...pre,
       ...newAddedFLTStyle,
     }));
-  }, [scrollTop, clientHeight]);
+  }, [scrollTop, clientHeight, currentScrollArea]);
 
   return (
     <CompetitionEnvir ref={ref} id="test" reducedRatio={reducedRatio}>
