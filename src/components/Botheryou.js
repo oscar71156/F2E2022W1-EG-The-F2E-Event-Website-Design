@@ -17,7 +17,7 @@ const Container = styled.div`
 
     /**cut overflow part */
     clip-path: inset(0 0 0 0);
-    
+
     > * {
       top: 0;
       position: ${(props) => (props.isChildSticky ? "sticky" : "relative")};
@@ -135,7 +135,7 @@ const Botheryou = () => {
   const [isShowWish, setIsShowWish] = useState(false);
   const [isShowComplex, setIsShowComplex] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
-  const { clientHeight, scrollTop, currentScrollArea } =
+  const { clientHeight, currentScrollArea } =
     useContext(LayoutContext);
 
   /**
@@ -178,7 +178,7 @@ const Botheryou = () => {
     } else {
       setIsSticky(false);
     }
-  }, [scrollTop, clientHeight, currentScrollArea]);
+  }, [ clientHeight, currentScrollArea]);
   return (
     <Container isChildSticky={isSticky}>
       <PageTitle isShow={isShowTitle} titleText={"你是否也有以下困擾？"} />
@@ -196,8 +196,8 @@ const Botheryou = () => {
           <ImageComplex src={iconComplex} />
         </QuestionComplex>
       </QuestionsCon>
-      <LBgD9 src={iconBgDecorate9}/>
-      <RBgD9 src={iconBgDecorate9}/>
+      <LBgD9 src={iconBgDecorate9} />
+      <RBgD9 src={iconBgDecorate9} />
     </Container>
   );
 };

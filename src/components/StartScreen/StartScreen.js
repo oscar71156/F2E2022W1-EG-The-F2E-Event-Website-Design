@@ -17,7 +17,7 @@ const Container = styled.div`
   overflow: hidden;
 
   z-index: 0;
-
+  padding-top: 60px;
   @media screen and (min-width: 1200px) {
     height: 1800px;
     display: flex;
@@ -151,13 +151,14 @@ const AnimationLogo = styled(Logo)`
 `;
 
 function StartScreen() {
-  const { scrollTop, clientHeight, currentScrollArea } =
+  const { clientHeight, currentScrollArea, screenWidth } =
     useContext(LayoutContext);
   const [bg1TransformStyle, setBg1TransformStyle] = useState({ scale: 1 });
   const [bg2TransformStyle, setBg2TransformStyle] = useState({ scale: 1 });
   const [runningState, setRunningState] = useState(0);
 
   /**
+   * When in desktop or , big desktop(width > 1200px)
    * Animation
    * 0   ~ 300 => runningState=0 initial
    * 300 ~ 600 => runningState=1 red light, bg cloud become smaller
@@ -169,14 +170,16 @@ function StartScreen() {
   useEffect(() => {
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
-    if (scrollAreaName === "initialScreen") {
-      setRunningState(0);
-    } else if (scrollAreaName === "startScreen") {
-      setRunningState(Math.floor(scrollAreaOffset / 300));
-    } else {
-      setRunningState(5);
+    if (screenWidth > 1200) {
+      if (scrollAreaName === "initialScreen") {
+        setRunningState(0);
+      } else if (scrollAreaName === "startScreen") {
+        setRunningState(Math.floor(scrollAreaOffset / 300));
+      } else {
+        setRunningState(5);
+      }
     }
-  }, [scrollTop, clientHeight, currentScrollArea]);
+  }, [clientHeight, currentScrollArea]);
 
   useEffect(() => {
     //runningState 0=>2 3=>disappear

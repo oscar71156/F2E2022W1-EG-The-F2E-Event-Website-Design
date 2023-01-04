@@ -61,7 +61,6 @@ function LayoutProvider({ children }) {
       value={{
         clientHeight,
         setClientHeight,
-        scrollTop,
         setScrollTop,
         currentScrollArea,
         scrollBarWidth,

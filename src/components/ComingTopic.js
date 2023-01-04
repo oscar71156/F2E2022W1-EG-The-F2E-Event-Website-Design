@@ -144,7 +144,7 @@ const ComingTopic = () => {
   const [isShowWeek2, setIsShowWeek2] = useState(false);
   const [isShowWeek3, setIsShowWeek3] = useState(false);
 
-  const { scrollTop, clientHeight, currentScrollArea } =
+  const {  clientHeight, currentScrollArea } =
     useContext(LayoutContext);
 
   useEffect(() => {
@@ -204,7 +204,7 @@ const ComingTopic = () => {
       setWeek2Opacity(0);
       setWeek3Opacity(0);
     }
-  }, [clientHeight, scrollTop, currentScrollArea]);
+  }, [clientHeight, currentScrollArea]);
 
   return (
     <Container>

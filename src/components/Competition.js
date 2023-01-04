@@ -163,7 +163,7 @@ const FinishLine = styled.div`
 
 const Competition = () => {
   const [reducedRatio, setReducedRatio] = useState(1);
-  const { clientHeight, scrollTop, currentScrollArea } =
+  const { clientHeight, currentScrollArea } =
     useContext(LayoutContext);
 
   const [isVisibleCharacter, setIsVisibleCharacter] = useState(true);
@@ -316,7 +316,7 @@ const Competition = () => {
       ...pre,
       ...newAddedFLTStyle,
     }));
-  }, [scrollTop, clientHeight, currentScrollArea]);
+  }, [clientHeight, currentScrollArea]);
 
   return (
     <CompetitionEnvir ref={ref} id="test" reducedRatio={reducedRatio}>
