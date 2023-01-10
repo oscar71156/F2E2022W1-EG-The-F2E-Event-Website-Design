@@ -9,7 +9,6 @@ import LayoutContext from "../contexts/Layout";
 
 const Container = styled.div`
   @media screen and (min-width: 1200px) {
-    height: 100vh;
     position: relative;
     top: 0;
     /**Three role types animations(3*300) + reserve spave for showing Competiton(600) */
@@ -39,16 +38,18 @@ const QuestionsCon = styled.div`
 `;
 
 const Question = styled.div`
+  transition: transform 1.2s, opacity 1s 0.5s;
+  opacity: ${(props) => (props.isShow ? 1 : 0)};
   @media screen and (min-width: 1200px) {
+    transition: transform 1s, opacity 1s 0.2s;
     flex: 1;
     max-width: 412px;
     text-align: center;
     margin: 0 10px;
-    transition: transform 1s, opacity 1s 0.2s;
-    opacity: ${(props) => (props.isShow ? 1 : 0)};
   }
 `;
 const QuestionEnvious = styled(Question)`
+  transform: translateX(${(props) => (props.isShow ? 0 : -150)}%);
   @media screen and (min-width: 1200px) {
     transform: translateX(${(props) => (props.isShow ? 0 : -150)}%);
     perspective-origin: right center;
@@ -57,8 +58,8 @@ const QuestionEnvious = styled(Question)`
 `;
 const QuestionWish = styled(Question)``;
 const QuestionComplex = styled(Question)`
+  transform: translateX(${(props) => (props.isShow ? 0 : 150)}%);
   @media screen and (min-width: 1200px) {
-    transform: translateX(${(props) => (props.isShow ? 0 : 150)}%);
     perspective-origin: left center;
     perspective: 900px;
   }
@@ -135,50 +136,77 @@ const Botheryou = () => {
   const [isShowWish, setIsShowWish] = useState(false);
   const [isShowComplex, setIsShowComplex] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
-  const { clientHeight, currentScrollArea } =
+  const { clientHeight, currentScrollArea, screenWidth } =
     useContext(LayoutContext);
 
-  /**
-   *
-   * scrollAreaOffset
-   * 2/3vh => show title
-   * 300+vh => show Envious Area
-   * 600+vh => show Wish Area
-   * 900+vh => show Complext Area
-   */
   useEffect(() => {
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
+
     if (scrollAreaName === "botherYou") {
-      setIsSticky(true);
-      if (scrollAreaOffset < (clientHeight / 3) * 2) {
-        setIsShowTitle(false);
-      } else if (scrollAreaOffset >= (clientHeight / 3) * 2) {
-        setIsShowTitle(true);
-      }
-      if (scrollAreaOffset < clientHeight + 300) {
-        setIsShowEnvious(false);
-        setIsShowWish(false);
-        setIsShowComplex(false);
-      } else if (
-        scrollAreaOffset >= clientHeight + 300 &&
-        scrollAreaOffset < clientHeight + 600
-      ) {
-        setIsShowEnvious(true);
-      } else if (
-        scrollAreaOffset >= clientHeight + 600 &&
-        scrollAreaOffset < clientHeight + 900
-      ) {
-        setIsShowWish(true);
-      } else if (scrollAreaOffset >= clientHeight + 900) {
-        setIsShowEnvious(true);
-        setIsShowWish(true);
-        setIsShowComplex(true);
+      if (screenWidth < 1200) {
+        let showTitle = false,
+          showEnvious = false,
+          showWish = false,
+          showComplex = false;
+        if (scrollAreaOffset >= 10 && scrollAreaOffset < 400) {
+          showTitle = true;
+        } else if (scrollAreaOffset >= 400 && scrollAreaOffset < 700) {
+          showTitle = true;
+          showEnvious = true;
+        } else if (scrollAreaOffset >= 700 && scrollAreaOffset < 1000) {
+          showTitle = true;
+          showEnvious = true;
+          showWish = true;
+        } else if (scrollAreaOffset >= 1000) {
+          showTitle = true;
+          showEnvious = true;
+          showWish = true;
+          showComplex = true;
+        }
+        setIsShowTitle(showTitle);
+        setIsShowEnvious(showEnvious);
+        setIsShowComplex(showComplex);
+        setIsShowWish(showWish);
+      } else {
+        /**
+         *
+         * scrollAreaOffset
+         * 2/3vh => show title
+         * 300+vh => show Envious Area
+         * 600+vh => show Wish Area
+         * 900+vh => show Complext Area
+         */
+        setIsSticky(true);
+        if (scrollAreaOffset < (clientHeight / 3) * 2) {
+          setIsShowTitle(false);
+        } else if (scrollAreaOffset >= (clientHeight / 3) * 2) {
+          setIsShowTitle(true);
+        }
+        if (scrollAreaOffset < clientHeight + 300) {
+          setIsShowEnvious(false);
+          setIsShowWish(false);
+          setIsShowComplex(false);
+        } else if (
+          scrollAreaOffset >= clientHeight + 300 &&
+          scrollAreaOffset < clientHeight + 600
+        ) {
+          setIsShowEnvious(true);
+        } else if (
+          scrollAreaOffset >= clientHeight + 600 &&
+          scrollAreaOffset < clientHeight + 900
+        ) {
+          setIsShowWish(true);
+        } else if (scrollAreaOffset >= clientHeight + 900) {
+          setIsShowEnvious(true);
+          setIsShowWish(true);
+          setIsShowComplex(true);
+        }
       }
     } else {
       setIsSticky(false);
     }
-  }, [clientHeight, currentScrollArea]);
+  }, [clientHeight, currentScrollArea, screenWidth]);
   return (
     <Container isChildSticky={isSticky} id="botherYou">
       <PageTitle isShow={isShowTitle} titleText={"你是否也有以下困擾？"} />
