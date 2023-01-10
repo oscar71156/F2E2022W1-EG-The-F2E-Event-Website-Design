@@ -8,10 +8,10 @@ const Container = styled.div`
   position: relative;
   margin: 40px auto;
   z-index: 0;
+  opacity: ${(props) => (props.isShow ? 1 : 0)};
+  transition: opacity 1s;
+  transition-timing-function: ease-in;
   @media screen and (min-width: 1200px) {
-    opacity: ${(props) => (props.isShow ? 1 : 0)};
-    transition: opacity 1s;
-    transition-timing-function: ease-in;
     height: max-content;
     text-align: center;
     /**For on top of content when scrolling */
@@ -20,8 +20,8 @@ const Container = styled.div`
 `;
 const Title = styled.h2`
   margin: 0 auto;
-  text-align:center;
-  padding:5px 0 15px;
+  text-align: center;
+  padding: 5px 0 15px;
   &::before {
     content: "";
     display: block;
@@ -42,7 +42,7 @@ const Title = styled.h2`
   @media screen and (min-width: 1200px) {
     width: ${(props) => (props.titleLength + 4) * 60 + "px"};
     margin-top: 40px;
-    padding:0;
+    padding: 0;
   }
 `;
 
