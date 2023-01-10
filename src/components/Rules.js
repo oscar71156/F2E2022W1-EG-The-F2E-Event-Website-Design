@@ -177,7 +177,7 @@ const Rules = () => {
     }
   }, [currentScrollArea, clientHeight]);
   return (
-    <Container>
+    <Container id="rules">
       <PageTitle titleText="還有比賽等著你!" isSticky={isSticky} />
       <Content tStyle={contentStyle} isSticky={isSticky}>
         <TrophyContainer rotateDeg={trophyRotateDeg} />

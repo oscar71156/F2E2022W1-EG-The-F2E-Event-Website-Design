@@ -13,7 +13,6 @@ import LayoutContext from "../contexts/Layout";
 import layout from "../layout";
 
 const Name = "sponsors";
-const sponsorsLayout = layout[Name];
 const Container = styled.div`
   @media screen and (min-width: 1200px) {
     height: calc(100vh + 1000px);
@@ -167,7 +166,7 @@ const ImageBgDecorate8 = styled.img`
 const Sponsors = () => {
   const [isShowContent, setIsShowContent] = useState(false);
   const [isShowTitle, setIsShowTitle] = useState(false);
-  const { currentScrollArea, clientHeight } = useContext(LayoutContext);
+  const { currentScrollArea, clientHeight,getScreenInforByName } = useContext(LayoutContext);
   const [isSticky, setIsSticky] = useState(false);
   const [bgD4TStyle, setBgD4TStyle] = useState({
     translateX: -2000,
@@ -313,14 +312,15 @@ const Sponsors = () => {
       setBgD4TStyle({ translateX: 0, scale: 0, opacity: 0, translateY: 0 });
       setBgD8TStyle({ translateX: 0, scale: 0, opacity: 0, translateY: 0 });
       setIsSticky(false);
-      if (scrollAreaOrder < sponsorsLayout.order) {
+      const sponsorsScreen=getScreenInforByName('sponsors');
+      if (scrollAreaOrder < sponsorsScreen?.order) {
         setIsShowContent(false);
         setIsShowTitle(false);
       }
     }
   }, [currentScrollArea, clientHeight]);
   return (
-    <Container isSticky={isSticky}>
+    <Container isSticky={isSticky} id="sponsors">
       <PageTitle isShow={isShowTitle} titleText="贊助單位" />
       <Content isSticky={isSticky}>
         <SponsorBS isShow={isShowContent}>

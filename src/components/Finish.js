@@ -233,7 +233,7 @@ function Finish() {
   }, [clientHeight, currentScrollArea]);
 
   return (
-    <Container isShowRailing={isShowRailing} tStyle={railingTStyle}>
+    <Container isShowRailing={isShowRailing} tStyle={railingTStyle} id="finish">
       <ImageBgDecorate1 src={bgDecorate01} tStyle={bg1TStyle} />
       <ImageBgDecorate5 src={bgDecorate05} tStyle={bg5TStyle} />
     </Container>

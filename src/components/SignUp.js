@@ -19,7 +19,7 @@ const Content = styled.div`
   @media screen and (min-width: 1200px) {
     opacity: ${(props) => props.tStyle.opacity};
 
-    transform:translateY(500px);
+    transform: translateY(500px);
   }
 `;
 const Title = styled.h2`
@@ -42,14 +42,17 @@ function SignUp() {
   useEffect(() => {
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
-      if(scrollAreaName==='signUp'){
-        if(scrollAreaOffset>=200+clientHeight){
-          setContentTStyle((pre)=>({...pre,opacity:0+(scrollAreaOffset-clientHeight-200)/400}));
-        }
+    if (scrollAreaName === "signUp") {
+      if (scrollAreaOffset >= 200 + clientHeight) {
+        setContentTStyle((pre) => ({
+          ...pre,
+          opacity: 0 + (scrollAreaOffset - clientHeight - 200) / 400,
+        }));
       }
+    }
   }, [currentScrollArea, clientHeight]);
   return (
-    <Container>
+    <Container id="signUp">
       <Content tStyle={contentTStyle}>
         <ImageBigLogo src={iconLogo} />
         <JoinButton isShowHand />

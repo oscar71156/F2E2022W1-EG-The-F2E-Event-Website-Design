@@ -34,22 +34,23 @@ const Container = styled.div`
 `;
 
 const EmptySlot = styled.div`
-  height: calc(100vh - 900px);
-  position: sticky;
-  top: calc(100vh - 300px);
-  ${"" /* width:10px; */}
-  right:0;
-  z-index:-1;
+  @media screen and (min-width: 1200px) {
+    height: calc(100vh - 900px);
+    position: sticky;
+    top: calc(100vh - 300px);
+    right: 0;
+    z-index: -1;
+  }
 `;
 
 const FixedJoinBTN = styled(JoinButton)`
-display:none;
+  display: none;
   @media screen and (min-width: 1200px) {
     position: fixed;
-    display:flex;
-    width:min-content;
-    right:40px;
-    bottom:40px;
+    display: flex;
+    width: min-content;
+    right: 40px;
+    bottom: 40px;
   }
 `;
 
@@ -58,8 +59,9 @@ display:none;
  */
 const AppContent = () => {
   const scrollRef = useRef(null);
-
-  const { setClientHeight, setScrollTop } = useContext(LayoutContext);
+  const thisYearTopicRef = useRef(null);
+  const { setClientHeight, setScrollTop, setScrollContent } =
+    useContext(LayoutContext);
 
   // const ttGetWheel = useCallback(
   //   throttle((readyStatus) => {
@@ -95,20 +97,18 @@ const AppContent = () => {
   return (
     <ScrollContainer
       id="scrollArea"
-      ref={scrollRef}
       // onWheel={ttGetWheel.bind(null, scrollRef)}
       onScroll={(e) => {
         const currentScrollTop = e.target.scrollTop;
         const clientHeight = e.target.clientHeight;
         ttGetScrollPosition(currentScrollTop, clientHeight);
-        console.log("onScroll");
       }}
     >
-      <Container>
+      <Container ref={setScrollContent}>
         <Header />
         <EmptySlot />
         <Competition />
-        <FixedJoinBTN isShowHand/>
+        <FixedJoinBTN isShowHand />
         <Menu />
         <Map />
         <StartScreen />

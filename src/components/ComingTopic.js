@@ -144,8 +144,7 @@ const ComingTopic = () => {
   const [isShowWeek2, setIsShowWeek2] = useState(false);
   const [isShowWeek3, setIsShowWeek3] = useState(false);
 
-  const {  clientHeight, currentScrollArea } =
-    useContext(LayoutContext);
+  const { clientHeight, currentScrollArea } = useContext(LayoutContext);
 
   useEffect(() => {
     const { name: scrollAreaName, offset: scrollAreaOffset } =
@@ -207,7 +206,7 @@ const ComingTopic = () => {
   }, [clientHeight, currentScrollArea]);
 
   return (
-    <Container>
+    <Container id="comingTopic">
       <PageTitle
         titleText="年度最強合作，三大主題來襲"
         secondTitleText="各路廠商強強聯手<br/>共同設計出接地氣的網頁互動挑戰關卡"

@@ -178,9 +178,9 @@ const Botheryou = () => {
     } else {
       setIsSticky(false);
     }
-  }, [ clientHeight, currentScrollArea]);
+  }, [clientHeight, currentScrollArea]);
   return (
-    <Container isChildSticky={isSticky}>
+    <Container isChildSticky={isSticky} id="botherYou">
       <PageTitle isShow={isShowTitle} titleText={"你是否也有以下困擾？"} />
       <QuestionsCon isSticky={isSticky}>
         <QuestionEnvious isShow={isShowEnvious}>

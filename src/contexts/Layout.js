@@ -1,5 +1,11 @@
+import { useCallback } from "react";
 import { createContext, useEffect, useLayoutEffect, useState } from "react";
-import { getScreenTopsArray, getScrollBarWidth } from "../layout";
+import layout from "../layout";
+import {
+  calcScreenTop,
+  getScreenNameArray,
+  getScrollBarWidth,
+} from "../layout";
 
 const LayoutContext = createContext({});
 
@@ -13,11 +19,14 @@ function LayoutProvider({ children }) {
    * window.innerWidth
    * including scrollbar width, padding
    */
+
+  const [scrollContent, setScrollContent] = useState(null);
+
   const [screenWidth, setScreenWidth] = useState(null);
 
   const [scrollTop, setScrollTop] = useState(0);
   const [currentScrollArea, setCurrentScrollArea] = useState({
-    name: "initialScreen",
+    name: "startScreen",
     offset: 0,
   });
   const [scrollBarWidth, setScrollBarWidth] = useState(0);
@@ -28,6 +37,17 @@ function LayoutProvider({ children }) {
     setClientHeight(window.innerHeight);
     setScreenWidth(window.innerWidth);
   };
+
+  useEffect(() => {
+    if (scrollContent) {
+      const screenNameArray = getScreenNameArray();
+      const screenNodes = [...scrollContent.childNodes].filter((node) =>
+        screenNameArray.includes(node.id)
+      );
+      setScrollTopsArray(calcScreenTop(screenNodes, clientHeight, screenWidth));
+    }
+  }, [scrollContent, clientHeight, screenWidth]);
+
   useLayoutEffect(() => {
     setClientHeight(window.innerHeight);
     setScreenWidth(window.innerWidth);
@@ -37,14 +57,11 @@ function LayoutProvider({ children }) {
       window.removeEventListener("resize", handleSizeChange);
     };
   }, []);
-  useLayoutEffect(() => {
-    setScrollTopsArray(getScreenTopsArray(clientHeight));
-  }, [clientHeight]);
 
   useEffect(() => {
     const currentScrollAreaElement = scrollTopsArray.find(
-      ({ height, scrollStart }) =>
-        scrollTop > scrollStart && scrollTop <= scrollStart + height
+      ({ scrollEnd, scrollStart }) =>
+        scrollTop > scrollStart && scrollTop <= scrollEnd
     );
     if (currentScrollAreaElement) {
       setCurrentScrollArea({
@@ -55,7 +72,43 @@ function LayoutProvider({ children }) {
     }
   }, [scrollTopsArray, scrollTop]);
 
-  console.log("scrollTopsArray", scrollTopsArray);
+  const getScreenInforByName = useCallback(
+    (name) => scrollTopsArray.find((screen) => screen.name === name),
+    [scrollTopsArray]
+  );
+
+  const getPreScreenByName = useCallback(
+    (name) => {
+      let currentScreen = scrollTopsArray.find(
+        ({ name: keyName }) => keyName === name
+      );
+      if (currentScreen) {
+        const { order: currentScreenOrder } = currentScreen;
+
+        ///order less than 1 have no preScreen
+        if (currentScreenOrder <= 1) {
+          //Competition or Header
+          //no realContentH=>Competition has fixed original height 600px
+          return {};
+        }
+        const preScreens = scrollTopsArray.filter(
+          ({ order }) => order < currentScreenOrder
+        );
+        const maxPreScreenOrder = Math.max(
+          ...preScreens.map(({ order }) => order)
+        );
+        const { name: preScreenName } = preScreens.find(
+          ({ order }) => order === maxPreScreenOrder
+        );
+
+        return { ...layout[preScreenName] };
+      } else {
+        return {};
+      }
+    },
+    [scrollTopsArray]
+  );
+
   return (
     <LayoutContext.Provider
       value={{
@@ -65,6 +118,9 @@ function LayoutProvider({ children }) {
         currentScrollArea,
         scrollBarWidth,
         screenWidth,
+        setScrollContent,
+        getScreenInforByName,
+        getPreScreenByName,
       }}
     >
       {children}

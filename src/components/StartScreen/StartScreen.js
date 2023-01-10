@@ -192,7 +192,7 @@ function StartScreen() {
     }
   }, [runningState]);
   return (
-    <Container>
+    <Container id="startScreen">
       <BigIconM>
         <ImageBigLogo src={iconLogo} />
         <LogoText />
