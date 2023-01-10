@@ -10,11 +10,8 @@
  * finish: 29px, 107px
  */
 
-//Header+EmptySlot+Competition=100vh(initialScreen)
+//Header+EmptySlot+Competition=100vh
 const layout = {
-  initialScreen: {
-    realContentH: 480,
-  },
   startScreen: {
     realContentH: 480,
     mapPosition: {

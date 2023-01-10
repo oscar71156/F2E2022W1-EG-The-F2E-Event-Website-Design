@@ -171,9 +171,7 @@ function StartScreen() {
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
     if (screenWidth > 1200) {
-      if (scrollAreaName === "initialScreen") {
-        setRunningState(0);
-      } else if (scrollAreaName === "startScreen") {
+      if (scrollAreaName === "startScreen") {
         setRunningState(Math.floor(scrollAreaOffset / 300));
       } else {
         setRunningState(5);

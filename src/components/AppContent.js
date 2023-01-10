@@ -55,7 +55,7 @@ const FixedJoinBTN = styled(JoinButton)`
 `;
 
 /***
- * Header+EmptySlot+Competition=100vh(initialScreen)
+ * Header+EmptySlot+Competition=100vh
  */
 const AppContent = () => {
   const scrollRef = useRef(null);
