@@ -46,6 +46,8 @@ const ATopic = styled.div`
   + div {
     margin: 20px 0;
   }
+  opacity: ${(props) => (props.isShow ? 1 : 0)};
+  transition: opacity 0.5s, transform 1s;
   @media screen and (min-width: 1200px) {
     display: inline-block;
     margin: 0;
@@ -57,11 +59,29 @@ const ATopic = styled.div`
   }
 `;
 
-const F2E = styled(ATopic)``;
+const F2E = styled(ATopic)`
+  transform: translateX(${(props) => (props.isShow ? 0 : "200%")});
+  @media screen and (min-width: 1200px) {
+    transform: none;
+    opacity: 1;
+  }
+`;
 
-const UI = styled(ATopic)``;
+const UI = styled(ATopic)`
+  transform: translateX(${(props) => (props.isShow ? 0 : "-200%")});
+  @media screen and (min-width: 1200px) {
+    transform: none;
+    opacity: 1;
+  }
+`;
 
-const Team = styled(ATopic)``;
+const Team = styled(ATopic)`
+  transform: translateX(${(props) => (props.isShow ? 0 : "200%")});
+  @media screen and (min-width: 1200px) {
+    transform: none;
+    opacity: 1;
+  }
+`;
 
 const CharacterTitle = styled.h4`
   color: var(--primary-color-default);
@@ -103,10 +123,14 @@ const Description = styled.div`
 `;
 
 const ThisYearTopic = () => {
-  const [isShowTitle, setIsShowTitle] = useState(false);
-  const [isShowContent, setIsShowContent] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
-  const { clientHeight, currentScrollArea } = useContext(LayoutContext);
+  const [isShowTitle, setIsShowTitle] = useState(false);
+  const [isShowContent, setIsShowContent] = useState(false); //for big screen
+  const [isShowF2E, setIShowF2E] = useState(false); //for small screen
+  const [isShowUI, setIsShowUI] = useState(false); //for small screen
+  const [isShowTeam, setIsShowTeam] = useState(false); //for small screen
+  const { clientHeight, currentScrollArea, screenWidth } =
+    useContext(LayoutContext);
 
   /**
    * 1. 過視窗3/4時，Title出現
@@ -115,25 +139,50 @@ const ThisYearTopic = () => {
   useEffect(() => {
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
-
     if (scrollAreaName === "thisYearTopic") {
-      setIsSticky(true);
-      if (scrollAreaOffset < (clientHeight * 3) / 4) {
-        setIsShowTitle(false);
-        setIsShowContent(false);
-      } else if (
-        scrollAreaOffset >= (clientHeight * 3) / 4 &&
-        scrollAreaOffset < clientHeight
-      ) {
-        setIsShowTitle(true);
-      } else if (scrollAreaOffset >= clientHeight) {
-        setIsShowContent(true);
-        setIsShowTitle(true);
+      if (screenWidth < 1200) {
+        let showTitle = false,
+          showF2E = false,
+          showUI = false,
+          showTeam = false;
+        if (scrollAreaOffset > 10 && scrollAreaOffset < 400) {
+          showTitle = true;
+        } else if (scrollAreaOffset >= 400 && scrollAreaOffset < 700) {
+          showTitle = true;
+          showF2E = true;
+        } else if (scrollAreaOffset >= 700 && scrollAreaOffset < 1000) {
+          showTitle = true;
+          showF2E = true;
+          showUI = true;
+        } else if (scrollAreaOffset > 1000) {
+          showTitle = true;
+          showF2E = true;
+          showUI = true;
+          showTeam = true;
+        }
+        setIsShowTitle(showTitle);
+        setIShowF2E(showF2E);
+        setIsShowUI(showUI);
+        setIsShowTeam(showTeam);
+      } else {
+        setIsSticky(true);
+        if (scrollAreaOffset < (clientHeight * 3) / 4) {
+          setIsShowTitle(false);
+          setIsShowContent(false);
+        } else if (
+          scrollAreaOffset >= (clientHeight * 3) / 4 &&
+          scrollAreaOffset < clientHeight
+        ) {
+          setIsShowTitle(true);
+        } else if (scrollAreaOffset >= clientHeight) {
+          setIsShowContent(true);
+          setIsShowTitle(true);
+        }
       }
     } else {
       setIsSticky(false);
     }
-  }, [clientHeight, currentScrollArea]);
+  }, [clientHeight, currentScrollArea, screenWidth]);
   return (
     <Container isChildSticky={isSticky} id="thisYearTopic">
       <PageTitle
@@ -142,7 +191,7 @@ const ThisYearTopic = () => {
         isShow={isShowTitle}
       />
       <Content isSticky={isSticky} isShow={isShowContent}>
-        <F2E>
+        <F2E isShow={isShowF2E}>
           <ImageContainer>
             <Imagef2e src={iconCharacterf2e} />
           </ImageContainer>
@@ -151,7 +200,7 @@ const ThisYearTopic = () => {
             <CharacterTitle>前端工程師</CharacterTitle>
           </Description>
         </F2E>
-        <UI>
+        <UI isShow={isShowUI}>
           <Description>
             <JoinButton />
             <CharacterTitle>UI設計師</CharacterTitle>
@@ -160,7 +209,7 @@ const ThisYearTopic = () => {
             <ImageUI src={iconCharacterUI} />
           </ImageContainer>
         </UI>
-        <Team>
+        <Team isShow={isShowTeam}>
           <ImageContainer>
             <ImageTeam src={iconCharacterTeam} />
           </ImageContainer>
