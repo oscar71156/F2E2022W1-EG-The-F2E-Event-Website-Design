@@ -44,13 +44,15 @@ const EmptySlot = styled.div`
 `;
 
 const FixedJoinBTN = styled(JoinButton)`
-  display: none;
-  @media screen and (min-width: 1200px) {
-    position: fixed;
-    display: flex;
-    width: min-content;
-    right: 40px;
-    bottom: 40px;
+  &#joinButton {
+    display: none;
+    @media screen and (min-width: 1200px) {
+      position: fixed;
+      display: flex;
+      width: min-content;
+      right: 40px;
+      bottom: 40px;
+    }
   }
 `;
 

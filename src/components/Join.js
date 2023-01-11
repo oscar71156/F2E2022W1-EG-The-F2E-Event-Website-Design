@@ -3,6 +3,7 @@ import iconJoinHand from "../assets/btn_joinHand.gif";
 import iconJoinBTN from "../assets/btn_join.png";
 import iconJoinBTNH from "../assets/btn_join_h.png";
 const JoinButtonCon = styled.div`
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -21,7 +22,7 @@ const ScheduleGIFImage = styled.img`
 
 const JoinButton = ({ isShowHand = false, className }) => {
   return (
-    <JoinButtonCon className={className}>
+    <JoinButtonCon className={className} id="joinButton">
       <ScheduleGIFImage src={iconJoinHand} isShowHand={isShowHand} />
       <a href="https://2022.thef2e.com/signup" target="_blank" rel="noreferrer">
         <ImageBTNJoin
