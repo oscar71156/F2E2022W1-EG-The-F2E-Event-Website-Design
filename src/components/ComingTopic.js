@@ -30,7 +30,6 @@ const Weeks = styled.div`
 
     /**For delay scroll disappearing */
     transform: translateY(130px);
-    ${"" /* top:300px; */}
   }
   @media screen and (min-width: 1800px) {
     padding: 0 240px;
@@ -41,8 +40,9 @@ const Week = styled.div`
   text-align: center;
   margin: 20px 0;
   opacity: ${(props) => props.opacity};
-  transition: opacity 0.1s;
+  transition: opacity 1s;
   @media screen and (min-width: 1200px) {
+    transition: opacity 0.1s;
     margin: 0;
     text-align: left;
   }
@@ -136,74 +136,95 @@ const WeekBTN = styled.button`
 const ComingTopic = () => {
   const [isShowTitle, setIsShowTitle] = useState(false);
 
-  const [isShowWeek1, setIsShowWeek1] = useState(false);
-  const [week1Opacity, setWeek1Opacity] = useState(0);
-  const [week2Opacity, setWeek2Opacity] = useState(0);
-  const [week3Opacity, setWeek3Opacity] = useState(0);
+  const [week1Opacity, setWeek1Opacity] = useState(1);
+  const [week2Opacity, setWeek2Opacity] = useState(1);
+  const [week3Opacity, setWeek3Opacity] = useState(1);
 
-  const [isShowWeek2, setIsShowWeek2] = useState(false);
-  const [isShowWeek3, setIsShowWeek3] = useState(false);
+  const { clientHeight, currentScrollArea, screenWidth } =
+    useContext(LayoutContext);
 
-  const { clientHeight, currentScrollArea } = useContext(LayoutContext);
-
+  console.log("isShowTitle", isShowTitle);
   useEffect(() => {
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
     if (scrollAreaName === "comingTopic") {
-      if (scrollAreaOffset >= (3 * clientHeight) / 4) {
-        setIsShowTitle(true);
-      }
+      if (screenWidth < 1200) {
+        let showTitle = false,
+          week1Opa = 0,
+          week2Opa = 0,
+          week3Opa = 0;
 
-      if (scrollAreaOffset < clientHeight) {
-        setWeek1Opacity(0);
-        setWeek2Opacity(0);
-        setWeek3Opacity(0);
-      } else if (
-        scrollAreaOffset >= clientHeight &&
-        scrollAreaOffset <= clientHeight + 260
-      ) {
-        setWeek1Opacity(
-          (260 * (scrollAreaOffset - clientHeight)) / clientHeight
-        );
-      } else if (
-        scrollAreaOffset >= clientHeight + 260 &&
-        scrollAreaOffset <= clientHeight + 520
-      ) {
-        setWeek1Opacity(
-          1 - (260 * (scrollAreaOffset - clientHeight - 260)) / clientHeight
-        );
-        setWeek2Opacity(
-          (260 * (scrollAreaOffset - clientHeight - 260)) / clientHeight
-        );
-      } else if (
-        scrollAreaOffset >= clientHeight + 520 &&
-        scrollAreaOffset <= clientHeight + 780
-      ) {
-        setWeek2Opacity(
-          (1 - 520 * (scrollAreaOffset - clientHeight - 520)) / clientHeight
-        );
-        setWeek3Opacity(
-          (520 * (scrollAreaOffset - clientHeight - 520)) / clientHeight
-        );
-      } else if (
-        scrollAreaOffset >= clientHeight + 780 &&
-        scrollAreaOffset <= clientHeight + 1040
-      ) {
-        setWeek3Opacity(
-          (1 - 780 * (scrollAreaOffset - clientHeight - 780)) / clientHeight
-        );
+        if (scrollAreaOffset > 10 && scrollAreaOffset < 500) {
+          showTitle = true;
+        } else if (scrollAreaOffset >= 500 && scrollAreaOffset < 900) {
+          showTitle = true;
+          week1Opa = 1;
+        } else if (scrollAreaOffset >= 900 && scrollAreaOffset < 1200) {
+          showTitle = true;
+          week1Opa = 1;
+          week2Opa = 1;
+        } else if (scrollAreaOffset >= 1200) {
+          showTitle = true;
+          week1Opa = 1;
+          week2Opa = 1;
+          week3Opa = 1;
+        }
+        setIsShowTitle(showTitle);
+        setWeek1Opacity(week1Opa);
+        setWeek2Opacity(week2Opa);
+        setWeek3Opacity(week3Opa);
       } else {
-        setWeek1Opacity(0);
-        setWeek2Opacity(0);
-        setWeek3Opacity(0);
+        if (scrollAreaOffset >= (3 * clientHeight) / 4) {
+          setIsShowTitle(true);
+        }
+
+        if (scrollAreaOffset < clientHeight) {
+          setWeek1Opacity(0);
+          setWeek2Opacity(0);
+          setWeek3Opacity(0);
+        } else if (
+          scrollAreaOffset >= clientHeight &&
+          scrollAreaOffset <= clientHeight + 260
+        ) {
+          setWeek1Opacity(
+            (260 * (scrollAreaOffset - clientHeight)) / clientHeight
+          );
+        } else if (
+          scrollAreaOffset >= clientHeight + 260 &&
+          scrollAreaOffset <= clientHeight + 520
+        ) {
+          setWeek1Opacity(
+            1 - (260 * (scrollAreaOffset - clientHeight - 260)) / clientHeight
+          );
+          setWeek2Opacity(
+            (260 * (scrollAreaOffset - clientHeight - 260)) / clientHeight
+          );
+        } else if (
+          scrollAreaOffset >= clientHeight + 520 &&
+          scrollAreaOffset <= clientHeight + 780
+        ) {
+          setWeek2Opacity(
+            (1 - 520 * (scrollAreaOffset - clientHeight - 520)) / clientHeight
+          );
+          setWeek3Opacity(
+            (520 * (scrollAreaOffset - clientHeight - 520)) / clientHeight
+          );
+        } else if (
+          scrollAreaOffset >= clientHeight + 780 &&
+          scrollAreaOffset <= clientHeight + 1040
+        ) {
+          setWeek3Opacity(
+            (1 - 780 * (scrollAreaOffset - clientHeight - 780)) / clientHeight
+          );
+        } else {
+          setIsShowTitle(false);
+          setWeek1Opacity(0);
+          setWeek2Opacity(0);
+          setWeek3Opacity(0);
+        }
       }
-    } else {
-      setIsShowTitle(false);
-      setWeek1Opacity(0);
-      setWeek2Opacity(0);
-      setWeek3Opacity(0);
     }
-  }, [clientHeight, currentScrollArea]);
+  }, [clientHeight, currentScrollArea, screenWidth]);
 
   return (
     <Container id="comingTopic">
