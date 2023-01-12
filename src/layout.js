@@ -101,18 +101,19 @@ export const getScreenNameArray = () => {
 };
 
 export const calcScreenTop = (screenNodeArray, screenHeight, screenWidth) => {
-  let currentHeight = 0;
   let order = 1;
-  if (screenWidth < 1200) {
-    currentHeight = -screenHeight;
-  }
-
-  return screenNodeArray.map((screenNode) => ({
-    name: screenNode.id,
-    scrollStart: currentHeight,
-    order: order++,
-    scrollEnd: (currentHeight += screenNode.offsetHeight),
-  }));
+  return screenNodeArray.map((screenNode) => {
+    const { top: screenNodeTop, height: screenNodeHeight } =
+      screenNode.getBoundingClientRect();
+    const screenScrollStart = screenNodeTop - screenHeight;
+    const screenScrollEnd = screenScrollStart + screenNodeHeight;
+    return {
+      name: screenNode.id,
+      scrollStart: Math.round(screenScrollStart),
+      order: order++,
+      scrollEnd: Math.round(screenScrollEnd),
+    };
+  });
 };
 
 export default layout;

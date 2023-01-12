@@ -186,9 +186,7 @@ const Rules = () => {
         <Description>
           <AwardTitle>評審機制</AwardTitle>
           <AwardDetail>
-            初選： 將由六角學院前端、UI 評審進行第一波篩選。
-          </AwardDetail>
-          <AwardDetail>
+            初選： 將由六角學院前端、UI 評審進行第一波篩選。<br/>
             決選： 由六角學院與贊助廠商討論，進行最後篩選，並於 12/30(五)
             由評審進行直播公布名單！
           </AwardDetail>

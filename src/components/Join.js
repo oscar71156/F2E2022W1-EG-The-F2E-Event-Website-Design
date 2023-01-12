@@ -3,7 +3,6 @@ import iconJoinHand from "../assets/btn_joinHand.gif";
 import iconJoinBTN from "../assets/btn_join.png";
 import iconJoinBTNH from "../assets/btn_join_h.png";
 const JoinButtonCon = styled.div`
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,7 +10,7 @@ const JoinButtonCon = styled.div`
 const ImageBTNJoin = styled.img`
   display: block;
   margin-top: 10px;
-  width: 103px;
+  height: 60px;
 `;
 
 const ScheduleGIFImage = styled.img`
