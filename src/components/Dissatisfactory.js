@@ -7,28 +7,32 @@ import LayoutContext from "../contexts/Layout";
 const Container = styled.div`
   @media screen and (min-width: 1200px) {
     height: calc(100vh + 2400px);
-    ${"" /* background-color: #cfffe5; */}
   }
 `;
 
 const Content = styled.div`
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   @media screen and (min-width: 1200px) {
+    display: block;
     position: ${(props) => (props.isSticky ? "sticky" : "static")};
     top: 230px;
     transform: translateY(${(props) => (props.isSticky ? 0 : 2000)}px);
-    ${"" /* height:400px; */}
+    height: auto;
   }
 `;
 const Title = styled.h2`
   font-weight: 700;
   color: var(--highlight-color-default);
-  padding: 228px 0 252px;
   text-align: center;
+  transform: scale(${(props) => props.tStyle.scale});
+  opacity: ${(props) => props.tStyle.opacity};
   @media screen and (min-width: 1200px) {
     padding: 0;
     margin-top: 232px;
-    transform: scale(${(props) => props.tStyle.scale});
-    opacity: ${(props) => props.tStyle.opacity};
   }
 `;
 const Br = styled.br`
@@ -68,10 +72,15 @@ const ImageBgDecorate7 = styled.img`
 `;
 
 const Dissatisfactory = () => {
-  const { currentScrollArea, clientHeight } = useContext(LayoutContext);
+  const { currentScrollArea, clientHeight, screenWidth } =
+    useContext(LayoutContext);
   const [bg3Translate, setBg3Translate] = useState({ x: -500, y: 0 });
   const [bg7Translate, setBg7Translate] = useState({ x: 450, y: -70 });
-  const [titleStyle, setTitleStyle] = useState({ scale: 30, opacity: 0 });
+  const [titleStyle, setTitleStyle] = useState({
+    scale: 30,
+    opacity: 0,
+    translateY: 0,
+  });
   const [isStikcy, setIsSticky] = useState(false);
   /**
    * bg3 x -500 y 0
@@ -86,65 +95,92 @@ const Dissatisfactory = () => {
    */
 
   useEffect(() => {
-    const { name: scrollAreaName, offset: scrollAreaOffset } =
-      currentScrollArea;
+    const {
+      name: scrollAreaName,
+      offset: scrollAreaOffset,
+      height: scrollAreaHeight,
+    } = currentScrollArea;
     if (scrollAreaName === "dissatisfactory") {
-      setIsSticky(true);
-      if (scrollAreaOffset < clientHeight / 2) {
-        setBg3Translate({
-          x: -500,
-          y: 0,
-        });
-        setBg7Translate({
-          x: 450,
-          y: -70,
-        });
-      } else if (
-        scrollAreaOffset >= clientHeight / 2 &&
-        scrollAreaOffset < clientHeight
-      ) {
-        setBg3Translate((pre) => ({
-          ...pre,
-          x:
-            -500 +
-            (450 * 2 * (scrollAreaOffset - clientHeight / 2)) / clientHeight,
-        }));
-        setBg7Translate((pre) => ({
-          ...pre,
-          x:
-            450 -
-            (450 * 2 * (scrollAreaOffset - clientHeight / 2)) / clientHeight,
-        }));
-      } else if (
-        scrollAreaOffset >= clientHeight &&
-        scrollAreaOffset < clientHeight + 2000
-      ) {
-        setBg3Translate((pre) => ({
-          ...pre,
-          x: -50 + (150 * (scrollAreaOffset - clientHeight)) / 2000,
-        }));
-        setBg7Translate((pre) => ({
-          ...pre,
-          x: 100 - (100 * (scrollAreaOffset - clientHeight)) / 2000,
-        }));
-
+      if (screenWidth < 1200) {
+        let titleOpacity = 1,
+          titleScale = 0;
+        if (
+          scrollAreaOffset > scrollAreaHeight / 2 &&
+          scrollAreaOffset < scrollAreaHeight
+        ) {
+          titleScale =
+            20 -
+            ((19 * (scrollAreaOffset - scrollAreaHeight / 2)) /
+              scrollAreaHeight) *
+              2;
+          titleOpacity =
+            0 +
+            ((scrollAreaOffset - scrollAreaHeight / 2) / scrollAreaHeight) * 2;
+        }
         setTitleStyle({
-          scale: 30 - (29 * (scrollAreaOffset - clientHeight)) / 2000,
-          opacity: 0 + (scrollAreaOffset - clientHeight) / 2000,
+          opacity: titleOpacity,
+          scale: titleScale,
         });
-      } else if (scrollAreaOffset >= clientHeight + 2000) {
-        setTitleStyle({ opacity: 1, scale: 1 });
-        setBg3Translate((pre) => ({
-          x: 100,
-          y: 0,
-        }));
-        setBg7Translate((pre) => ({
-          x: 0,
-          y: -70,
-        }));
+      } else {
+        setIsSticky(true);
+        if (scrollAreaOffset < clientHeight / 2) {
+          setTitleStyle({ opacity: 0, scale: 1 });
+
+          setBg3Translate({
+            x: -500,
+            y: 0,
+          });
+          setBg7Translate({
+            x: 450,
+            y: -70,
+          });
+        } else if (
+          scrollAreaOffset >= clientHeight / 2 &&
+          scrollAreaOffset < clientHeight
+        ) {
+          setBg3Translate((pre) => ({
+            ...pre,
+            x:
+              -500 +
+              (450 * 2 * (scrollAreaOffset - clientHeight / 2)) / clientHeight,
+          }));
+          setBg7Translate((pre) => ({
+            ...pre,
+            x:
+              450 -
+              (450 * 2 * (scrollAreaOffset - clientHeight / 2)) / clientHeight,
+          }));
+        } else if (
+          scrollAreaOffset >= clientHeight &&
+          scrollAreaOffset < clientHeight + 2000
+        ) {
+          setBg3Translate((pre) => ({
+            ...pre,
+            x: -50 + (150 * (scrollAreaOffset - clientHeight)) / 2000,
+          }));
+          setBg7Translate((pre) => ({
+            ...pre,
+            x: 100 - (100 * (scrollAreaOffset - clientHeight)) / 2000,
+          }));
+
+          setTitleStyle({
+            scale: 30 - (29 * (scrollAreaOffset - clientHeight)) / 2000,
+            opacity: 0 + (scrollAreaOffset - clientHeight) / 2000,
+          });
+        } else if (scrollAreaOffset >= clientHeight + 2000) {
+          setTitleStyle({ opacity: 1, scale: 1 });
+          setBg3Translate((pre) => ({
+            x: 100,
+            y: 0,
+          }));
+          setBg7Translate((pre) => ({
+            x: 0,
+            y: -70,
+          }));
+        }
       }
     } else {
-      setTitleStyle({ opacity: 0, scale: 1 });
+      setTitleStyle({ opacity: 1, scale: 1 });
       setIsSticky(false);
     }
   }, [currentScrollArea, clientHeight]);
