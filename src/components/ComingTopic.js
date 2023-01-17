@@ -10,10 +10,13 @@ const Container = styled.div`
   @media screen and (min-width: 1200px) {
     height: calc(100vh + 1040px);
     position: relative;
-    > * {
-      position: sticky;
-      top: 0;
-    }
+  }
+`;
+
+const StickyPageTitle = styled(PageTitle)`
+  @media screen and (min-width: 1200px) {
+    top: 0;
+    position: sticky;
   }
 `;
 
@@ -72,13 +75,12 @@ const Week3 = styled(Week)`
 `;
 
 const ImageWeek = styled.img`
-  width: 200px;
-  height: auto;
+  width: auto;
+  height: 135px;
   margin: 4px 0;
   @media screen and (min-width: 1200px) {
     display: inline-block;
     height: 190px;
-    width: auto;
     &.imageWeek2 {
       order: 1;
     }
@@ -135,7 +137,6 @@ const WeekBTN = styled.button`
 
 const ComingTopic = () => {
   const [isShowTitle, setIsShowTitle] = useState(false);
-
   const [week1Opacity, setWeek1Opacity] = useState(1);
   const [week2Opacity, setWeek2Opacity] = useState(1);
   const [week3Opacity, setWeek3Opacity] = useState(1);
@@ -143,10 +144,10 @@ const ComingTopic = () => {
   const { clientHeight, currentScrollArea, screenWidth } =
     useContext(LayoutContext);
 
-  console.log("isShowTitle", isShowTitle);
   useEffect(() => {
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
+
     if (scrollAreaName === "comingTopic") {
       if (screenWidth < 1200) {
         let showTitle = false,
@@ -174,7 +175,10 @@ const ComingTopic = () => {
         setWeek2Opacity(week2Opa);
         setWeek3Opacity(week3Opa);
       } else {
-        if (scrollAreaOffset >= (3 * clientHeight) / 4) {
+        if (
+          scrollAreaOffset >= (3 * clientHeight) / 4 &&
+          scrollAreaOffset <= clientHeight + 1040
+        ) {
           setIsShowTitle(true);
         }
 
@@ -216,19 +220,22 @@ const ComingTopic = () => {
           setWeek3Opacity(
             (1 - 780 * (scrollAreaOffset - clientHeight - 780)) / clientHeight
           );
-        } else {
-          setIsShowTitle(false);
-          setWeek1Opacity(0);
-          setWeek2Opacity(0);
-          setWeek3Opacity(0);
         }
+      }
+    } else {
+      if (screenWidth < 1200) {
+      } else {
+        setIsShowTitle(false);
+        setWeek1Opacity(0);
+        setWeek2Opacity(0);
+        setWeek3Opacity(0);
       }
     }
   }, [clientHeight, currentScrollArea, screenWidth]);
 
   return (
     <Container id="comingTopic">
-      <PageTitle
+      <StickyPageTitle
         titleText="年度最強合作，三大主題來襲"
         secondTitleText="各路廠商強強聯手<br/>共同設計出接地氣的網頁互動挑戰關卡"
         isShow={isShowTitle}
