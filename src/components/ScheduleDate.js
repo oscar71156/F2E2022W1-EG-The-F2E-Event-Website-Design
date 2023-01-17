@@ -13,6 +13,11 @@ const Container = styled.div`
   }
 `;
 
+const ConditionalPageTitle = styled(PageTitle)`
+  @media screen and (min-width: 1200px) {
+    display: none;
+  }
+`;
 const Content = styled.div`
   width: 100%;
   max-width: 1440px;
@@ -180,8 +185,7 @@ const ScheduleDate = () => {
   const [uploadOriginHeight, setUploadOriginHeight] = useState(0);
   const [uploadOpacity, setUploadOpacity] = useState(0);
 
-  const { currentScrollArea, clientHeight, screenWidth } =
-    useContext(LayoutContext);
+  const { currentScrollArea, clientHeight } = useContext(LayoutContext);
 
   /**
    * 1vh~ 2vh => dateLine grow
@@ -196,97 +200,89 @@ const ScheduleDate = () => {
       currentScrollArea;
 
     if (scrollAreaName === "scheduleDate") {
-      if (screenWidth < 1200) {
-        
+      if (scrollAreaOffset <= clientHeight) {
+        setDateLineWidth(0);
+      } else if (
+        scrollAreaOffset > clientHeight &&
+        scrollAreaOffset <= 2 * clientHeight
+      ) {
+        const startPoint = clientHeight;
+        const endPoint = 2 * clientHeight;
+        setDateLineWidth(
+          (100 * (scrollAreaOffset - startPoint)) / clientHeight
+        );
       } else {
-        if (scrollAreaOffset <= clientHeight) {
-          setDateLineWidth(0);
-        } else if (
-          scrollAreaOffset > clientHeight &&
-          scrollAreaOffset <= 2 * clientHeight
-        ) {
-          const startPoint = clientHeight;
-          const endPoint = 2 * clientHeight;
-          setDateLineWidth(
-            (100 * (scrollAreaOffset - startPoint)) / clientHeight
-          );
-        } else {
-          setDateLineWidth(100);
-        }
+        setDateLineWidth(100);
+      }
 
-        if (scrollAreaOffset <= 2 * clientHeight) {
-          setSignUpOriginHeight(0);
-        } else if (
-          scrollAreaOffset > 2 * clientHeight &&
-          scrollAreaOffset <= clientHeight * 2 + 300
-        ) {
-          //height 0=> 150
-          //translateY => 150 =>  0
-          setSignUpOriginHeight((scrollAreaOffset - 2 * clientHeight) * 0.5);
-          setSignUpOpacity(0);
-        } else if (
-          scrollAreaOffset > 2 * clientHeight + 300 &&
-          scrollAreaOffset <= clientHeight * 2 + 700
-        ) {
-          setSignUpOriginHeight(150);
+      if (scrollAreaOffset <= 2 * clientHeight) {
+        setSignUpOriginHeight(0);
+      } else if (
+        scrollAreaOffset > 2 * clientHeight &&
+        scrollAreaOffset <= clientHeight * 2 + 300
+      ) {
+        //height 0=> 150
+        //translateY => 150 =>  0
+        setSignUpOriginHeight((scrollAreaOffset - 2 * clientHeight) * 0.5);
+        setSignUpOpacity(0);
+      } else if (
+        scrollAreaOffset > 2 * clientHeight + 300 &&
+        scrollAreaOffset <= clientHeight * 2 + 700
+      ) {
+        setSignUpOriginHeight(150);
 
-          //opacity 0 => 1
-          setSignUpOpacity(
-            (scrollAreaOffset - 2 * clientHeight - 300) * 0.0025
-          );
+        //opacity 0 => 1
+        setSignUpOpacity((scrollAreaOffset - 2 * clientHeight - 300) * 0.0025);
 
-          setStartOriginHeight(0);
-        } else if (
-          scrollAreaOffset > 2 * clientHeight + 700 &&
-          scrollAreaOffset <= clientHeight * 2 + 1000
-        ) {
-          setSignUpOpacity(1);
+        setStartOriginHeight(0);
+      } else if (
+        scrollAreaOffset > 2 * clientHeight + 700 &&
+        scrollAreaOffset <= clientHeight * 2 + 1000
+      ) {
+        setSignUpOpacity(1);
 
-          /**0 => 105 */
-          setStartOriginHeight(
-            0.35 * (scrollAreaOffset - 2 * clientHeight - 700)
-          );
+        /**0 => 105 */
+        setStartOriginHeight(
+          0.35 * (scrollAreaOffset - 2 * clientHeight - 700)
+        );
 
-          setStartOpacity(0);
-        } else if (
-          scrollAreaOffset > 2 * clientHeight + 1000 &&
-          scrollAreaOffset <= clientHeight * 2 + 1400
-        ) {
-          setStartOriginHeight(105);
+        setStartOpacity(0);
+      } else if (
+        scrollAreaOffset > 2 * clientHeight + 1000 &&
+        scrollAreaOffset <= clientHeight * 2 + 1400
+      ) {
+        setStartOriginHeight(105);
 
-          /**0=>1 */
-          setStartOpacity(
-            (scrollAreaOffset - 2 * clientHeight - 1000) * 0.0025
-          );
+        /**0=>1 */
+        setStartOpacity((scrollAreaOffset - 2 * clientHeight - 1000) * 0.0025);
 
-          setUploadOriginHeight(0);
-        } else if (
-          scrollAreaOffset > 2 * clientHeight + 1400 &&
-          scrollAreaOffset <= clientHeight * 2 + 1700
-        ) {
-          setStartOpacity(1);
+        setUploadOriginHeight(0);
+      } else if (
+        scrollAreaOffset > 2 * clientHeight + 1400 &&
+        scrollAreaOffset <= clientHeight * 2 + 1700
+      ) {
+        setStartOpacity(1);
 
-          // 0=>171
-          setUploadOriginHeight(
-            (scrollAreaOffset - 2 * clientHeight - 1400) * 0.57
-          );
-        } else if (
-          scrollAreaOffset > 2 * clientHeight + 1700 &&
-          scrollAreaOffset <= clientHeight * 2 + 2100
-        ) {
-          setUploadOriginHeight(171);
+        // 0=>171
+        setUploadOriginHeight(
+          (scrollAreaOffset - 2 * clientHeight - 1400) * 0.57
+        );
+      } else if (
+        scrollAreaOffset > 2 * clientHeight + 1700 &&
+        scrollAreaOffset <= clientHeight * 2 + 2100
+      ) {
+        setUploadOriginHeight(171);
 
-          // 0=>1
-          setUploadOpacity((scrollAreaOffset - 2 * clientHeight - 2100) * 0.25);
-        } else {
-          setDateLineWidth(100);
-          setSignUpOriginHeight(150);
-          setSignUpOpacity(1);
-          setStartOriginHeight(105);
-          setStartOpacity(1);
-          setUploadOriginHeight(171);
-          setUploadOpacity(1);
-        }
+        // 0=>1
+        setUploadOpacity((scrollAreaOffset - 2 * clientHeight - 2100) * 0.25);
+      } else {
+        setDateLineWidth(100);
+        setSignUpOriginHeight(150);
+        setSignUpOpacity(1);
+        setStartOriginHeight(105);
+        setStartOpacity(1);
+        setUploadOriginHeight(171);
+        setUploadOpacity(1);
       }
     } else {
       setDateLineWidth(0);
@@ -300,7 +296,7 @@ const ScheduleDate = () => {
   }, [currentScrollArea, clientHeight]);
   return (
     <Container id="scheduleDate">
-      <PageTitle titleText="重要時程" />
+      <ConditionalPageTitle titleText="重要時程" />
       <Content>
         <Schedules>
           <Signup originHeight={signUpOriginHeight} opacity={signUpOpacity}>
