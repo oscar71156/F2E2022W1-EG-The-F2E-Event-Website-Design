@@ -8,7 +8,13 @@ import PageTitle from "./PageTitle";
 const Container = styled.div`
   @media screen and (min-width: 1200px) {
     height: 300vh;
-    ${"" /* background: pink; */}
+  }
+`;
+
+const StickyPageTitle = styled(PageTitle)`
+  @media screen and (min-width: 1200px) {
+    top: 0;
+    position: ${(props) => (props.isSticky ? "sticky" : "relative")};
   }
 `;
 const Content = styled.div`
@@ -27,9 +33,6 @@ const Content = styled.div`
     position: sticky;
     top: 200px;
     transform: translateX(${(props) => props.tStyle.x}px);
-    ${
-      "" /* translateY(${(props) => (props.isSticky ? 0 : "calc( 200vh - 200px )")}); */
-    }
     opacity: ${(props) => props.tStyle.opacity};
   }
 `;
@@ -53,7 +56,6 @@ const TrophyContainer = styled.div`
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    ${"" /* transform: rotate(${(props) => -props.rotateDeg}deg); */}
   }
   @media screen and (min-width: 600px) {
     box-sizing: content-box;
@@ -66,13 +68,6 @@ const TrophyContainer = styled.div`
     width: 100%;
     height: 100%;
   }
-`;
-
-const ImageTrophy = styled.img`
-  width: 100%;
-  height: 100%;
-  max-height: 375px;
-  max-width: 375px;
 `;
 
 const Description = styled.div`
@@ -178,15 +173,14 @@ const Rules = () => {
   }, [currentScrollArea, clientHeight]);
   return (
     <Container id="rules">
-      <PageTitle titleText="還有比賽等著你!" isSticky={isSticky} />
+      <StickyPageTitle titleText="還有比賽等著你!" isSticky={isSticky} />
       <Content tStyle={contentStyle} isSticky={isSticky}>
         <TrophyContainer rotateDeg={trophyRotateDeg} />
-        {/* <ImageTrophy src={iconAwardTrophy} />
-        </TrophyContainer> */}
         <Description>
           <AwardTitle>評審機制</AwardTitle>
           <AwardDetail>
-            初選： 將由六角學院前端、UI 評審進行第一波篩選。<br/>
+            初選： 將由六角學院前端、UI 評審進行第一波篩選。
+            <br />
             決選： 由六角學院與贊助廠商討論，進行最後篩選，並於 12/30(五)
             由評審進行直播公布名單！
           </AwardDetail>
