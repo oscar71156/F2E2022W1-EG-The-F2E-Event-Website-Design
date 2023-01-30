@@ -10,7 +10,6 @@ import iconDecorate8 from "../assets/bg_decorate_08.png";
 import PageTitle from "./PageTitle";
 import { useContext, useEffect, useState } from "react";
 import LayoutContext from "../contexts/Layout";
-import layout from "../layout";
 
 const Name = "sponsors";
 const Container = styled.div`
@@ -166,7 +165,8 @@ const ImageBgDecorate8 = styled.img`
 const Sponsors = () => {
   const [isShowContent, setIsShowContent] = useState(false);
   const [isShowTitle, setIsShowTitle] = useState(false);
-  const { currentScrollArea, clientHeight,getScreenInforByName } = useContext(LayoutContext);
+  const { currentScrollArea, clientHeight, getScreenInforByName } =
+    useContext(LayoutContext);
   const [isSticky, setIsSticky] = useState(false);
   const [bgD4TStyle, setBgD4TStyle] = useState({
     translateX: -2000,
@@ -312,20 +312,25 @@ const Sponsors = () => {
       setBgD4TStyle({ translateX: 0, scale: 0, opacity: 0, translateY: 0 });
       setBgD8TStyle({ translateX: 0, scale: 0, opacity: 0, translateY: 0 });
       setIsSticky(false);
-      const sponsorsScreen=getScreenInforByName('sponsors');
+      const sponsorsScreen = getScreenInforByName("sponsors");
       if (scrollAreaOrder < sponsorsScreen?.order) {
         setIsShowContent(false);
         setIsShowTitle(false);
       }
     }
   }, [currentScrollArea, clientHeight]);
+
   return (
     <Container isSticky={isSticky} id="sponsors">
       <PageTitle isShow={isShowTitle} titleText="贊助單位" />
       <Content isSticky={isSticky}>
         <SponsorBS isShow={isShowContent}>
           <SponsorIconBTN>
-            <a href="https://kdanmobile.teamdoor.io/" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://kdanmobile.teamdoor.io/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <ImageLogoBS src={iconLogoBS} />
             </a>
           </SponsorIconBTN>
@@ -333,7 +338,11 @@ const Sponsors = () => {
         </SponsorBS>
         <SponsorTS isShow={isShowContent}>
           <SponsorIconBTN>
-            <a href="https://www.titansoft.com/tw/" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://www.titansoft.com/tw/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <ImageLogoKDAN src={iconLogoKDAN} />
             </a>
           </SponsorIconBTN>
@@ -341,7 +350,11 @@ const Sponsors = () => {
         </SponsorTS>
         <SponsorKM isShow={isShowContent}>
           <SponsorIconBTN>
-            <a href="https://blockstudio.tw/career/" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://blockstudio.tw/career/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <ImageLogoTitan src={iconLogoTS} />
             </a>
           </SponsorIconBTN>
