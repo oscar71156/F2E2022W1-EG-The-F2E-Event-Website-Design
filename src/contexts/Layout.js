@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { createContext, useEffect, useLayoutEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import layout from "../layout";
 import {
   calcScreenTop,
@@ -48,7 +48,8 @@ function LayoutProvider({ children }) {
     }
   }, [scrollContent, clientHeight, screenWidth]);
 
-  useLayoutEffect(() => {
+
+  useEffect(() => {
     setClientHeight(window.innerHeight);
     setScreenWidth(window.innerWidth);
     window.addEventListener("resize", handleSizeChange);
@@ -68,6 +69,9 @@ function LayoutProvider({ children }) {
         name: currentScrollAreaElement.name,
         offset: scrollTop - currentScrollAreaElement.scrollStart,
         order: currentScrollAreaElement.order,
+        height:
+          currentScrollAreaElement.scrollEnd -
+          currentScrollAreaElement.scrollStart,
       });
     }
   }, [scrollTopsArray, scrollTop]);
