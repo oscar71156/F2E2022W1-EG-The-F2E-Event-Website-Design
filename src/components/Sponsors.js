@@ -323,6 +323,8 @@ const Sponsors = () => {
   return (
     <Container isSticky={isSticky} id="sponsors">
       <PageTitle isShow={isShowTitle} titleText="贊助單位" />
+      <ImageBgDecorate4 src={iconDecorate4} tStyle={bgD4TStyle} />
+      <ImageBgDecorate8 src={iconDecorate8} tStyle={bgD8TStyle} />
       <Content isSticky={isSticky}>
         <SponsorBS isShow={isShowContent}>
           <SponsorIconBTN>
@@ -361,8 +363,6 @@ const Sponsors = () => {
           <SponsorTitle>#凱鈿科技</SponsorTitle>
         </SponsorKM>
       </Content>
-      <ImageBgDecorate4 src={iconDecorate4} tStyle={bgD4TStyle} />
-      <ImageBgDecorate8 src={iconDecorate8} tStyle={bgD8TStyle} />
     </Container>
   );
 };
