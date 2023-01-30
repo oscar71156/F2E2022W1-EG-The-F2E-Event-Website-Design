@@ -16,6 +16,7 @@ const Container = styled.div`
     position: fixed;
     left: 40px;
     bottom: 40px;
+    z-index: 1;
   }
 `;
 
@@ -34,23 +35,27 @@ const ImageCurrentPosition = styled.img`
   position: absolute;
   left: 0;
   top: 0;
-  transform: translateX(${(props) => props.currentPosition.x}px)  translateY(${(props) => props.currentPosition.y}px);
-  transition-duration:.1s;
+  transform: translateX(${(props) => props.currentPosition.x}px)
+    translateY(${(props) => props.currentPosition.y}px);
+  transition-duration: 0.1s;
 `;
 function Map() {
   const { currentScrollArea } = useContext(LayoutContext);
   const [currentPosition, setCurrentPosition] = useState({ x: 0, y: 0 });
   useEffect(() => {
     const { name: scrollAreaName } = currentScrollArea;
-    if(layout[scrollAreaName]){
-      const {mapPosition}=layout[scrollAreaName];
-      setCurrentPosition((pre)=>({...pre,...mapPosition}));
+    if (layout[scrollAreaName]) {
+      const { mapPosition } = layout[scrollAreaName];
+      setCurrentPosition((pre) => ({ ...pre, ...mapPosition }));
     }
   }, [currentScrollArea]);
   return (
     <Container>
       <Icon.RaceMap />
-      <ImageCurrentPosition src={iconCurrentPosition} currentPosition={currentPosition} />
+      <ImageCurrentPosition
+        src={iconCurrentPosition}
+        currentPosition={currentPosition}
+      />
     </Container>
   );
 }

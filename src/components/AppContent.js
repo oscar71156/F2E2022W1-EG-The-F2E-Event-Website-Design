@@ -47,6 +47,7 @@ const FixedJoinBTN = styled(JoinButton)`
   &#joinButton {
     display: none;
     @media screen and (min-width: 1200px) {
+      z-index: 1;
       position: fixed;
       display: flex;
       width: min-content;
