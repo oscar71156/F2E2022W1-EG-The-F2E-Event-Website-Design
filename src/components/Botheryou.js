@@ -110,14 +110,29 @@ const ImageBgDecorate9 = styled.img`
 `;
 
 const LBgD9 = styled(ImageBgDecorate9)`
-  left: 200px;
+  display: none;
   @media screen and (min-width: 1430px) {
-    left: 0;
+    display: block;
+    visibility: ${(props) => (props.isVisible ? "visible" : "hidden")};
+    left: calc(50vw - 450px);
+    bottom: -20px;
+    transform: translateX(${(props) => props.tStyle.XOffset}px)
+      translateY(${(props) => props.tStyle.YOffset}px)
+      scale(${(props) => props.tStyle.scale});
   }
 `;
 
 const RBgD9 = styled(ImageBgDecorate9)`
-  right: 0;
+  display: none;
+  @media screen and (min-width: 1430px) {
+    visibility: ${(props) => (props.isVisible ? "visible" : "hidden")};
+    display: block;
+    right: calc(50vw - 450px);
+    bottom: -20px;
+    transform: translateX(${(props) => props.tStyle.XOffset}px)
+      translateY(${(props) => props.tStyle.YOffset}px)
+      scale(${(props) => props.tStyle.scale});
+  }
 `;
 
 /**
@@ -136,6 +151,20 @@ const Botheryou = () => {
   const [isShowWish, setIsShowWish] = useState(false);
   const [isShowComplex, setIsShowComplex] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+
+  const [LBgD9TStyle, setLBgD9TStyle] = useState({
+    XOffset: 0,
+    YOffset: 0,
+    scale: 1,
+  });
+  const [isLBgVisible, setIsLBgVisible] = useState(false);
+  const [RBgD9TStyle, setRBgD9TStyle] = useState({
+    XOffset: 0,
+    YOffset: 0,
+    scale: 1,
+  });
+  const [isRBgVisible, setIsRBgVisible] = useState(false);
+
   const { clientHeight, currentScrollArea, screenWidth } =
     useContext(LayoutContext);
 
@@ -187,17 +216,30 @@ const Botheryou = () => {
           setIsShowEnvious(false);
           setIsShowWish(false);
           setIsShowComplex(false);
+          setIsLBgVisible(true);
+          setIsRBgVisible(true);
+          setLBgD9TStyle({ XOffset: 0, YOffset: 0, scale: 1 });
+          setRBgD9TStyle({ XOffset: 0, YOffset: 0, scale: 1 });
         } else if (
           scrollAreaOffset >= clientHeight + 300 &&
           scrollAreaOffset < clientHeight + 600
         ) {
           setIsShowEnvious(true);
+
+          setLBgD9TStyle({ XOffset: 100, YOffset: 5, scale: 0.5 });
+          setRBgD9TStyle({ XOffset: -100, YOffset: 5, scale: 0.5 });
         } else if (
           scrollAreaOffset >= clientHeight + 600 &&
           scrollAreaOffset < clientHeight + 900
         ) {
           setIsShowWish(true);
+          setLBgD9TStyle({ XOffset: 200, YOffset: -10, scale: 0.5 });
+          setRBgD9TStyle({ XOffset: -200, YOffset: -10, scale: 0.5 });
+          setIsLBgVisible(true);
+          setIsRBgVisible(true);
         } else if (scrollAreaOffset >= clientHeight + 900) {
+          setIsLBgVisible(false);
+          setIsRBgVisible(false);
           setIsShowEnvious(true);
           setIsShowWish(true);
           setIsShowComplex(true);
@@ -224,8 +266,16 @@ const Botheryou = () => {
           <ImageComplex src={iconComplex} />
         </QuestionComplex>
       </QuestionsCon>
-      <LBgD9 src={iconBgDecorate9} />
-      <RBgD9 src={iconBgDecorate9} />
+      <LBgD9
+        src={iconBgDecorate9}
+        tStyle={LBgD9TStyle}
+        isVisible={isLBgVisible}
+      />
+      <RBgD9
+        src={iconBgDecorate9}
+        tStyle={RBgD9TStyle}
+        isVisible={isRBgVisible}
+      />
     </Container>
   );
 };
