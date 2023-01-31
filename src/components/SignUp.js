@@ -16,9 +16,11 @@ const Container = styled.div`
 `;
 
 const Content = styled.div`
+  @media screen and (max-height: 700px) {
+    transform: translateY(-50px);
+  }
   @media screen and (min-width: 1200px) {
     opacity: ${(props) => props.tStyle.opacity};
-
     transform: translateY(500px);
   }
 `;
