@@ -15,7 +15,6 @@ import Logo from "./Logo";
 const Container = styled.div`
   height: 100vh;
   overflow: hidden;
-
   z-index: 0;
   padding-top: 60px;
   @media screen and (min-width: 1200px) {
@@ -28,13 +27,13 @@ const ImageBigLogo = styled.img`
   display: block;
   padding: 32px 0 16px;
   margin: 0 auto;
-  height: auto;
-  width: calc(100vh - 550px);
-
-  @media screen and (max-height: 700px) {
-    padding: 16px 0 8px;
-    width: 680px;
-    height: 236px;
+  width: auto;
+  height: calc(100vh - 550px);
+  aspect-ratio: 137/102;
+  max-width: 90vw;
+  @media screen and (min-width: 800px) {
+    width: 90vw;
+    height: auto;
   }
 `;
 const BigIconM = styled.div`
@@ -50,20 +49,11 @@ const BigIconM = styled.div`
 const ImageBgDecorate1 = styled.img`
   display: none;
   position: absolute;
-  ${"" /* left: -20px; */}
   top: 50%;
   transform: translateY(-30%);
   width: 113px;
   height: auto;
 
-  ${"" /* transform: translateY(40px); */}
-
-  @media screen and (min-width: 600px) {
-    display: block;
-    width: 271px;
-    ${"" /* left: -70px; */}
-    z-index: -1;
-  }
   @media screen and (min-width: 900px) {
     width: 430px;
   }
@@ -86,11 +76,6 @@ const ImageBgDecorate5 = styled.img`
   top: 50%;
   right: -30px;
   transform: translateY(-50%);
-
-  @media screen and (min-width: 600px) {
-    width: 305px;
-    right: -70px;
-  }
 
   @media screen and (min-width: 900px) {
     display: block;
