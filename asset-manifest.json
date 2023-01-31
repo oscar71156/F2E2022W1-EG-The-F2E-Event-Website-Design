@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/F2E2022W1-EG-The-F2E-Event-Website-Design/static/css/main.1a903f02.css",
-    "main.js": "/F2E2022W1-EG-The-F2E-Event-Website-Design/static/js/main.9a15188f.js",
+    "main.js": "/F2E2022W1-EG-The-F2E-Event-Website-Design/static/js/main.e9e52f76.js",
     "static/js/787.7972a87e.chunk.js": "/F2E2022W1-EG-The-F2E-Event-Website-Design/static/js/787.7972a87e.chunk.js",
     "static/media/GenJyuuGothic-P-Bold.ttf": "/F2E2022W1-EG-The-F2E-Event-Website-Design/static/media/GenJyuuGothic-P-Bold.647639c06a35c659316a.ttf",
     "static/media/biglogo.svg": "/F2E2022W1-EG-The-F2E-Event-Website-Design/static/media/biglogo.a24c739aba7b556a04bd222fb426fa5f.svg",
@@ -71,11 +71,11 @@
     "static/media/user.svg": "/F2E2022W1-EG-The-F2E-Event-Website-Design/static/media/user.becb1de774d9588ece43624ffef258e9.svg",
     "index.html": "/F2E2022W1-EG-The-F2E-Event-Website-Design/index.html",
     "main.1a903f02.css.map": "/F2E2022W1-EG-The-F2E-Event-Website-Design/static/css/main.1a903f02.css.map",
-    "main.9a15188f.js.map": "/F2E2022W1-EG-The-F2E-Event-Website-Design/static/js/main.9a15188f.js.map",
+    "main.e9e52f76.js.map": "/F2E2022W1-EG-The-F2E-Event-Website-Design/static/js/main.e9e52f76.js.map",
     "787.7972a87e.chunk.js.map": "/F2E2022W1-EG-The-F2E-Event-Website-Design/static/js/787.7972a87e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.1a903f02.css",
-    "static/js/main.9a15188f.js"
+    "static/js/main.e9e52f76.js"
   ]
 }
