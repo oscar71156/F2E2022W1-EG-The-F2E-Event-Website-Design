@@ -56,6 +56,10 @@ const TrophyContainer = styled.div`
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
+    transform: rotate(${(props) => -props.rotateDeg}deg);
+    @media screen and (min-width: 1200px) {
+      transform: none;
+    }
   }
   @media screen and (min-width: 600px) {
     box-sizing: content-box;
@@ -105,7 +109,8 @@ const AwardItems = styled.ol`
 const AwardItem = styled.li``;
 
 const Rules = () => {
-  const { currentScrollArea, clientHeight } = useContext(LayoutContext);
+  const { currentScrollArea, clientHeight, screenWidth, getScreenInforByName } =
+    useContext(LayoutContext);
   const [contentStyle, setContentStyle] = useState({
     opacity: 0,
     x: -300,
@@ -119,58 +124,74 @@ const Rules = () => {
       currentScrollArea;
 
     if (scrollAreaName === "rules") {
-      setIsSticky(true);
-
-      if (scrollAreaOffset < clientHeight / 2) {
-        setContentStyle({ opacity: 0, x: -300 });
-        setTrophyRotateDeg(0);
-      } else if (
-        scrollAreaOffset >= clientHeight / 2 &&
-        scrollAreaOffset < (clientHeight * 3) / 2
-      ) {
-        setContentStyle({
-          opacity: 0 + (scrollAreaOffset - clientHeight / 2) / clientHeight,
-          x:
-            -300 + (300 * (scrollAreaOffset - clientHeight / 2)) / clientHeight,
-        });
-        setTrophyRotateDeg(
-          ((scrollAreaOffset - clientHeight / 2) / clientHeight) * 3600
-        );
-      } else if (
-        scrollAreaOffset >= (clientHeight * 3) / 2 &&
-        scrollAreaOffset < clientHeight * 2
-      ) {
-        setContentStyle({
-          opacity: 1,
-          x: 0,
-        });
-        setTrophyRotateDeg(0);
-      } else if (
-        scrollAreaOffset >= clientHeight * 2 &&
-        scrollAreaOffset < clientHeight * 3
-      ) {
-        setContentStyle({
-          opacity: 1 - (scrollAreaOffset - clientHeight * 2) / clientHeight,
-          x: 0 + (300 * (scrollAreaOffset - clientHeight * 2)) / clientHeight,
-        });
-        setTrophyRotateDeg(
-          ((scrollAreaOffset - clientHeight * 2) / clientHeight) * 3600
-        );
+      if (screenWidth > 1200) {
+        setIsSticky(true);
+        if (scrollAreaOffset < clientHeight / 2) {
+          setContentStyle({ opacity: 0, x: -300 });
+          setTrophyRotateDeg(0);
+        } else if (
+          scrollAreaOffset >= clientHeight / 2 &&
+          scrollAreaOffset < (clientHeight * 3) / 2
+        ) {
+          setContentStyle({
+            opacity: 0 + (scrollAreaOffset - clientHeight / 2) / clientHeight,
+            x:
+              -300 +
+              (300 * (scrollAreaOffset - clientHeight / 2)) / clientHeight,
+          });
+          setTrophyRotateDeg(
+            ((scrollAreaOffset - clientHeight / 2) / clientHeight) * 720
+          );
+        } else if (
+          scrollAreaOffset >= (clientHeight * 3) / 2 &&
+          scrollAreaOffset < clientHeight * 2
+        ) {
+          setContentStyle({
+            opacity: 1,
+            x: 0,
+          });
+          setTrophyRotateDeg(0);
+        } else if (
+          scrollAreaOffset >= clientHeight * 2 &&
+          scrollAreaOffset < clientHeight * 3
+        ) {
+          setContentStyle({
+            opacity: 1 - (scrollAreaOffset - clientHeight * 2) / clientHeight,
+            x: 0 + (300 * (scrollAreaOffset - clientHeight * 2)) / clientHeight,
+          });
+          setTrophyRotateDeg(
+            ((scrollAreaOffset - clientHeight * 2) / clientHeight) * 720
+          );
+        } else {
+          setContentStyle({
+            opacity: 0,
+            x: 0,
+          });
+          setTrophyRotateDeg(0);
+        }
       } else {
+        const { scrollStart, scrollEnd } = getScreenInforByName("rules");
+        const currentScrollAreaHeight = scrollEnd - scrollStart;
+        if (
+          scrollAreaOffset > 0 &&
+          scrollAreaOffset < currentScrollAreaHeight
+        ) {
+          setTrophyRotateDeg(
+            (scrollAreaOffset * currentScrollAreaHeight) / 7200
+          );
+        }
+      }
+    } else {
+      if (screenWidth > 1200) {
+        setIsSticky(false);
         setContentStyle({
           opacity: 0,
           x: 0,
         });
-        setTrophyRotateDeg(0);
+      } else {
       }
-    } else {
-      setIsSticky(false);
-      setContentStyle({
-        opacity: 0,
-        x: 0,
-      });
     }
-  }, [currentScrollArea, clientHeight]);
+  }, [currentScrollArea, clientHeight, screenWidth]);
   return (
     <Container id="rules">
       <StickyPageTitle titleText="還有比賽等著你!" isSticky={isSticky} />
