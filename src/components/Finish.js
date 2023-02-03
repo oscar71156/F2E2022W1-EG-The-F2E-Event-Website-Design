@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import iconFinish from "../assets/finish_1.png";
+import iconFinish from "../assets/icon/finish_1.png";
 import { useContext, useEffect, useState } from "react";
-import bgDecorate01 from "../assets/bg_decorate_01.png";
-import bgDecorate05 from "../assets/bg_decorate_05.png";
+import bgDecorate01 from "../assets/icon/bg/bg_decorate_01.png";
+import bgDecorate05 from "../assets/icon/bg/bg_decorate_05.png";
 import LayoutContext from "../contexts/Layout";
 const Container = styled.div`
   display: none;

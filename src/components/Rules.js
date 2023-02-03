@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import LayoutContext from "../contexts/Layout";
-import iconAwardLight from "../assets/award_light.png";
-import iconAwardTrophy from "../assets/award_trophy.png";
+import iconAwardLight from "../assets/icon/award_light.png";
+import iconAwardTrophy from "../assets/icon/award_trophy.png";
 
 import PageTitle from "./PageTitle";
 const Container = styled.div`

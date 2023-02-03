@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useRef } from "react";
-import iconBTNUser from "../../../assets/btn_user.png";
-import iconBTNUserH from "../../../assets/btn_user_h.png";
-import iconBTNUserP from "../../../assets/btn_user_p.png";
+import iconBTNUser from "../../../assets/icon/button/btn_user.png";
+import iconBTNUserH from "../../../assets/icon/button/btn_user_h.png";
+import iconBTNUserP from "../../../assets/icon/button/btn_user_p.png";
 
 const Button = styled.button`
   background: transparent;

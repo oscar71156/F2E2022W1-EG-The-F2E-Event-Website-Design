@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import iconLogoBS from "../assets/logo_blockstudio.png";
-import iconLogoKDAN from "../assets/logo_kdanmobile.png";
-import iconLogoTS from "../assets/logo_titansoft.png";
-import iconBTNSponsor from "../assets/btnSponsor.svg";
-import iconBTNSponsorH from "../assets/btnSponsor_h.svg";
-import iconDecorate4 from "../assets/bg_decorate_04.png";
-import iconDecorate8 from "../assets/bg_decorate_08.png";
+import iconLogoBS from "../assets/icon/logo_blockstudio.png";
+import iconLogoKDAN from "../assets/icon/logo_kdanmobile.png";
+import iconLogoTS from "../assets/icon/logo_titansoft.png";
+import iconBTNSponsor from "../assets/icon/button/btn_sponsor.png";
+import iconBTNSponsorH from "../assets/icon/button/btn_sponsor_h.png";
+import iconDecorate4 from "../assets/icon/bg/bg_decorate_04.png";
+import iconDecorate8 from "../assets/icon/bg/bg_decorate_08.png";
 
 import PageTitle from "./PageTitle";
 import { useContext, useEffect, useState } from "react";

@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import PageTitle from "./PageTitle";
-import iconWeek1 from "../assets/week_1.png";
-import iconWeek2 from "../assets/week_2.png";
-import iconWeek3 from "../assets/week_3.png";
+import iconWeek1 from "../assets/icon/week_1.png";
+import iconWeek2 from "../assets/icon/week_2.png";
+import iconWeek3 from "../assets/icon/week_3.png";
 import { useContext, useEffect, useState } from "react";
 import LayoutContext from "../contexts/Layout";
 

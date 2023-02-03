@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { useRef, useEffect } from "react";
-import iconBTNBurgerOpen from "../../assets/btn_burger_open.png";
-import iconBTNBurgerOpenH from "../../assets/btn_burger_open_h.png";
-import iconBTNBurgerOpenP from "../../assets/btn_burger_open_p.png";
-import iconBTNBurgerClose from "../../assets/btn_burger_close.png";
-import iconBTNBurgerCloseH from "../../assets/btn_burger_close_h.png";
-import iconBTNBurgerCloseP from "../../assets/btn_burger_close_p.png";
+import iconBTNBurgerOpen from "../../assets/icon/button/btn_burger_open.png";
+import iconBTNBurgerOpenH from "../../assets/icon/button/btn_burger_open_h.png";
+import iconBTNBurgerOpenP from "../../assets/icon/button/btn_burger_open_p.png";
+import iconBTNBurgerClose from "../../assets/icon/button/btn_burger_close.png";
+import iconBTNBurgerCloseH from "../../assets/icon/button/btn_burger_close_h.png";
+import iconBTNBurgerCloseP from "../../assets/icon/button/btn_burger_close_p.png";
 
 const MenuSwitchBTN = styled.button`
   background: transparent;

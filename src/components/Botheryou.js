@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import PageTitle from "./PageTitle";
-import iconEnvious from "../assets/question_1.png";
-import iconWish from "../assets/question_2.png";
-import iconComplex from "../assets/question_3.png";
-import iconBgDecorate9 from "../assets/bg_decorate_09.png";
+import iconEnvious from "../assets/icon/question_1.png";
+import iconWish from "../assets/icon/question_2.png";
+import iconComplex from "../assets/icon/question_3.png";
+import iconBgDecorate9 from "../assets/icon/bg/bg_decorate_09.png";
 import { useContext, useEffect, useState } from "react";
 import LayoutContext from "../contexts/Layout";
 

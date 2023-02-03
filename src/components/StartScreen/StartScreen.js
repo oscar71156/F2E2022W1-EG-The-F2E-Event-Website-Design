@@ -1,14 +1,14 @@
 import styled from "styled-components";
-import iconLogo from "../../assets/logo.png";
+import iconLogo from "../../assets/icon/logo.png";
 import LogoText from "../LogoText";
 import JoiningTypes from "./JoiningTypes";
 import { useContext, useEffect, useState } from "react";
 import LayoutContext from "../../contexts/Layout";
 import TrafficLight from "./TraficLight";
 
-import iconBGStart from "../../assets/start.png";
-import bgDecorate01 from "../../assets/bg_decorate_01.png";
-import bgDecorate05 from "../../assets/bg_decorate_05.png";
+import iconBGStart from "../../assets/icon/start.png";
+import bgDecorate01 from "../../assets/icon/bg/bg_decorate_01.png";
+import bgDecorate05 from "../../assets/icon/bg/bg_decorate_05.png";
 
 import Logo from "./Logo";
 
@@ -29,8 +29,9 @@ const ImageBigLogo = styled.img`
   margin: 0 auto;
   width: auto;
   height: calc(100vh - 550px);
-  aspect-ratio: 137/102;
-  max-width: 90vw;
+  ${'' /* aspect-ratio: 137/102; */}
+  max-height: 190px;
+
   @media screen and (min-width: 800px) {
     width: 90vw;
     height: auto;
@@ -47,13 +48,12 @@ const BigIconM = styled.div`
 `;
 
 const ImageBgDecorate1 = styled.img`
-  display: none;
   position: absolute;
   top: 50%;
   transform: translateY(-30%);
   width: 113px;
   height: auto;
-
+  z-index: -1;
   @media screen and (min-width: 900px) {
     width: 430px;
   }
@@ -69,7 +69,6 @@ const ImageBgDecorate1 = styled.img`
 `;
 
 const ImageBgDecorate5 = styled.img`
-  display: none;
   position: absolute;
   width: 127px;
   height: auto;

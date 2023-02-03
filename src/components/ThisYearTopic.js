@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import iconCharacterf2e from "../assets/character_f2e.png";
-import iconCharacterUI from "../assets/character_ui.png";
-import iconCharacterTeam from "../assets/character_team.png";
+import iconCharacterf2e from "../assets/icon/character/character_f2e.png";
+import iconCharacterUI from "../assets/icon/character/character_ui.png";
+import iconCharacterTeam from "../assets/icon/character/character_team.png";
 import JoinButton from "./Join";
 
 import PageTitle from "./PageTitle";

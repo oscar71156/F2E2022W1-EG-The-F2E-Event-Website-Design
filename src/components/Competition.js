@@ -2,12 +2,12 @@ import styled from "styled-components";
 import { useContext, useEffect, useState, useRef } from "react";
 import LayoutContext from "../contexts/Layout";
 
-import iconCharacterf2e from "../assets/characterf2e.gif";
-import iconCharacterTeam from "../assets/characterTeam.gif";
-import iconCharacterUI from "../assets/characterUI.gif";
-import iconRoad from "../assets/road.png";
-import iconFinishLineL from "../assets/finishLine_l.png";
-import iconFinishLineR from "../assets/finishLine_r.png";
+import iconCharacterf2e from "../assets/icon/character/characterf2e.gif";
+import iconCharacterTeam from "../assets/icon/character/characterTeam.gif";
+import iconCharacterUI from "../assets/icon/character/characterUI.gif";
+import iconRoad from "../assets/icon/road.png";
+import iconFinishLineL from "../assets/icon/finishLine_l.png";
+import iconFinishLineR from "../assets/icon/finishLine_r.png";
 
 import layout from "../layout";
 

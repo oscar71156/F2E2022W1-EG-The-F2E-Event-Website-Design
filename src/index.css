@@ -17,7 +17,7 @@ body {
   font-size: 16px;
   line-height: 140%;
   overflow: hidden;
-  cursor: url(./assets/cursor.png), auto;
+  cursor: url(./assets/icon/cursor.png), auto;
 
   /* minus scrollbar */
   /* width: calc(100vw - (100vw - 100%)); */

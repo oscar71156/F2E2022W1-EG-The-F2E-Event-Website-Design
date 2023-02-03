@@ -3,8 +3,8 @@ import { useContext, useEffect, useState } from "react";
 import LayoutContext from "../../contexts/Layout";
 import Menu from "../Menu/Menu";
 import Profile from "./Profile/Profile";
-import iconLogoText from "../../assets/logo_text.png";
-import iconLogo from "../../assets/logo.png";
+import iconLogoText from "../../assets/icon/logo_text.png";
+import iconLogo from "../../assets/icon/logo.png";
 import LogoText from "../LogoText";
 const HeaderC = styled.div`
   display: flex;

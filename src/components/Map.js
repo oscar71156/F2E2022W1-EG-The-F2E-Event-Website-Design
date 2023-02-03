@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import LayoutContext from "../contexts/Layout";
-import Icon from "../assets/icons";
+import Icon from "../assets/icon/icons";
 
 import styled from "styled-components";
-import iconCurrentPosition from "../assets/map_now.gif";
+import iconCurrentPosition from "../assets/icon/map_now.gif";
 
 import layout from "../layout";
 import { useEffect } from "react";

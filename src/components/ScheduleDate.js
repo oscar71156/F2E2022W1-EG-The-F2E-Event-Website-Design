@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import iconDateStart from "../assets/date_start.png";
-import iconDateUpload from "../assets/date_upload.png";
-import iconDateLine from "../assets/date_line.png";
-import iconWeekLine from "../assets/date_weekLine.png";
+import iconDateStart from "../assets/icon/date_start.png";
+import iconDateUpload from "../assets/icon/date_upload.png";
+import iconDateLine from "../assets/icon/date_line.png";
+import iconWeekLine from "../assets/icon/date_weekLine.png";
 import PageTitle from "./PageTitle";
 import JoinButton from "./Join";
 import { useContext, useEffect, useState } from "react";

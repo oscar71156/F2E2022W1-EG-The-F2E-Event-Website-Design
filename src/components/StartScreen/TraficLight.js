@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { useContext } from "react";
 import LayoutContext from "../../contexts/Layout";
-import iconTrafficLightFrame from "../../assets/ready_frame.png";
-import iconLightGreen from "../../assets/ready_1.png";
-import iconLightOrange from "../../assets/ready_2.png";
-import iconLightRed from "../../assets/ready_3.png";
+import iconTrafficLightFrame from "../../assets/icon/ready_frame.png";
+import iconLightGreen from "../../assets/icon/ready_1.png";
+import iconLightOrange from "../../assets/icon/ready_2.png";
+import iconLightRed from "../../assets/icon/ready_3.png";
 const TrafficLightCon = styled.div`
   position: absolute;
   height: max-content;

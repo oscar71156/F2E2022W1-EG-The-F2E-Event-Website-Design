@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import iconTalking from "../assets/bg_talking.png";
+import iconTalking from "../assets/icon/bg/bg_talking.png";
 const Container = styled.div`
   /**make margin top valid,  block will  Collapsing margins*/
   display: inline-block;

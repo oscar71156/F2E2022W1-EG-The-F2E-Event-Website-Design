@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import iconJoinHand from "../assets/btn_joinHand.gif";
-import iconJoinBTN from "../assets/btn_join.png";
-import iconJoinBTNH from "../assets/btn_join_h.png";
+import iconJoinHand from "../assets/icon/button/btn_joinHand.gif";
+import iconJoinBTN from "../assets/icon/button/btn_join.png";
+import iconJoinBTNH from "../assets/icon/button/btn_join_h.png";
 const JoinButtonCon = styled.div`
   display: flex;
   flex-direction: column;

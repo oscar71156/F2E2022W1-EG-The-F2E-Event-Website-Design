@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import iconLoading from "../assets/loading_2x.gif";
+import iconLoading from "../assets/icon/loading_2x.gif";
 
 const Container = styled.div`
   height: 100vh;

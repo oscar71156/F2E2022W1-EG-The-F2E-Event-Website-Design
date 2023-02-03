@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import iconDecorate3 from "../assets/bg_decorate_03.png";
-import iconDecorate7 from "../assets/bg_decorate_07.png";
+import iconDecorate3 from "../assets/icon/bg/bg_decorate_03.png";
+import iconDecorate7 from "../assets/icon/bg/bg_decorate_07.png";
 import LayoutContext from "../contexts/Layout";
 
 const Container = styled.div`

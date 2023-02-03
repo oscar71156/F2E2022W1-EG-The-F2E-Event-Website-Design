@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import JoinButton from "./Join";
-import iconLogo from "../assets/logo.png";
+import iconLogo from "../assets/icon/logo.png";
 import { useEffect, useContext, useState } from "react";
 import LayoutContext from "../contexts/Layout";
 

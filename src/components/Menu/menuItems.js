@@ -1,11 +1,11 @@
-import iconMenuInfo from "../../assets/ic_menu_info.png";
-import iconMenuInfoH from "../../assets/ic_menu_info_h.png";
-import iconMenuList from "../../assets/ic_menu_list.png";
-import iconMenuListH from "../../assets/ic_menu_list_h.png";
-import iconMenuJob from "../../assets/ic_menu_job.png";
-import iconMenuJobH from "../../assets/ic_menu_job_h.png";
-import iconMenuStrategy from "../../assets/ic_menu_strategy.png";
-import iconMenuStrategyH from "../../assets/ic_menu_strategy_h.png";
+import iconMenuInfo from "../../assets/icon/smallic/ic_menu_info.png";
+import iconMenuInfoH from "../../assets/icon/smallic/ic_menu_info_h.png";
+import iconMenuList from "../../assets/icon/smallic/ic_menu_list.png";
+import iconMenuListH from "../../assets/icon/smallic/ic_menu_list_h.png";
+import iconMenuJob from "../../assets/icon/smallic/ic_menu_job.png";
+import iconMenuJobH from "../../assets/icon/smallic/ic_menu_job_h.png";
+import iconMenuStrategy from "../../assets/icon/smallic/ic_menu_strategy.png";
+import iconMenuStrategyH from "../../assets/icon/smallic/ic_menu_strategy_h.png";
 
 const menuItems = [
   {

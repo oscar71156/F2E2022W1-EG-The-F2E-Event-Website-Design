@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import LogoText from "../LogoText";
-import iconLogoText from "../../assets/logo_text.png";
+import iconLogoText from "../../assets/icon/logo_text.png";
 const TitleImage = styled.img`
   display: block;
   width: 133px;
