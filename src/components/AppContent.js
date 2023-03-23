@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import { useRef, useContext, useCallback } from "react";
+import { useContext } from "react";
 import Competition from "../components/Competition";
-import { throttle } from "../utilities";
 import Header from "../components/Header/Header";
 import Botheryou from "../components/Botheryou";
 import ThisYearTopic from "../components/ThisYearTopic";
@@ -61,53 +60,10 @@ const FixedJoinBTN = styled(JoinButton)`
  * Header+EmptySlot+Competition=100vh
  */
 const AppContent = () => {
-  const scrollRef = useRef(null);
-  const thisYearTopicRef = useRef(null);
-  const { setClientHeight, setScrollTop, setScrollContent } =
-    useContext(LayoutContext);
-
-  // const ttGetWheel = useCallback(
-  //   throttle((readyStatus) => {
-  //     console.log("ttGetWheel", this);
-  //     if (readyStatus < 5) {
-  //       changeReadyStatus(readyStatus + 1);
-  //     }
-  //   }, 1000),
-  //   []
-  // );
-
-  const ttGetWheel = () => {
-    console.log("ttGetWheel");
-  };
-  // throttle(function (scrollRef) {
-  //   const currentScrollTop=scrollRef.current.scrollTop
-  //   console.log("ttGetWheel", currentScrollTop);
-
-  //   scrollRef.current.scrollTo(0,currentScrollTop+100);
-  //   // if (readyStatus < 5) {
-  //   //   changeReadyStatus(readyStatus + 1);
-  //   // }
-  // });
-
-  const ttGetScrollPosition = useCallback(
-    throttle((currentScrollTop, clientHeight) => {
-      setScrollTop(currentScrollTop);
-      setClientHeight(clientHeight);
-    }, 0),
-    []
-  );
-
+  const { setScrollContainer } = useContext(LayoutContext);
   return (
-    <ScrollContainer
-      id="scrollArea"
-      // onWheel={ttGetWheel.bind(null, scrollRef)}
-      onScroll={(e) => {
-        const currentScrollTop = e.target.scrollTop;
-        const clientHeight = e.target.clientHeight;
-        ttGetScrollPosition(currentScrollTop, clientHeight);
-      }}
-    >
-      <Container ref={setScrollContent}>
+    <ScrollContainer id="scrollArea" ref={setScrollContainer}>
+      <Container>
         <Header />
         <EmptySlot />
         <Competition />

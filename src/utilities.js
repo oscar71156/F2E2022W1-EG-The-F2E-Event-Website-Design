@@ -13,6 +13,18 @@ export const throttle = (fun, duration = 3000) => {
   };
 };
 
+export const debounce = (fun, duration = 1000) => {
+  let timeoutId = null;
+  return (...argu) => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(() => {
+      fun.apply(this, argu);
+    }, duration);
+  };
+};
+
 export const changeReadyStatus2 = (status) => {
   console.log("changeReadyStatus", status);
 };

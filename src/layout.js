@@ -100,20 +100,5 @@ export const getScreenNameArray = () => {
   return Object.keys(layout).map((screenName) => screenName);
 };
 
-export const calcScreenTop = (screenNodeArray, screenHeight, screenWidth) => {
-  let order = 1;
-  return screenNodeArray.map((screenNode) => {
-    const { top: screenNodeTop, height: screenNodeHeight } =
-      screenNode.getBoundingClientRect();
-    const screenScrollStart = screenNodeTop - screenHeight;
-    const screenScrollEnd = screenScrollStart + screenNodeHeight;
-    return {
-      name: screenNode.id,
-      scrollStart: Math.round(screenScrollStart),
-      order: order++,
-      scrollEnd: Math.round(screenScrollEnd),
-    };
-  });
-};
 
 export default layout;

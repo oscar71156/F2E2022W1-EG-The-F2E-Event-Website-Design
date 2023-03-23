@@ -1,28 +1,15 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { createContext, useEffect, useState } from "react";
 import layout from "../layout";
-import {
-  calcScreenTop,
-  getScreenNameArray,
-  getScrollBarWidth,
-} from "../layout";
+import { getScreenNameArray, getScrollBarWidth } from "../layout";
+
+import { debounce, throttle } from "../utilities";
 
 const LayoutContext = createContext({});
 
 function LayoutProvider({ children }) {
-  /**
-   * window.innerHeight
-   * including scrollbar height, padding
-   */
-  const [clientHeight, setClientHeight] = useState(null);
-  /**
-   * window.innerWidth
-   * including scrollbar width, padding
-   */
-
-  const [scrollContent, setScrollContent] = useState(null);
-
-  const [screenWidth, setScreenWidth] = useState(null);
+  const [screenDim, setScreenDim] = useState({ width: 0, height: 0 });
+  const [scrollContainer, setScrollContainer] = useState(null);
 
   const [scrollTop, setScrollTop] = useState(0);
   const [currentScrollArea, setCurrentScrollArea] = useState({
@@ -31,71 +18,118 @@ function LayoutProvider({ children }) {
   });
   const [scrollBarWidth, setScrollBarWidth] = useState(0);
 
-  const [scrollTopsArray, setScrollTopsArray] = useState([]);
+  const [screenNodesInfor, setScreenNodesInfor] = useState([]);
 
-  const handleSizeChange = () => {
-    setClientHeight(window.innerHeight);
-    setScreenWidth(window.innerWidth);
-  };
-
-  useEffect(() => {
-    if (scrollContent) {
+  //設定螢幕寬度、高度及每個Screen的起點及高度。
+  //Every screen Information: name, start, height, order(from 1)
+  const setScreenDimAndgetScreenInforArray = useCallback(() => {
+    if (scrollContainer) {
+      const scrollContent = scrollContainer.firstElementChild;
       const screenNameArray = getScreenNameArray();
       const screenNodes = [...scrollContent.childNodes].filter((node) =>
         screenNameArray.includes(node.id)
       );
-      setScrollTopsArray(calcScreenTop(screenNodes, clientHeight, screenWidth));
+      const screenHeight = window.innerHeight;
+      const screenWidth = window.innerWidth;
+      let order = 1;
+      const screenNodesInfor = screenNodes.reduce((acc, curr) => {
+        const { top: screenNodeTop, height: screenNodeHeight } =
+          curr.getBoundingClientRect();
+
+        return [
+          ...acc,
+          {
+            name: curr.id,
+            start: Math.round(
+              screenNodeTop - screenHeight + scrollContainer.scrollTop
+            ), //當在特定scrollTop refresh時，之前的screen會變負的，必須加回去
+            height: Math.round(screenNodeHeight),
+            order: order++,
+          },
+        ];
+      }, []);
+
+      setScreenNodesInfor(screenNodesInfor);
+      setScreenDim({ height: screenHeight, width: screenWidth });
     }
-  }, [scrollContent, clientHeight, screenWidth]);
+  }, [scrollContainer]);
 
-
+  //初始時，設定螢幕寬度、高度及每個Screen的起點及高度。
   useEffect(() => {
-    setClientHeight(window.innerHeight);
-    setScreenWidth(window.innerWidth);
-    window.addEventListener("resize", handleSizeChange);
-    setScrollBarWidth(getScrollBarWidth("scrollArea"));
+    if (scrollContainer) {
+      setScreenDimAndgetScreenInforArray();
+    }
+  }, [scrollContainer, setScreenDimAndgetScreenInforArray]);
+
+  //當螢幕resize時，重新設定螢幕寬度、高度及每個Screen的起點及高度。
+  const deHandleSizeChange = useCallback(() => {
+    debounce(() => {
+      setScreenDimAndgetScreenInforArray();
+    }, 1000);
+  }, [setScreenDimAndgetScreenInforArray]);
+  useEffect(() => {
+    if (deHandleSizeChange) {
+      window.addEventListener("resize", deHandleSizeChange);
+      setScrollBarWidth(getScrollBarWidth("scrollArea"));
+    }
     return () => {
-      window.removeEventListener("resize", handleSizeChange);
+      window.removeEventListener("resize", deHandleSizeChange);
     };
-  }, []);
+  }, [deHandleSizeChange]);
+
+  //當螢幕滾動時，設定目前ScrollTop
+  const ttGetScrollPosition = useMemo(
+    () =>
+      throttle((event) => {
+        const currentScrollTop = event.target.scrollTop;
+        setScrollTop(currentScrollTop);
+      }, 0),
+    []
+  );
+  useEffect(() => {
+    if (scrollContainer) {
+      scrollContainer.addEventListener("scroll", ttGetScrollPosition);
+      return () => {
+        scrollContainer.removeEventListener("scroll", ttGetScrollPosition);
+      };
+    }
+  }, [scrollContainer, ttGetScrollPosition]);
 
   useEffect(() => {
-    const currentScrollAreaElement = scrollTopsArray.find(
-      ({ scrollEnd, scrollStart }) =>
-        scrollTop > scrollStart && scrollTop <= scrollEnd
+    const currentScrollAreaElement = screenNodesInfor.find(
+      ({ start, height }) => scrollTop > start && scrollTop <= start + height
     );
+
     if (currentScrollAreaElement) {
       setCurrentScrollArea({
         name: currentScrollAreaElement.name,
-        offset: scrollTop - currentScrollAreaElement.scrollStart,
+        offset: scrollTop - currentScrollAreaElement.start,
         order: currentScrollAreaElement.order,
-        height:
-          currentScrollAreaElement.scrollEnd -
-          currentScrollAreaElement.scrollStart,
+        height: currentScrollAreaElement.height,
       });
     }
-  }, [scrollTopsArray, scrollTop]);
+  }, [screenNodesInfor, scrollTop]);
 
   const getScreenInforByName = useCallback(
-    (name) => scrollTopsArray.find((screen) => screen.name === name),
-    [scrollTopsArray]
+    (name) => screenNodesInfor.find((screen) => screen.name === name),
+    [screenNodesInfor]
   );
 
   const getPreScreenByName = useCallback(
     (name) => {
-      let currentScreen = scrollTopsArray.find(
+      let currentScreen = screenNodesInfor.find(
         ({ name: keyName }) => keyName === name
       );
+
       if (currentScreen) {
         const { order: currentScreenOrder } = currentScreen;
-
         ///order less than 1 have no preScreen
         if (currentScreenOrder <= 1) {
           //Competition or Header
           //no realContentH=>Competition has fixed original height 600px
           return {};
         }
-        const preScreens = scrollTopsArray.filter(
+        const preScreens = screenNodesInfor.filter(
           ({ order }) => order < currentScreenOrder
         );
         const maxPreScreenOrder = Math.max(
@@ -104,27 +138,24 @@ function LayoutProvider({ children }) {
         const { name: preScreenName } = preScreens.find(
           ({ order }) => order === maxPreScreenOrder
         );
-
         return { ...layout[preScreenName] };
       } else {
         return {};
       }
     },
-    [scrollTopsArray]
+    [screenNodesInfor]
   );
 
   return (
     <LayoutContext.Provider
       value={{
-        clientHeight,
-        setClientHeight,
-        setScrollTop,
+        clientHeight: screenDim.height,
         currentScrollArea,
         scrollBarWidth,
-        screenWidth,
-        setScrollContent,
+        screenWidth: screenDim.width,
         getScreenInforByName,
         getPreScreenByName,
+        setScrollContainer,
       }}
     >
       {children}
