@@ -16,30 +16,9 @@ import Menu from "../components/Menu/Menu";
 import Map from "../components/Map";
 import JoinButton from "./Join";
 import LayoutContext from "../contexts/Layout";
-const ScrollContainer = styled.div`
-  height: 100vh;
-  overflow-y: auto;
-
-  /**Make content dont exceed the window*/
-  overflow-x: hidden;
-`;
-
 const Container = styled.div`
+  overflow-x: hidden;
   background-color: var(--secondary-color-default);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const EmptySlot = styled.div`
-  @media screen and (min-width: 1200px) {
-    height: calc(100vh - 900px);
-    position: sticky;
-    top: calc(100vh - 300px);
-    right: 0;
-    z-index: -1;
-  }
 `;
 
 const FixedJoinBTN = styled(JoinButton)`
@@ -56,32 +35,26 @@ const FixedJoinBTN = styled(JoinButton)`
   }
 `;
 
-/***
- * Header+EmptySlot+Competition=100vh
- */
 const AppContent = () => {
-  const { setScrollContainer } = useContext(LayoutContext);
+  const { setScrollArea } = useContext(LayoutContext);
   return (
-    <ScrollContainer id="scrollArea" ref={setScrollContainer}>
-      <Container>
-        <Header />
-        <EmptySlot />
-        <Competition />
-        <FixedJoinBTN isShowHand />
-        <Menu />
-        <Map />
-        <StartScreen />
-        <Botheryou />
-        <ThisYearTopic />
-        <ComingTopic />
-        <ScheduleDate />
-        <Dissatisfactory />
-        <Rules />
-        <Sponsors />
-        <Finish />
-        <SignUp />
-      </Container>
-    </ScrollContainer>
+    <Container id="scrollArea" ref={setScrollArea}>
+      <Header />
+      <Competition />
+      <FixedJoinBTN isShowHand />
+      <Menu />
+      <Map />
+      <StartScreen />
+      <Botheryou />
+      <ThisYearTopic />
+      <ComingTopic />
+      <ScheduleDate />
+      <Dissatisfactory />
+      <Rules />
+      <Sponsors />
+      <Finish />
+      <SignUp />
+    </Container>
   );
 };
 export default AppContent;

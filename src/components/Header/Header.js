@@ -1,11 +1,9 @@
 import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import LayoutContext from "../../contexts/Layout";
-import Menu from "../Menu/Menu";
 import Profile from "./Profile/Profile";
 import iconLogoText from "../../assets/icon/logo_text.png";
 import iconLogo from "../../assets/icon/logo.png";
-import LogoText from "../LogoText";
 const HeaderC = styled.div`
   display: flex;
   justify-content: space-between;
@@ -19,9 +17,8 @@ const HeaderC = styled.div`
   z-index: 1;
   position: fixed;
   @media screen and (min-width: 1200px) {
-    height: 300px;
+    height: 0;
     /**For scrollable, normal flow will take up space */
-    position: sticky;
   }
 `;
 
@@ -40,13 +37,6 @@ const TitleImage = styled.img`
     width: 680px;
     height: 236px;
     margin-top: 44px;
-  }
-`;
-
-const LogoTextL = styled(LogoText)`
-  display: none;
-  @media screen and (min-width: 1200px) {
-    display: block;
   }
 `;
 
@@ -95,7 +85,6 @@ const Header = () => {
       <ImageBigLogo src={iconLogo} tStyle={bigLogoTStyle} />
       <Title>
         <TitleImage src={iconLogoText} />
-        {/* <LogoTextL /> */}
       </Title>
       <Profile />
     </HeaderC>

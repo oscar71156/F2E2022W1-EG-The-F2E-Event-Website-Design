@@ -9,7 +9,7 @@ const LayoutContext = createContext({});
 
 function LayoutProvider({ children }) {
   const [screenDim, setScreenDim] = useState({ width: 0, height: 0 });
-  const [scrollContainer, setScrollContainer] = useState(null);
+  const [scrollArea, setScrollArea] = useState(null);
 
   const [scrollTop, setScrollTop] = useState(0);
   const [currentScrollArea, setCurrentScrollArea] = useState({
@@ -23,10 +23,9 @@ function LayoutProvider({ children }) {
   //設定螢幕寬度、高度及每個Screen的起點及高度。
   //Every screen Information: name, start, height, order(from 1)
   const setScreenDimAndgetScreenInforArray = useCallback(() => {
-    if (scrollContainer) {
-      const scrollContent = scrollContainer.firstElementChild;
+    if (scrollArea) {
       const screenNameArray = getScreenNameArray();
-      const screenNodes = [...scrollContent.childNodes].filter((node) =>
+      const screenNodes = [...scrollArea.childNodes].filter((node) =>
         screenNameArray.includes(node.id)
       );
       const screenHeight = window.innerHeight;
@@ -35,14 +34,11 @@ function LayoutProvider({ children }) {
       const screenNodesInfor = screenNodes.reduce((acc, curr) => {
         const { top: screenNodeTop, height: screenNodeHeight } =
           curr.getBoundingClientRect();
-
         return [
           ...acc,
           {
             name: curr.id,
-            start: Math.round(
-              screenNodeTop - screenHeight + scrollContainer.scrollTop
-            ), //當在特定scrollTop refresh時，之前的screen會變負的，必須加回去
+            start: Math.round(screenNodeTop + scrollArea.scrollTop), //當在特定scrollTop refresh時，之前的screen會變負的，必須加回去
             height: Math.round(screenNodeHeight),
             order: order++,
           },
@@ -52,21 +48,22 @@ function LayoutProvider({ children }) {
       setScreenNodesInfor(screenNodesInfor);
       setScreenDim({ height: screenHeight, width: screenWidth });
     }
-  }, [scrollContainer]);
+  }, [scrollArea]);
 
   //初始時，設定螢幕寬度、高度及每個Screen的起點及高度。
   useEffect(() => {
-    if (scrollContainer) {
+    if (scrollArea) {
       setScreenDimAndgetScreenInforArray();
     }
-  }, [scrollContainer, setScreenDimAndgetScreenInforArray]);
+  }, [scrollArea, setScreenDimAndgetScreenInforArray]);
 
   //當螢幕resize時，重新設定螢幕寬度、高度及每個Screen的起點及高度。
-  const deHandleSizeChange = useCallback(() => {
+  const deHandleSizeChange = useCallback(
     debounce(() => {
       setScreenDimAndgetScreenInforArray();
-    }, 1000);
-  }, [setScreenDimAndgetScreenInforArray]);
+    }, 1000),
+    [setScreenDimAndgetScreenInforArray]
+  );
   useEffect(() => {
     if (deHandleSizeChange) {
       window.addEventListener("resize", deHandleSizeChange);
@@ -81,19 +78,19 @@ function LayoutProvider({ children }) {
   const ttGetScrollPosition = useMemo(
     () =>
       throttle((event) => {
-        const currentScrollTop = event.target.scrollTop;
-        setScrollTop(currentScrollTop);
+        if (document.lastElementChild?.scrollTop) {
+          const currentScrollTop = document.lastElementChild.scrollTop;
+          setScrollTop(currentScrollTop);
+        }
       }, 0),
     []
   );
   useEffect(() => {
-    if (scrollContainer) {
-      scrollContainer.addEventListener("scroll", ttGetScrollPosition);
-      return () => {
-        scrollContainer.removeEventListener("scroll", ttGetScrollPosition);
-      };
-    }
-  }, [scrollContainer, ttGetScrollPosition]);
+    document.addEventListener("scroll", ttGetScrollPosition);
+    return () => {
+      document.removeEventListener("scroll", ttGetScrollPosition);
+    };
+  }, [ttGetScrollPosition]);
 
   useEffect(() => {
     const currentScrollAreaElement = screenNodesInfor.find(
@@ -155,7 +152,7 @@ function LayoutProvider({ children }) {
         screenWidth: screenDim.width,
         getScreenInforByName,
         getPreScreenByName,
-        setScrollContainer,
+        setScrollArea,
       }}
     >
       {children}

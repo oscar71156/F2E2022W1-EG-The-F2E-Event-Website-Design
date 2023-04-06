@@ -9,7 +9,10 @@ const Button = styled.button`
   cursor: pointer;
   margin: 12px 8px;
   padding: 0;
-
+  right: 0;
+  top: 0;
+  position: fixed;
+  z-index:2;
   @media screen and (min-width: 800px) {
     /**right side with 40px+8px => left side  MenuFake width */
     margin-right: 8px;

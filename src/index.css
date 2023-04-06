@@ -1,3 +1,5 @@
+@import-normalize;
+
 @font-face {
   font-family: "GenJyuuGothic-P";
   src: local("GenJyuuGothic-P"),
@@ -7,22 +9,18 @@
 * {
   position: relative;
 }
-html {
-  overflow: hidden;
-}
+
 body {
   margin: 0;
   font-family: "GenJyuuGothic-P";
   font-weight: 500;
   font-size: 16px;
   line-height: 140%;
-  overflow: hidden;
   cursor: url(./assets/icon/cursor.png), auto;
 
   /* minus scrollbar */
   /* width: calc(100vw - (100vw - 100%)); */
   width: 100%;
-  height: 100%;
   padding: 0;
 }
 body * {

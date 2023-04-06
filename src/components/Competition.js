@@ -13,26 +13,20 @@ import layout from "../layout";
 
 const CompetitionEnvir = styled.div`
   margin: 0 auto;
+  left: 0;
+  right: 0;
   bottom: 0;
   position: fixed;
   width: 100%;
-  /**On top of all the content PageTitle */
-  z-index: 2;
+  z-index: 0;
   height: 200px;
   transform-origin: bottom;
   transform: ${(props) => "scale( " + props.reducedRatio + " )"};
   @media screen and (min-width: 1200px) {
-    position: sticky;
     max-height: 1080px;
     max-width: 1430px;
     width: 100%;
     height: 600px;
-    bottom: initial;
-    top: calc(100vh - 600px);
-  }
-
-  @media screen and (min-width: 1800px) {
-    width: 74.48vw;
   }
 `;
 
@@ -228,6 +222,7 @@ const Competition = () => {
         const { realContentH } = layout[scrollAreaName];
         const { realContentH: preRealContentH } =
           getPreScreenByName(scrollAreaName);
+
         lastCompetitionP = (clientHeight - preRealContentH) / 600;
         currenttCompetitionP = (clientHeight - realContentH) / 600;
         if (scrollAreaName === "startScreen") {

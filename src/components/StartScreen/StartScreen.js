@@ -16,11 +16,8 @@ const Container = styled.div`
   height: 100vh;
   overflow: hidden;
   z-index: 0;
-  padding-top: 60px;
   @media screen and (min-width: 1200px) {
-    height: 1800px;
-    display: flex;
-    justify-content: center;
+    height: calc(100vh + 1800px);
   }
 `;
 const ImageBigLogo = styled.img`
@@ -29,7 +26,7 @@ const ImageBigLogo = styled.img`
   margin: 0 auto;
   width: auto;
   height: calc(100vh - 550px);
-  ${'' /* aspect-ratio: 137/102; */}
+  ${"" /* aspect-ratio: 137/102; */}
   max-height: 190px;
 
   @media screen and (min-width: 800px) {
@@ -98,33 +95,30 @@ const AnimationJoiningTypes = styled(JoiningTypes)`
     position: fixed;
     top: 50%;
     transform: translateY(-200%);
+    right: 0;
+    left: 0;
+    margin: 0 auto;
     visibility: ${(props) => (props.runningState > 3 ? "hidden" : "visible")};
   }
 `;
 
 const ImageBgStart = styled.img`
   display: none;
-  @media screen and (min-height: 900px) and (min-width: 1200px) {
-    display: block;
-  }
+
   @media screen and (min-width: 1200px) {
     position: fixed;
+    ${"" /* background: green; */}
+    display: block;
 
-    top: 0;
-    max-height: 1080px;
-    max-width: 1430px;
+    z-index: -1;
+    bottom: -10%;
+    height: 120%;
 
-    width: 100%;
-    height: 100vh;
-
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    max-width: 100vw;
     visibility: ${(props) => (props.runningState > 4 ? "hidden" : "visible")};
-  }
-
-  @media screen and (min-width: 1800px) {
-    width: 74.48vw;
-  }
-  @media screen and (min-height: 1080px) {
-    top: calc(100vh - 1080px);
   }
 `;
 
@@ -161,7 +155,7 @@ function StartScreen() {
         setRunningState(5);
       }
     }
-  }, [clientHeight, currentScrollArea]);
+  }, [clientHeight, currentScrollArea, screenWidth]);
 
   useEffect(() => {
     //runningState 0=>2 3=>disappear
