@@ -11,16 +11,14 @@ const TrafficLightCon = styled.div`
   margin: auto 0;
   right: 0;
   bottom: 200px;
-  @media screen and (min-width: 1431px) {
+  @media screen and (min-width: 1200px) {
+    display: block;
     top: 0;
     bottom: 0;
     top: -10%;
     position: fixed;
     visibility: ${(props) => (props.readyStatus > 3 ? "hidden" : "visible")};
     right: ${(props) => props.scrollBarWidth}px;
-  }
-  @media screen and (min-width: 1200px) {
-    display: block;
   }
 `;
 

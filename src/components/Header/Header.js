@@ -48,6 +48,8 @@ const ImageBigLogo = styled.img`
   margin: 12px 0;
   display: block;
   @media screen and (min-width: 1200px) {
+    ${"" /* for  collapsed margin */}
+    left: 40px;
     margin: 30px 40px;
     width: 200px;
     height: auto;
@@ -58,24 +60,46 @@ const ImageBigLogo = styled.img`
 `;
 
 const Header = () => {
-  const [bigLogoTStyle, setBigLogoTStyle] = useState({ opacity: 1 });
-  const { clientHeight, currentScrollArea } = useContext(LayoutContext);
+  const [bigLogoTStyle, setBigLogoTStyle] = useState({ opacity: 0 });
+  const { clientHeight, currentScrollArea, screenWidth } =
+    useContext(LayoutContext);
   useEffect(() => {
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
-    if (scrollAreaName === "signUp") {
-      if (scrollAreaOffset <= clientHeight - 200) {
-        setBigLogoTStyle({ opacity: 1 });
-      } else if (
-        scrollAreaOffset > clientHeight - 200 &&
-        scrollAreaOffset <= clientHeight + 600
-      ) {
+    // if (scrollAreaName === "signUp") {
+    //   if (scrollAreaOffset <= clientHeight - 200) {
+    //     setBigLogoTStyle({ opacity: 1 });
+    //   } else if (
+    //     scrollAreaOffset > clientHeight - 200 &&
+    //     scrollAreaOffset <= clientHeight + 600
+    //   ) {
+    //     setBigLogoTStyle((pre) => ({
+    //       ...pre,
+    //       opacity: 1 - (scrollAreaOffset - clientHeight + 200) / 800,
+    //     }));
+    //   } else {
+    //     setBigLogoTStyle({ opacity: 0 });
+    //   }
+    // }
+    if (screenWidth > 1200) {
+      if (scrollAreaName === "startScreen") {
+        setBigLogoTStyle({ opacity: 0 });
+      } else if (scrollAreaName === "botherYou") {
+        // if (scrollAreaOffset <= clientHeight - 200) {
+        //   setBigLogoTStyle({ opacity: 1 });
+        // } else if (
+        //   scrollAreaOffset > clientHeight - 200 &&
+        //   scrollAreaOffset <= clientHeight + 600
+        // ) {
         setBigLogoTStyle((pre) => ({
           ...pre,
-          opacity: 1 - (scrollAreaOffset - clientHeight + 200) / 800,
+          opacity: scrollAreaOffset / 800,
         }));
+        // } else {
+        //   setBigLogoTStyle({ opacity: 0 });
+        // }
       } else {
-        setBigLogoTStyle({ opacity: 0 });
+        setBigLogoTStyle({ opacity: 1 });
       }
     }
   }, [clientHeight, currentScrollArea]);

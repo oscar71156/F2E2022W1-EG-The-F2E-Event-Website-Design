@@ -11,8 +11,7 @@ const Button = styled.button`
   padding: 0;
   right: 0;
   top: 0;
-  position: fixed;
-  z-index:2;
+  z-index: 2;
   @media screen and (min-width: 800px) {
     /**right side with 40px+8px => left side  MenuFake width */
     margin-right: 8px;
@@ -23,6 +22,7 @@ const Button = styled.button`
     margin-top: 30px;
     /**right side with 80px+15px => left side  MenuFake width */
     margin-right: 15px;
+    position: fixed;
   }
 
   @media screen and (min-width: 1800px) {

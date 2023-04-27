@@ -194,7 +194,6 @@ const Competition = () => {
     let currenttCompetitionP = 1;
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
-
     if (screenWidth < 1200) {
       if (scrollAreaName === "botherYou") {
         lastCompetitionP = 1;
@@ -327,7 +326,7 @@ const Competition = () => {
         ...newAddedFLTStyle,
       }));
     }
-  }, [clientHeight, currentScrollArea]);
+  }, [clientHeight, currentScrollArea, screenWidth]);
 
   return (
     <CompetitionEnvir ref={ref} id="test" reducedRatio={reducedRatio}>

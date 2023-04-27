@@ -1,11 +1,12 @@
 import styled from "styled-components";
-import iconLogo from "../../assets/icon/logo.png";
+import { useContext, useEffect, useState } from "react";
+
 import LogoText from "../LogoText";
 import JoiningTypes from "./JoiningTypes";
-import { useContext, useEffect, useState } from "react";
 import LayoutContext from "../../contexts/Layout";
-import TrafficLight from "./TraficLight";
+import TrafficLight from "./TrafficLight";
 
+import iconLogo from "../../assets/icon/logo.png";
 import iconBGStart from "../../assets/icon/start.png";
 import bgDecorate01 from "../../assets/icon/bg/bg_decorate_01.png";
 import bgDecorate05 from "../../assets/icon/bg/bg_decorate_05.png";
@@ -21,21 +22,22 @@ const Container = styled.div`
   }
 `;
 const ImageBigLogo = styled.img`
-  display: block;
   padding: 32px 0 16px;
-  margin: 0 auto;
-  width: auto;
   height: calc(100vh - 550px);
-  ${"" /* aspect-ratio: 137/102; */}
   max-height: 190px;
 
+  ${"" /* for header space in mobile */}
+  margin-top: 60px;
+  @media screen and (min-width: 1200px) {
+    margin-top: 0;
+  }
   @media screen and (min-width: 800px) {
-    width: 90vw;
     height: auto;
   }
 `;
 const BigIconM = styled.div`
   height: min-content;
+  text-align: center;
   @media screen and (min-width: 1200px) {
     display: none;
   }
@@ -93,8 +95,7 @@ const ImageBgDecorate5 = styled.img`
 const AnimationJoiningTypes = styled(JoiningTypes)`
   @media screen and (min-width: 1200px) {
     position: fixed;
-    top: 50%;
-    transform: translateY(-200%);
+    top: 375px;
     right: 0;
     left: 0;
     margin: 0 auto;
@@ -104,10 +105,8 @@ const AnimationJoiningTypes = styled(JoiningTypes)`
 
 const ImageBgStart = styled.img`
   display: none;
-
   @media screen and (min-width: 1200px) {
     position: fixed;
-    ${"" /* background: green; */}
     display: block;
 
     z-index: -1;
@@ -175,10 +174,10 @@ function StartScreen() {
       </BigIconM>
       <ImageBgDecorate1 src={bgDecorate01} transformStyle={bg1TransformStyle} />
       <ImageBgDecorate5 src={bgDecorate05} transformStyle={bg2TransformStyle} />
-      <AnimationJoiningTypes runningState={runningState} />
       <TrafficLight runningState={runningState} />
       <ImageBgStart src={iconBGStart} runningState={runningState} />
       <AnimationLogo runningState={runningState} />
+      <AnimationJoiningTypes runningState={runningState} />
     </Container>
   );
 }

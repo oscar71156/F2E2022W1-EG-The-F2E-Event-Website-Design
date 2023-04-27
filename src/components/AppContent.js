@@ -17,7 +17,7 @@ import Map from "../components/Map";
 import JoinButton from "./Join";
 import LayoutContext from "../contexts/Layout";
 const Container = styled.div`
-  overflow-x: hidden;
+  overflow:hidden;
   background-color: var(--secondary-color-default);
 `;
 

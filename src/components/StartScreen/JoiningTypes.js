@@ -12,7 +12,8 @@ const Container = styled.div`
   @media screen and (min-width: 1200px) {
     flex-direction: row;
     z-index: 2;
-    width: 100%;
+    /**make width change with screenHeight(like ImageBgStart) */
+    width: 90vh;
     max-width: 800px;
   }
 `;
@@ -54,7 +55,7 @@ const JoiningRoleNumber = styled.div`
   padding: 3px 0;
 `;
 
-const JoiningTypes = ({className}) => {
+const JoiningTypes = ({ className }) => {
   return (
     <Container id="joiningType" className={className}>
       <JoiningRole>
