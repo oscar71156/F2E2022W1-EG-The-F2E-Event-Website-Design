@@ -22,6 +22,7 @@ const CompetitionEnvir = styled.div`
   height: 200px;
   transform-origin: bottom;
   transform: ${(props) => "scale( " + props.reducedRatio + " )"};
+
   @media screen and (min-width: 1200px) {
     max-height: 1080px;
     max-width: 1430px;
@@ -218,9 +219,26 @@ const Competition = () => {
       }
     } else {
       if (scrollAreaName) {
-        const { realContentH } = layout[scrollAreaName];
-        const { realContentH: preRealContentH } =
+        let { realContentH } = layout[scrollAreaName];
+
+        if (typeof realContentH !== "number") {
+          realContentH = Math.round(
+            realContentH.number + (clientHeight * realContentH.vh) / 100
+          );
+        }
+
+        let { realContentH: preRealContentH } =
           getPreScreenByName(scrollAreaName);
+
+        if (!preRealContentH) {
+          preRealContentH = 0;
+        } else {
+          if (typeof preRealContentH !== "number") {
+            preRealContentH = Math.round(
+              preRealContentH.number + (clientHeight * preRealContentH.vh) / 100
+            );
+          }
+        }
 
         lastCompetitionP = (clientHeight - preRealContentH) / 600;
         currenttCompetitionP = (clientHeight - realContentH) / 600;

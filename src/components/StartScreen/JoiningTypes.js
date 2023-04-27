@@ -9,6 +9,15 @@ const Container = styled.div`
   margin-top: 23px;
   margin-bottom: 23px;
 
+  @media screen and (max-width: 600px) and (max-height: 600px) {
+    display: none;
+  }
+  @media screen and (min-width: 600px) and (max-height: 900px) {
+    flex-direction: row;
+    width: 40%;
+    margin: 50px auto 0;
+    min-width: 360px;
+  }
   @media screen and (min-width: 1200px) {
     flex-direction: row;
     z-index: 2;
@@ -19,7 +28,7 @@ const Container = styled.div`
 `;
 
 const JoiningRole = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 1vh;
   @media screen and (min-width: 1200px) {
     /**For parent justify-content: space-between => center RoleUX*/
     width: 130px;

@@ -1,12 +1,10 @@
 import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
 
-import LogoText from "../LogoText";
 import JoiningTypes from "./JoiningTypes";
 import LayoutContext from "../../contexts/Layout";
 import TrafficLight from "./TrafficLight";
 
-import iconLogo from "../../assets/icon/logo.png";
 import iconBGStart from "../../assets/icon/start.png";
 import bgDecorate01 from "../../assets/icon/bg/bg_decorate_01.png";
 import bgDecorate05 from "../../assets/icon/bg/bg_decorate_05.png";
@@ -19,30 +17,6 @@ const Container = styled.div`
   z-index: 0;
   @media screen and (min-width: 1200px) {
     height: calc(100vh + 1800px);
-  }
-`;
-const ImageBigLogo = styled.img`
-  padding: 32px 0 16px;
-  height: calc(100vh - 550px);
-  max-height: 190px;
-
-  ${"" /* for header space in mobile */}
-  margin-top: 60px;
-  @media screen and (min-width: 1200px) {
-    margin-top: 0;
-  }
-  @media screen and (min-width: 800px) {
-    height: auto;
-  }
-`;
-const BigIconM = styled.div`
-  height: min-content;
-  text-align: center;
-  @media screen and (min-width: 1200px) {
-    display: none;
-  }
-  @media screen and (max-height: 600px) {
-    display: none;
   }
 `;
 
@@ -95,10 +69,11 @@ const ImageBgDecorate5 = styled.img`
 const AnimationJoiningTypes = styled(JoiningTypes)`
   @media screen and (min-width: 1200px) {
     position: fixed;
-    top: 375px;
+    top: 35vh;
     right: 0;
     left: 0;
     margin: 0 auto;
+    padding: 5vh 0;
     visibility: ${(props) => (props.runningState > 3 ? "hidden" : "visible")};
   }
 `;
@@ -168,10 +143,6 @@ function StartScreen() {
   }, [runningState]);
   return (
     <Container id="startScreen">
-      <BigIconM>
-        <ImageBigLogo src={iconLogo} />
-        <LogoText />
-      </BigIconM>
       <ImageBgDecorate1 src={bgDecorate01} transformStyle={bg1TransformStyle} />
       <ImageBgDecorate5 src={bgDecorate05} transformStyle={bg2TransformStyle} />
       <TrafficLight runningState={runningState} />

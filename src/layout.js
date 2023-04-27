@@ -13,7 +13,10 @@
 //Header+EmptySlot+Competition=100vh
 const layout = {
   startScreen: {
-    realContentH: 480,
+    realContentH: {
+      number:70,
+      vh:50,
+    },
     mapPosition: {
       x: 2,
       y: 52,

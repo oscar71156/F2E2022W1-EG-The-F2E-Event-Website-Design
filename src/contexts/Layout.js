@@ -135,6 +135,9 @@ function LayoutProvider({ children }) {
         const { name: preScreenName } = preScreens.find(
           ({ order }) => order === maxPreScreenOrder
         );
+        if (!preScreenName) {
+          return 0;
+        }
         return { ...layout[preScreenName] };
       } else {
         return {};

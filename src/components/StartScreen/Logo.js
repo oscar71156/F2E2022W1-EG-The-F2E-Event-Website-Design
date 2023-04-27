@@ -1,27 +1,29 @@
 import styled from "styled-components";
-import LogoText from "../LogoText";
 import iconLogoText from "../../assets/icon/logo_text.png";
-const TitleImage = styled.img`
-  display: block;
-  width: 133px;
-  height: 46px;
-  margin-top: 8px;
-  @media screen and (min-width: 1200px) {
-    width: 680px;
-    height: 236px;
-    margin-top: 44px;
-  }
-`;
+import iconLogo from "../../assets/icon/logo.png";
 
-const LogoTextL = styled(LogoText)`
+const LogoText = styled.h1`
+  display: block;
+  background-color: var(--highlight-color-default);
+  color: white;
+  padding: 8px 40px;
+  width: max-content;
+  margin: 0 auto;
+  border-radius: 100px;
+  text-align: center;
+  line-height: 125%;
+`;
+const TitleLogo = styled.img`
   display: none;
   @media screen and (min-width: 1200px) {
     display: block;
+    height: 21.9vh;
+    margin-top: 5vh;
   }
 `;
 
 const Container = styled.div`
-  display: none;
+  text-align: center;
   @media screen and (min-width: 1200px) {
     display: block;
     width: min-content;
@@ -32,12 +34,26 @@ const Container = styled.div`
     top: 0;
   }
 `;
+const ImageBigLogoM = styled.img`
+  padding: 32px 0 16px;
+  height: 23.2vh;
+  ${"" /* for header space in mobile */}
+  margin-top: 60px;
+  @media screen and (min-width: 1200px) {
+    display: none;
+    margin-top: 0;
+  }
+  @media screen and (min-width: 600px) {
+    height: 40vh;
+  }
+`;
 
-function Logo({ className }) {
+function Logo({className}) {
   return (
     <Container className={className}>
-      <TitleImage src={iconLogoText} />
-      <LogoTextL />
+      <ImageBigLogoM src={iconLogo} />
+      <TitleLogo src={iconLogoText} />
+      <LogoText>互動式網頁設計</LogoText>
     </Container>
   );
 }
