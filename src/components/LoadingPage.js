@@ -2,7 +2,12 @@ import styled from "styled-components";
 import iconLoading from "../assets/icon/loading_2x.gif";
 
 const Container = styled.div`
+  position: fixed;
+  width: calc(100vw);
   height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 100;
   background-color: var(--secondary-color-default);
   display: flex;
   justify-content: center;

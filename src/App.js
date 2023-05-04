@@ -3,23 +3,33 @@ import { useContext, useState } from "react";
 import AppContent from "./components/AppContent";
 import LoadingPage from "./components/LoadingPage";
 import LayoutContext from "./contexts/Layout";
+import { createGlobalStyle } from "styled-components";
+
+const HideScrollBarStyle = createGlobalStyle`
+  html{
+    overflow:${(props) => (props.isLoaded ? "auto" : "hidden")};
+  }
+`;
+
 function App() {
-  const { clientHeight } = useContext(LayoutContext);
+  const { clientHeight, screenNodesInfor } = useContext(LayoutContext);
   const [isLoaded, setIsloaded] = useState(false);
   useEffect(() => {
-    if (!Number.isNaN(clientHeight)) {
+    if (!Number.isNaN(clientHeight) && screenNodesInfor.length > 0) {
+      console.log("screenNodesInfor", screenNodesInfor);
       setTimeout(() => {
         setIsloaded(true);
-      }, 10000);
+      }, 1000);
     } else {
       setIsloaded(false);
     }
-  }, [clientHeight]);
+  }, [clientHeight, screenNodesInfor]);
   return (
-    <div>
-      {isLoaded && <AppContent />}
+    <>
+      <HideScrollBarStyle isLoaded={isLoaded} />
+      <AppContent />
       {!isLoaded && <LoadingPage />}
-    </div>
+    </>
   );
 }
 export default App;
