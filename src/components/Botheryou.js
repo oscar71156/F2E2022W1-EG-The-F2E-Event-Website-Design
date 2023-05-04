@@ -8,6 +8,7 @@ import { useContext, useEffect, useState } from "react";
 import LayoutContext from "../contexts/Layout";
 
 const Container = styled.div`
+  background-color: red;
   @media screen and (min-width: 1200px) {
     position: relative;
     top: 0;
@@ -17,9 +18,11 @@ const Container = styled.div`
     /**cut overflow part */
     clip-path: inset(0 0 0 0);
 
-    > * {
+    ${
+      "" /* > * {
       top: 0;
-      position: ${(props) => (props.isChildSticky ? "sticky" : "relative")};
+      position: ${(props) => (props.isChildSticky ? "fixed" : "relative")};
+    } */
     }
   }
 `;
@@ -39,7 +42,7 @@ const QuestionsCon = styled.div`
 
 const Question = styled.div`
   transition: transform 1.2s, opacity 1s 0.5s;
-  opacity: ${(props) => (props.isShow ? 1 : 0)};
+  ${"" /* opacity: ${(props) => (props.isShow ? 1 : 0)}; */}
   @media screen and (min-width: 1200px) {
     transition: transform 1s, opacity 1s 0.2s;
     flex: 1;
@@ -49,7 +52,7 @@ const Question = styled.div`
   }
 `;
 const QuestionEnvious = styled(Question)`
-  transform: translateX(${(props) => (props.isShow ? 0 : -150)}%);
+  ${"" /* transform: translateX(${(props) => (props.isShow ? 0 : -150)}%); */}
   @media screen and (min-width: 1200px) {
     transform: translateX(${(props) => (props.isShow ? 0 : -150)}%);
     perspective-origin: right center;
@@ -58,7 +61,7 @@ const QuestionEnvious = styled(Question)`
 `;
 const QuestionWish = styled(Question)``;
 const QuestionComplex = styled(Question)`
-  transform: translateX(${(props) => (props.isShow ? 0 : 150)}%);
+  ${"" /* transform: translateX(${(props) => (props.isShow ? 0 : 150)}%); */}
   @media screen and (min-width: 1200px) {
     perspective-origin: left center;
     perspective: 900px;
@@ -171,28 +174,27 @@ const Botheryou = () => {
   useEffect(() => {
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
-
     if (scrollAreaName === "botherYou") {
       if (screenWidth < 1200) {
         let showTitle = false,
           showEnvious = false,
           showWish = false,
           showComplex = false;
-        if (scrollAreaOffset >= 10 && scrollAreaOffset < 400) {
-          showTitle = true;
-        } else if (scrollAreaOffset >= 400 && scrollAreaOffset < 700) {
-          showTitle = true;
-          showEnvious = true;
-        } else if (scrollAreaOffset >= 700 && scrollAreaOffset < 1000) {
-          showTitle = true;
-          showEnvious = true;
-          showWish = true;
-        } else if (scrollAreaOffset >= 1000) {
-          showTitle = true;
-          showEnvious = true;
-          showWish = true;
-          showComplex = true;
-        }
+        // if (scrollAreaOffset >= 10 && scrollAreaOffset < 400) {
+        //   showTitle = true;
+        // } else if (scrollAreaOffset >= 400 && scrollAreaOffset < 700) {
+        //   showTitle = true;
+        //   showEnvious = true;
+        // } else if (scrollAreaOffset >= 700 && scrollAreaOffset < 1000) {
+        //   showTitle = true;
+        //   showEnvious = true;
+        //   showWish = true;
+        // } else if (scrollAreaOffset >= 1000) {
+        showTitle = true;
+        showEnvious = true;
+        showWish = true;
+        showComplex = true;
+        // }
         setIsShowTitle(showTitle);
         setIsShowEnvious(showEnvious);
         setIsShowComplex(showComplex);

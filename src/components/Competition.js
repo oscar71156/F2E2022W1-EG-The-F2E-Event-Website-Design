@@ -158,8 +158,14 @@ const FinishLine = styled.div`
 
 const Competition = () => {
   const [reducedRatio, setReducedRatio] = useState(1);
-  const { clientHeight, currentScrollArea, screenWidth, getPreScreenByName } =
-    useContext(LayoutContext);
+  const {
+    clientHeight,
+    currentScrollArea,
+    screenWidth,
+    getPreScreenByName,
+    scrollTop,
+    screenNodesInforObj: screenNodesInfor,
+  } = useContext(LayoutContext);
 
   const [isVisibleCharacter, setIsVisibleCharacter] = useState(true);
   const [cF2eTStyle, setCF2eTStyle] = useState({
@@ -195,10 +201,29 @@ const Competition = () => {
     let currenttCompetitionP = 1;
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
+
     if (screenWidth < 1200) {
-      if (scrollAreaName === "botherYou") {
+      const enlargePosInBotherYou = {
+        start: screenNodesInfor?.botherYou.start - clientHeight,
+        end:
+          screenNodesInfor?.botherYou.start +
+          screenNodesInfor?.botherYou.height -
+          clientHeight,
+      };
+      const shrinkPosInSignUp = {
+        start: screenNodesInfor?.signUp.start - clientHeight,
+        end:
+          screenNodesInfor?.signUp.start +
+          screenNodesInfor?.signUp.height -
+          clientHeight,
+      };
+      if (
+        scrollTop > enlargePosInBotherYou.start &&
+        scrollTop <= enlargePosInBotherYou.end
+      ) {
         lastCompetitionP = 1;
         currenttCompetitionP = 0.5;
+        const scrollAreaOffset = scrollTop - enlargePosInBotherYou.start;
         const maxScrollAreaOffset =
           scrollAreaOffset > clientHeight ? clientHeight : scrollAreaOffset;
         const scaleNumber =
@@ -206,7 +231,10 @@ const Competition = () => {
           ((currenttCompetitionP - lastCompetitionP) * maxScrollAreaOffset) /
             clientHeight;
         setReducedRatio(scaleNumber);
-      } else if (scrollAreaName === "signUp") {
+      } else if (
+        scrollTop > shrinkPosInSignUp.start &&
+        scrollTop <= shrinkPosInSignUp.end
+      ) {
         lastCompetitionP = 0.5;
         currenttCompetitionP = 1;
         const maxScrollAreaOffset =
@@ -344,7 +372,7 @@ const Competition = () => {
         ...newAddedFLTStyle,
       }));
     }
-  }, [clientHeight, currentScrollArea, screenWidth]);
+  }, [clientHeight, currentScrollArea, screenWidth, screenNodesInfor]);
 
   return (
     <CompetitionEnvir ref={ref} id="test" reducedRatio={reducedRatio}>

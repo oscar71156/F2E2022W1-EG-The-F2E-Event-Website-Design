@@ -8,7 +8,7 @@ const Container = styled.div`
   position: relative;
   margin: 40px auto;
   z-index: 0;
-  opacity: ${(props) => (props.isShow ? 1 : 0)};
+  ${'' /* opacity: ${(props) => (props.isShow ? 1 : 0)}; */}
   transition: opacity 1s;
   transition-timing-function: ease-in;
   @media screen and (min-width: 1200px) {

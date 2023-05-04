@@ -3,7 +3,7 @@ import iconLoading from "../assets/icon/loading_2x.gif";
 
 const Container = styled.div`
   position: fixed;
-  width: calc(100vw + 100px);
+  width: 100vw;
   height: 100vh;
   left: 0;
   top: 0;
