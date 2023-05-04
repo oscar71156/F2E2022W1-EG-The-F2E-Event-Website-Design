@@ -103,8 +103,11 @@ const AnimationLogo = styled(Logo)`
 `;
 
 function StartScreen() {
-  const { clientHeight, currentScrollArea, screenWidth } =
-    useContext(LayoutContext);
+  const {
+    screenWidth,
+    screenNodesInforObj: screenNodesInfor,
+    scrollTop,
+  } = useContext(LayoutContext);
   const [bg1TransformStyle, setBg1TransformStyle] = useState({ scale: 1 });
   const [bg2TransformStyle, setBg2TransformStyle] = useState({ scale: 1 });
   const [runningState, setRunningState] = useState(0);
@@ -120,16 +123,21 @@ function StartScreen() {
    * 1500 ~ 1800 => runningState=5 bgStart and the icon on top of it disappear, top-left icon appear
    */
   useEffect(() => {
-    const { name: scrollAreaName, offset: scrollAreaOffset } =
-      currentScrollArea;
     if (screenWidth > 1200) {
-      if (scrollAreaName === "startScreen") {
-        setRunningState(Math.floor(scrollAreaOffset / 300));
+      const startScreenPos = {
+        start: screenNodesInfor?.startScreen.start,
+        end:
+          screenNodesInfor?.startScreen.start +
+          screenNodesInfor?.startScreen.height,
+      };
+      if (scrollTop >= startScreenPos.start && scrollTop <= startScreenPos.end) {
+
+        setRunningState(Math.floor(scrollTop / 300));
       } else {
         setRunningState(5);
       }
     }
-  }, [clientHeight, currentScrollArea, screenWidth]);
+  }, [screenWidth, screenNodesInfor, scrollTop]);
 
   useEffect(() => {
     //runningState 0=>2 3=>disappear

@@ -40,7 +40,6 @@ const AppContent = () => {
   return (
     <Container id="scrollArea" ref={setScrollArea}>
       <Header />
-      <Competition />
       <FixedJoinBTN isShowHand />
       <Menu />
       <Map />
@@ -54,6 +53,7 @@ const AppContent = () => {
       <Sponsors />
       <Finish />
       <SignUp />
+      <Competition />
     </Container>
   );
 };
