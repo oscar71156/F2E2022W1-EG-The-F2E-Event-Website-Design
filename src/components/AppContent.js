@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useContext } from "react";
+import { useContext, useCallback } from "react";
 import Competition from "../components/Competition";
 import Header from "../components/Header/Header";
 import Botheryou from "../components/Botheryou";
@@ -17,7 +17,7 @@ import Map from "../components/Map";
 import JoinButton from "./Join";
 import LayoutContext from "../contexts/Layout";
 const Container = styled.div`
-  overflow:hidden;
+  overflow: hidden;
   background-color: var(--secondary-color-default);
 `;
 
@@ -36,9 +36,19 @@ const FixedJoinBTN = styled(JoinButton)`
 `;
 
 const AppContent = () => {
-  const { setScrollArea } = useContext(LayoutContext);
+  const { scrollAreaRef, setIsScrollAreaReady } = useContext(LayoutContext);
+  const onSetScrollArea = useCallback(
+    (scrollAreaDom) => {
+      if (!scrollAreaDom) {
+        return;
+      }
+      scrollAreaRef.current = scrollAreaDom;
+      setIsScrollAreaReady(true);
+    },
+    [setIsScrollAreaReady]
+  );
   return (
-    <Container id="scrollArea" ref={setScrollArea}>
+    <Container id="scrollArea" ref={onSetScrollArea}>
       <Header />
       <FixedJoinBTN isShowHand />
       <Menu />

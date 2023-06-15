@@ -12,18 +12,17 @@ const HideScrollBarStyle = createGlobalStyle`
 `;
 
 function App() {
-  const { clientHeight, screenNodesInfor } = useContext(LayoutContext);
+  const { isScreenStatisticReady } = useContext(LayoutContext);
   const [isLoaded, setIsloaded] = useState(false);
   useEffect(() => {
-    if (!Number.isNaN(clientHeight) && screenNodesInfor.length > 0) {
-      console.log("screenNodesInfor", screenNodesInfor);
+    if (isScreenStatisticReady) {
       setTimeout(() => {
         setIsloaded(true);
       }, 1000);
     } else {
       setIsloaded(false);
     }
-  }, [clientHeight, screenNodesInfor]);
+  }, [isScreenStatisticReady]);
   return (
     <>
       <HideScrollBarStyle isLoaded={isLoaded} />
