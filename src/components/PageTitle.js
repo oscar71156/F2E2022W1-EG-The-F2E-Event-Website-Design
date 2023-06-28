@@ -5,13 +5,15 @@ const Container = styled.div`
   display: inline-block;
   color: var(--primary-color-default);
   width: 100%;
-  position: relative;
   margin: 40px auto;
   z-index: 0;
   opacity: ${(props) => (props.isShow ? 1 : 0)};
-  transition: opacity 1s;
+  transition: opacity ${(props) => (props.isShow ? "1s" : "0s")};
+
   transition-timing-function: ease-in;
   @media screen and (min-width: 1200px) {
+    transition: opacity 1s;
+
     height: max-content;
     text-align: center;
     /**For on top of content when scrolling */
