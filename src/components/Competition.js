@@ -158,8 +158,15 @@ const FinishLine = styled.div`
 
 const Competition = () => {
   const [reducedRatio, setReducedRatio] = useState(1);
-  const { clientHeight, currentScrollArea, screenWidth, getPreScreenByName } =
-    useContext(LayoutContext);
+  const {
+    clientHeight,
+    currentScrollArea,
+    screenWidth,
+    getPreScreenByName,
+    scrollTop,
+    screenNodesInforObj: screenNodesInfor,
+    screenNodesInfor: screenNodesInforArray,
+  } = useContext(LayoutContext);
 
   const [isVisibleCharacter, setIsVisibleCharacter] = useState(true);
   const [cF2eTStyle, setCF2eTStyle] = useState({
@@ -193,12 +200,28 @@ const Competition = () => {
   useEffect(() => {
     let lastCompetitionP = 1;
     let currenttCompetitionP = 1;
-    const { name: scrollAreaName, offset: scrollAreaOffset } =
-      currentScrollArea;
     if (screenWidth < 1200) {
-      if (scrollAreaName === "botherYou") {
+      const enlargePosInBotherYou = {
+        start: screenNodesInfor?.botherYou.start - clientHeight,
+        end:
+          screenNodesInfor?.botherYou.start +
+          screenNodesInfor?.botherYou.height -
+          clientHeight,
+      };
+      const shrinkPosInSignUp = {
+        start: screenNodesInfor?.signUp.start - clientHeight,
+        end:
+          screenNodesInfor?.signUp.start +
+          screenNodesInfor?.signUp.height -
+          clientHeight,
+      };
+      if (
+        scrollTop > enlargePosInBotherYou.start &&
+        scrollTop <= enlargePosInBotherYou.end
+      ) {
         lastCompetitionP = 1;
         currenttCompetitionP = 0.5;
+        const scrollAreaOffset = scrollTop - enlargePosInBotherYou.start;
         const maxScrollAreaOffset =
           scrollAreaOffset > clientHeight ? clientHeight : scrollAreaOffset;
         const scaleNumber =
@@ -206,9 +229,13 @@ const Competition = () => {
           ((currenttCompetitionP - lastCompetitionP) * maxScrollAreaOffset) /
             clientHeight;
         setReducedRatio(scaleNumber);
-      } else if (scrollAreaName === "signUp") {
+      } else if (
+        scrollTop > shrinkPosInSignUp.start &&
+        scrollTop <= shrinkPosInSignUp.end
+      ) {
         lastCompetitionP = 0.5;
         currenttCompetitionP = 1;
+        const scrollAreaOffset = scrollTop - shrinkPosInSignUp.start;
         const maxScrollAreaOffset =
           scrollAreaOffset > clientHeight ? clientHeight : scrollAreaOffset;
         const scaleNumber =
@@ -218,8 +245,22 @@ const Competition = () => {
         setReducedRatio(scaleNumber);
       }
     } else {
-      if (scrollAreaName) {
-        let { realContentH } = layout[scrollAreaName];
+      if (screenNodesInforArray) {
+        let currentScrollAreaFromTop = screenNodesInforArray.find(
+          (item) =>
+            item.start <= scrollTop + clientHeight &&
+            item.start + item.height > scrollTop + clientHeight
+        );
+
+        if (!currentScrollAreaFromTop) {
+          return;
+        } else {
+          currentScrollAreaFromTop = { ...currentScrollAreaFromTop };
+        }
+        currentScrollAreaFromTop.start -= clientHeight;
+
+        const { name: scrollAreaNameFromTop } = currentScrollAreaFromTop;
+        let { realContentH } = layout[scrollAreaNameFromTop];
 
         if (typeof realContentH !== "number") {
           realContentH = Math.round(
@@ -227,9 +268,9 @@ const Competition = () => {
           );
         }
 
-        let { realContentH: preRealContentH } =
-          getPreScreenByName(scrollAreaName);
-
+        let { realContentH: preRealContentH } = getPreScreenByName(
+          scrollAreaNameFromTop
+        );
         if (!preRealContentH) {
           preRealContentH = 0;
         } else {
@@ -239,112 +280,148 @@ const Competition = () => {
             );
           }
         }
-
         lastCompetitionP = (clientHeight - preRealContentH) / 600;
         currenttCompetitionP = (clientHeight - realContentH) / 600;
-        if (scrollAreaName === "startScreen") {
+        if (scrollAreaNameFromTop === "startScreen") {
           lastCompetitionP = 1;
         }
-      }
+        if (
+          scrollAreaNameFromTop === "finish" &&
+          scrollTop - currentScrollAreaFromTop.start >= 2000
+        ) {
+          setReducedRatio(1);
+        } else if (scrollAreaNameFromTop === "startScreen") {
+          setReducedRatio(currenttCompetitionP);
+        } else {
+          const scrollAreaOffset = scrollTop - currentScrollAreaFromTop.start;
+          const maxScrollAreaOffset =
+            scrollAreaOffset > clientHeight ? clientHeight : scrollAreaOffset;
+          const scaleNumber =
+            lastCompetitionP +
+            ((currenttCompetitionP - lastCompetitionP) * maxScrollAreaOffset) /
+              clientHeight;
 
-      if (scrollAreaName === "finish" && scrollAreaOffset >= 2000) {
-        setReducedRatio(1);
-      } else if (scrollAreaName === "startScreen") {
-        setReducedRatio(currenttCompetitionP);
-      } else {
-        const maxScrollAreaOffset =
-          scrollAreaOffset > clientHeight ? clientHeight : scrollAreaOffset;
-        const scaleNumber =
-          lastCompetitionP +
-          ((currenttCompetitionP - lastCompetitionP) * maxScrollAreaOffset) /
-            clientHeight;
-
-        setReducedRatio(scaleNumber);
-      }
-
-      let newAddedCharTStyle = {};
-      let newAddedFLTStyle = {};
-      if (scrollAreaName === "finish") {
-        if (scrollAreaOffset <= 400) {
-          setIsRenderFL(false);
+          setReducedRatio(scaleNumber);
         }
+        const currentScrollAreaFromBottom = screenNodesInforArray.find(
+          (item) =>
+            item.start <= scrollTop && item.start + item.height > scrollTop
+        );
+        if (!currentScrollAreaFromBottom) {
+          return;
+        }
+        let newAddedCharTStyle = {};
+        let newAddedFLTStyle = {};
+        const scrollAreaOffsetFromBottom =
+          scrollTop - currentScrollAreaFromBottom.start;
 
-        if (scrollAreaOffset <= 2000) {
-          setIsRenderFL(true);
+        if (currentScrollAreaFromBottom.name === "finish") {
+          if (scrollAreaOffsetFromBottom <= 400) {
+            setIsRenderFL(false);
+          }
+
+          if (scrollAreaOffsetFromBottom <= 2000) {
+            setIsRenderFL(true);
+            newAddedCharTStyle = {
+              scale: 1,
+              translateY: 0,
+            };
+            newAddedFLTStyle = {
+              lTanslateXOffset: 0,
+              lTranslateY: 0,
+              lRotate: 0,
+              rTanslateXOffset: 0,
+              rTranslateY: 0,
+              rRotate: 0,
+              opacity: 0,
+            };
+          } else if (
+            scrollAreaOffsetFromBottom > 2000 &&
+            scrollAreaOffsetFromBottom <= 4000
+          ) {
+            newAddedCharTStyle = {
+              scale: 1 + (0.3 * (scrollAreaOffsetFromBottom - 2000)) / 2000,
+              translateY:
+                0 + (100 * (scrollAreaOffsetFromBottom - 2000)) / 2000,
+            };
+            newAddedFLTStyle = {
+              lTanslateXOffset:
+                0 - (50 * (scrollAreaOffsetFromBottom - 2000)) / 2000,
+              lTranslateY:
+                0 + (100 * (scrollAreaOffsetFromBottom - 2000)) / 2000,
+              lRotate: 0 - (5 * (scrollAreaOffsetFromBottom - 2000)) / 2000,
+              rTanslateXOffset:
+                0 + (50 * (scrollAreaOffsetFromBottom - 2000)) / 2000,
+              rTranslateY:
+                0 + (100 * (scrollAreaOffsetFromBottom - 2000)) / 2000,
+              rRotate: 0 + (5 * (scrollAreaOffsetFromBottom - 2000)) / 2000,
+              opacity: 1,
+            };
+          } else if (
+            scrollAreaOffsetFromBottom > 4000 &&
+            scrollAreaOffsetFromBottom <= 6000
+          ) {
+            setIsRenderFL(true);
+
+            newAddedCharTStyle = {
+              scale: 1.3 + (0.2 * (scrollAreaOffsetFromBottom - 4000)) / 2000,
+              opacity: 1,
+              translateY: 100, //+ ( * (scrollAreaOffset - 4000)) / 2000,
+            };
+
+            newAddedFLTStyle = {
+              lTanslateXOffset:
+                -50 - (400 * (scrollAreaOffsetFromBottom - 4000)) / 2000,
+              rTanslateXOffset:
+                50 + (400 * (scrollAreaOffsetFromBottom - 4000)) / 2000,
+              lRotate: -5 - (10 * (scrollAreaOffsetFromBottom - 4000)) / 2000,
+              rRotate: 5 + (10 * (scrollAreaOffsetFromBottom - 4000)) / 2000,
+              lTranslateY:
+                100 + (1000 * (scrollAreaOffsetFromBottom - 4000)) / 2000,
+              rTranslateY:
+                100 + (1000 * (scrollAreaOffsetFromBottom - 4000)) / 2000,
+              opacity: 1 - (0 + (scrollAreaOffsetFromBottom - 4000) / 2000),
+            };
+          } else if (
+            scrollAreaOffsetFromBottom > 6000 &&
+            scrollAreaOffsetFromBottom <= 8000
+          ) {
+            newAddedCharTStyle = {
+              scale: 1.5 + (1 * (scrollAreaOffsetFromBottom - 6000)) / 2000,
+              opacity: 1 - (1 * (scrollAreaOffsetFromBottom - 6000)) / 2000,
+              translateY: 100, //scroll up will stay the same position
+            };
+            setIsVisibleCharacter(true);
+            setIsRenderFL(false);
+          } else if (scrollAreaOffsetFromBottom > 8000) {
+            //For prevent character overflow in the end
+            newAddedCharTStyle = {
+              scale: 1,
+              translateY: 0, //prevent overflow
+            };
+            setIsVisibleCharacter(false);
+          }
+        } else if (currentScrollAreaFromBottom.name === "signUp") {
           newAddedCharTStyle = {
             scale: 1,
-            translateY: 0,
-          };
-          newAddedFLTStyle = {
-            lTanslateXOffset: 0,
-            lTranslateY: 0,
-            lRotate: 0,
-            rTanslateXOffset: 0,
-            rTranslateY: 0,
-            rRotate: 0,
+            trnaslateY: 0,
             opacity: 0,
           };
-        } else if (scrollAreaOffset > 2000 && scrollAreaOffset <= 4000) {
-          newAddedCharTStyle = {
-            scale: 1 + (0.3 * (scrollAreaOffset - 2000)) / 2000,
-            translateY: 0 + (100 * (scrollAreaOffset - 2000)) / 2000,
-          };
-          newAddedFLTStyle = {
-            lTanslateXOffset: 0 - (50 * (scrollAreaOffset - 2000)) / 2000,
-            lTranslateY: 0 + (100 * (scrollAreaOffset - 2000)) / 2000,
-            lRotate: 0 - (5 * (scrollAreaOffset - 2000)) / 2000,
-            rTanslateXOffset: 0 + (50 * (scrollAreaOffset - 2000)) / 2000,
-            rTranslateY: 0 + (100 * (scrollAreaOffset - 2000)) / 2000,
-            rRotate: 0 + (5 * (scrollAreaOffset - 2000)) / 2000,
-            opacity: 1,
-          };
-        } else if (scrollAreaOffset > 4000 && scrollAreaOffset <= 6000) {
-          setIsRenderFL(true);
-
-          newAddedCharTStyle = {
-            scale: 1.3 + (0.2 * (scrollAreaOffset - 4000)) / 2000,
-            opacity: 1,
-            translateY: 100, //+ ( * (scrollAreaOffset - 4000)) / 2000,
-          };
-
-          newAddedFLTStyle = {
-            lTanslateXOffset: -50 - (400 * (scrollAreaOffset - 4000)) / 2000,
-            rTanslateXOffset: 50 + (400 * (scrollAreaOffset - 4000)) / 2000,
-            lRotate: -5 - (10 * (scrollAreaOffset - 4000)) / 2000,
-            rRotate: 5 + (10 * (scrollAreaOffset - 4000)) / 2000,
-            lTranslateY: 100 + (1000 * (scrollAreaOffset - 4000)) / 2000,
-            rTranslateY: 100 + (1000 * (scrollAreaOffset - 4000)) / 2000,
-            opacity: 1 - (0 + (scrollAreaOffset - 4000) / 2000),
-          };
-        } else if (scrollAreaOffset > 6000 && scrollAreaOffset <= 8000) {
-          newAddedCharTStyle = {
-            scale: 1.5 + (1 * (scrollAreaOffset - 6000)) / 2000,
-            opacity: 1 - (1 * (scrollAreaOffset - 6000)) / 2000,
-            translateY: 100, //scroll up will stay the same position
-          };
-          setIsVisibleCharacter(true);
-          setIsRenderFL(false);
-        } else if (scrollAreaName === "finish" && scrollAreaOffset > 8000) {
-          //For prevent character overflow in the end
-          newAddedCharTStyle = {
-            scale: 1,
-            translateY: 0, //prevent overflow
-          };
           setIsVisibleCharacter(false);
+        } else {
         }
-      } else {
+
+        setCF2eTStyle((pre) => ({ ...pre, ...newAddedCharTStyle }));
+        setCUITStyle((pre) => ({ ...pre, ...newAddedCharTStyle }));
+        setCTeamTStyle((pre) => ({ ...pre, ...newAddedCharTStyle }));
+
+        setFinishLineTStyle((pre) => ({
+          ...pre,
+          ...newAddedFLTStyle,
+        }));
       }
-
-      setCF2eTStyle((pre) => ({ ...pre, ...newAddedCharTStyle }));
-      setCUITStyle((pre) => ({ ...pre, ...newAddedCharTStyle }));
-      setCTeamTStyle((pre) => ({ ...pre, ...newAddedCharTStyle }));
-
-      setFinishLineTStyle((pre) => ({
-        ...pre,
-        ...newAddedFLTStyle,
-      }));
     }
-  }, [clientHeight, currentScrollArea, screenWidth]);
+  }, [clientHeight, currentScrollArea, screenWidth, screenNodesInfor]);
 
   return (
     <CompetitionEnvir ref={ref} id="test" reducedRatio={reducedRatio}>

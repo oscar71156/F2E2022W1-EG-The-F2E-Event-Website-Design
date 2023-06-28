@@ -122,6 +122,7 @@ function StartScreen() {
    * 1200 ~ 1500 => runningState=4 traffic light and jointypes disappear
    * 1500 ~ 1800 => runningState=5 bgStart and the icon on top of it disappear, top-left icon appear
    */
+
   useEffect(() => {
     if (screenWidth > 1200) {
       const startScreenPos = {
@@ -130,8 +131,10 @@ function StartScreen() {
           screenNodesInfor?.startScreen.start +
           screenNodesInfor?.startScreen.height,
       };
-      if (scrollTop >= startScreenPos.start && scrollTop <= startScreenPos.end) {
-
+      if (
+        scrollTop >= startScreenPos.start &&
+        scrollTop <= startScreenPos.end
+      ) {
         setRunningState(Math.floor(scrollTop / 300));
       } else {
         setRunningState(5);

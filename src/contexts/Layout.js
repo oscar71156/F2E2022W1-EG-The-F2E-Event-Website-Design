@@ -65,32 +65,42 @@ function LayoutProvider({ children }) {
 
   //當螢幕resize時，重新設定螢幕寬度、高度及每個Screen的起點及高度。
   const deHandleSizeChange = useCallback(
-    debounce(() => {
-      setScreenDimAndgetScreenInforArray();
+    debounce((scrollTop) => {
+      setScreenDimAndgetScreenInforArray(scrollTop);
     }, 1000),
     [setScreenDimAndgetScreenInforArray]
   );
   useEffect(() => {
     if (deHandleSizeChange) {
-      window.addEventListener("resize", deHandleSizeChange);
+      window.addEventListener(
+        "resize",
+        deHandleSizeChange.bind(this, scrollTop)
+      );
       setScrollBarWidth(getScrollBarWidth("scrollArea"));
     }
     return () => {
-      window.removeEventListener("resize", deHandleSizeChange);
+      window.removeEventListener(
+        "resize",
+        deHandleSizeChange.bind(this, scrollTop)
+      );
     };
-  }, [deHandleSizeChange]);
+  }, [deHandleSizeChange, scrollTop]);
 
   //當螢幕滾動時，設定目前ScrollTop
   const ttGetScrollPosition = useMemo(
     () =>
       throttle((event) => {
         if (document.lastElementChild?.scrollTop) {
-          const currentScrollTop = document.lastElementChild.scrollTop;
+          const currentScrollTop =
+            window.scrollY ||
+            window.pageYOffset ||
+            document.lastElementChild.scrollTop;
           setScrollTop(currentScrollTop);
         }
       }, 0),
     []
   );
+
   useEffect(() => {
     document.addEventListener("scroll", ttGetScrollPosition);
     return () => {
@@ -108,7 +118,7 @@ function LayoutProvider({ children }) {
     if (currentScrollAreaElement) {
       setCurrentScrollArea({
         name: currentScrollAreaElement.name,
-        offset: scrollTop - currentScrollAreaElement.start,
+        offset: scrollPositonY - currentScrollAreaElement.start,
         order: currentScrollAreaElement.order,
         height: currentScrollAreaElement.height,
       });
