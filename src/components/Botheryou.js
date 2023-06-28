@@ -9,18 +9,18 @@ import LayoutContext from "../contexts/Layout";
 
 const Container = styled.div`
   @media screen and (min-width: 1200px) {
-    position: relative;
-    top: 0;
     /**Three role types animations(3*300) + reserve spave for showing Competiton(600) */
-    height: calc(100vh + 1200px);
+    height: calc(200vh + 1500px);
 
     /**cut overflow part */
     clip-path: inset(0 0 0 0);
+  }
+`;
 
-    > * {
-      top: 0;
-      position: ${(props) => (props.isChildSticky ? "sticky" : "relative")};
-    }
+const FixedPageTitle = styled(PageTitle)`
+  @media screen and (min-width: 1200px) {
+    top: 0;
+    position: fixed;
   }
 `;
 
@@ -30,7 +30,9 @@ const QuestionsCon = styled.div`
   align-items: center;
   padding: 40px 20px 60px;
   @media screen and (min-width: 1200px) {
-    top: ${(props) => (props.isSticky ? "130px" : 0)};
+    position: fixed;
+    top: 130px;
+    width: 100%;
     padding-top: 100px;
     flex-direction: row;
     justify-content: center;
@@ -51,7 +53,6 @@ const Question = styled.div`
 const QuestionEnvious = styled(Question)`
   transform: translateX(${(props) => (props.isShow ? 0 : -150)}%);
   @media screen and (min-width: 1200px) {
-    transform: translateX(${(props) => (props.isShow ? 0 : -150)}%);
     perspective-origin: right center;
     perspective: 900px;
   }
@@ -101,6 +102,7 @@ const ImageComplex = styled(Image)`
 const ImageBgDecorate9 = styled.img`
   display: none;
   @media screen and (min-width: 1200px) {
+    transition: transform 1s, opacity 1s 0.2s;
     display: block;
     width: 150px;
     position: fixed;
@@ -150,7 +152,6 @@ const Botheryou = () => {
   const [isShowEnvious, setIsShowEnvious] = useState(false);
   const [isShowWish, setIsShowWish] = useState(false);
   const [isShowComplex, setIsShowComplex] = useState(false);
-  const [isSticky, setIsSticky] = useState(false);
 
   const [LBgD9TStyle, setLBgD9TStyle] = useState({
     XOffset: 0,
@@ -178,7 +179,7 @@ const Botheryou = () => {
           showEnvious = false,
           showWish = false,
           showComplex = false;
-        if (scrollAreaOffset >= 10 && scrollAreaOffset < 400) {
+        if (scrollAreaOffset >= 100 && scrollAreaOffset < 400) {
           showTitle = true;
         } else if (scrollAreaOffset >= 400 && scrollAreaOffset < 700) {
           showTitle = true;
@@ -206,13 +207,13 @@ const Botheryou = () => {
          * 600+vh => show Wish Area
          * 900+vh => show Complext Area
          */
-        setIsSticky(true);
-        if (scrollAreaOffset < (clientHeight / 3) * 2) {
+        if (scrollAreaOffset < clientHeight) {
           setIsShowTitle(false);
-        } else if (scrollAreaOffset >= (clientHeight / 3) * 2) {
+        } else if (
+          scrollAreaOffset >= clientHeight &&
+          scrollAreaOffset < clientHeight + 300
+        ) {
           setIsShowTitle(true);
-        }
-        if (scrollAreaOffset < clientHeight + 300) {
           setIsShowEnvious(false);
           setIsShowWish(false);
           setIsShowComplex(false);
@@ -224,6 +225,7 @@ const Botheryou = () => {
           scrollAreaOffset >= clientHeight + 300 &&
           scrollAreaOffset < clientHeight + 600
         ) {
+          setIsShowTitle(true);
           setIsShowEnvious(true);
 
           setLBgD9TStyle({ XOffset: 100, YOffset: 5, scale: 0.5 });
@@ -232,27 +234,45 @@ const Botheryou = () => {
           scrollAreaOffset >= clientHeight + 600 &&
           scrollAreaOffset < clientHeight + 900
         ) {
+          setIsShowTitle(true);
           setIsShowWish(true);
           setLBgD9TStyle({ XOffset: 200, YOffset: -10, scale: 0.5 });
           setRBgD9TStyle({ XOffset: -200, YOffset: -10, scale: 0.5 });
           setIsLBgVisible(true);
           setIsRBgVisible(true);
-        } else if (scrollAreaOffset >= clientHeight + 900) {
+        } else if (
+          scrollAreaOffset >= clientHeight + 900 &&
+          scrollAreaOffset < clientHeight + 1200
+        ) {
+          setIsShowTitle(true);
+
           setIsLBgVisible(false);
           setIsRBgVisible(false);
           setIsShowEnvious(true);
           setIsShowWish(true);
           setIsShowComplex(true);
+        } else if (
+          scrollAreaOffset >= clientHeight + 1200 &&
+          scrollAreaOffset < 2 * clientHeight + 1200
+        ) {
+          setIsShowTitle(true);
+          setIsShowEnvious(true);
+          setIsShowWish(true);
+          setIsShowComplex(true);
+        } else if (scrollAreaOffset > 2 * clientHeight + 1200) {
+          setIsShowTitle(false);
+          setIsShowEnvious(false);
+          setIsShowWish(false);
+          setIsShowComplex(false);
         }
       }
     } else {
-      setIsSticky(false);
     }
   }, [clientHeight, currentScrollArea, screenWidth]);
   return (
-    <Container isChildSticky={isSticky} id="botherYou">
-      <PageTitle isShow={isShowTitle} titleText={"你是否也有以下困擾？"} />
-      <QuestionsCon isSticky={isSticky}>
+    <Container id="botherYou">
+      <FixedPageTitle isShow={isShowTitle} titleText={"你是否也有以下困擾？"} />
+      <QuestionsCon>
         <QuestionEnvious isShow={isShowEnvious}>
           <QuestionText>羨慕別人的酷酷網頁動畫?</QuestionText>
           <ImageEnvious src={iconEnvious} />
