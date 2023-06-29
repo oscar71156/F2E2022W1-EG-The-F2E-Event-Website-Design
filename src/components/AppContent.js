@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useContext, useCallback } from "react";
 import Competition from "../components/Competition";
 import Header from "../components/Header/Header";
-import Botheryou from "../components/Botheryou";
+import Botheryou from "../components/Botheryou/Botheryou";
 import ThisYearTopic from "../components/ThisYearTopic";
 import ComingTopic from "../components/ComingTopic";
 import ScheduleDate from "../components/ScheduleDate";

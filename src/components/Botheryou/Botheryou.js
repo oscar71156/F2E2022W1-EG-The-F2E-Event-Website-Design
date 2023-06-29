@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import PageTitle from "./PageTitle";
-import iconEnvious from "../assets/icon/question_1.png";
-import iconWish from "../assets/icon/question_2.png";
-import iconComplex from "../assets/icon/question_3.png";
-import iconBgDecorate9 from "../assets/icon/bg/bg_decorate_09.png";
+import PageTitle from "../PageTitle";
+import iconEnvious from "../../assets/icon/question_1.png";
+import iconWish from "../../assets/icon/question_2.png";
+import iconComplex from "../../assets/icon/question_3.png";
+import iconBgDecorate9 from "../../assets/icon/bg/bg_decorate_09.png";
 import { useContext, useEffect, useState } from "react";
-import LayoutContext from "../contexts/Layout";
-
+import { getAnimationData, getAnimationDataM } from "./Animation";
+import LayoutContext from "../../contexts/Layout";
 const Container = styled.div`
   @media screen and (min-width: 1200px) {
     /**Three role types animations(3*300) + reserve spave for showing Competiton(600) */
@@ -137,16 +137,6 @@ const RBgD9 = styled(ImageBgDecorate9)`
   }
 `;
 
-/**
-  Height: 100vh + 300*3px + 300px
-  
-  100vh=> show title and zoom out Competition
-  
-  300*3 => for each three roles types showingss
-
-  300 => preserve space for showing Competitison and make content disappear
- */
-
 const Botheryou = () => {
   const [isShowTitle, setIsShowTitle] = useState(false);
   const [isShowEnvious, setIsShowEnvious] = useState(false);
@@ -175,25 +165,16 @@ const Botheryou = () => {
 
     if (scrollAreaName === "botherYou") {
       if (screenWidth < 1200) {
-        let showTitle = false,
-          showEnvious = false,
-          showWish = false,
-          showComplex = false;
-        if (scrollAreaOffset >= 100 && scrollAreaOffset < 400) {
-          showTitle = true;
-        } else if (scrollAreaOffset >= 400 && scrollAreaOffset < 700) {
-          showTitle = true;
-          showEnvious = true;
-        } else if (scrollAreaOffset >= 700 && scrollAreaOffset < 1000) {
-          showTitle = true;
-          showEnvious = true;
-          showWish = true;
-        } else if (scrollAreaOffset >= 1000) {
-          showTitle = true;
-          showEnvious = true;
-          showWish = true;
-          showComplex = true;
-        }
+        /**
+         *
+         * scrollAreaOffset
+         * 100 => show title
+         * 400 => show Envious
+         * 700=> show Wish
+         * 1000 => show Complex
+         */
+        const { showTitle, showEnvious, showWish, showComplex } =
+          getAnimationDataM(scrollAreaOffset);
         setIsShowTitle(showTitle);
         setIsShowEnvious(showEnvious);
         setIsShowComplex(showComplex);
@@ -202,69 +183,29 @@ const Botheryou = () => {
         /**
          *
          * scrollAreaOffset
-         * 2/3vh => show title
+         * 100vh => show title + show LBG + show RBG
          * 300+vh => show Envious Area
          * 600+vh => show Wish Area
-         * 900+vh => show Complext Area
+         * 900+vh => show Complex Area + hide LBG + hide RBG
+         * 1200+200vh =>  hide all
          */
-        if (scrollAreaOffset < clientHeight) {
-          setIsShowTitle(false);
-        } else if (
-          scrollAreaOffset >= clientHeight &&
-          scrollAreaOffset < clientHeight + 300
-        ) {
-          setIsShowTitle(true);
-          setIsShowEnvious(false);
-          setIsShowWish(false);
-          setIsShowComplex(false);
-          setIsLBgVisible(true);
-          setIsRBgVisible(true);
-          setLBgD9TStyle({ XOffset: 0, YOffset: 0, scale: 1 });
-          setRBgD9TStyle({ XOffset: 0, YOffset: 0, scale: 1 });
-        } else if (
-          scrollAreaOffset >= clientHeight + 300 &&
-          scrollAreaOffset < clientHeight + 600
-        ) {
-          setIsShowTitle(true);
-          setIsShowEnvious(true);
-
-          setLBgD9TStyle({ XOffset: 100, YOffset: 5, scale: 0.5 });
-          setRBgD9TStyle({ XOffset: -100, YOffset: 5, scale: 0.5 });
-        } else if (
-          scrollAreaOffset >= clientHeight + 600 &&
-          scrollAreaOffset < clientHeight + 900
-        ) {
-          setIsShowTitle(true);
-          setIsShowWish(true);
-          setLBgD9TStyle({ XOffset: 200, YOffset: -10, scale: 0.5 });
-          setRBgD9TStyle({ XOffset: -200, YOffset: -10, scale: 0.5 });
-          setIsLBgVisible(true);
-          setIsRBgVisible(true);
-        } else if (
-          scrollAreaOffset >= clientHeight + 900 &&
-          scrollAreaOffset < clientHeight + 1200
-        ) {
-          setIsShowTitle(true);
-
-          setIsLBgVisible(false);
-          setIsRBgVisible(false);
-          setIsShowEnvious(true);
-          setIsShowWish(true);
-          setIsShowComplex(true);
-        } else if (
-          scrollAreaOffset >= clientHeight + 1200 &&
-          scrollAreaOffset < 2 * clientHeight + 1200
-        ) {
-          setIsShowTitle(true);
-          setIsShowEnvious(true);
-          setIsShowWish(true);
-          setIsShowComplex(true);
-        } else if (scrollAreaOffset > 2 * clientHeight + 1200) {
-          setIsShowTitle(false);
-          setIsShowEnvious(false);
-          setIsShowWish(false);
-          setIsShowComplex(false);
-        }
+        const {
+          showTitle,
+          showEnvious,
+          showWish,
+          showComplex,
+          LBgD9TStyle,
+          RBgD9TStyle,
+          BgVisible,
+        } = getAnimationData(scrollAreaOffset, clientHeight);
+        setIsShowTitle(showTitle);
+        setIsShowEnvious(showEnvious);
+        setIsShowWish(showWish);
+        setIsShowComplex(showComplex);
+        setIsLBgVisible(BgVisible);
+        setIsRBgVisible(BgVisible);
+        setLBgD9TStyle({ ...LBgD9TStyle });
+        setRBgD9TStyle({ ...RBgD9TStyle });
       }
     } else {
     }
