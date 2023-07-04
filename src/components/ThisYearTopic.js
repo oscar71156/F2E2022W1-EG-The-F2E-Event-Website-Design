@@ -9,14 +9,15 @@ import { useState, useEffect, useContext } from "react";
 import LayoutContext from "../contexts/Layout";
 const Container = styled.div`
   @media screen and (min-width: 1200px) {
-    height: calc(100vh + 900px);
+    height: calc(200vh + 900px);
     width: 100%;
-    position: relative;
-    > * {
-      top: 0;
-      position: ${(props) => (props.isChildSticky ? "sticky" : "relative")};
-      transform: translateY(${(props) => (props.isChildSticky ? 0 : "900px")});
-    }
+  }
+`;
+
+const FixedPageTitle = styled(PageTitle)`
+  @media screen and (min-width: 1200px) {
+    top: 0;
+    position: fixed;
   }
 `;
 
@@ -32,8 +33,11 @@ const Content = styled.div`
     justify-content: space-around;
     margin: 0 auto;
     opacity: ${(props) => (props.isShow ? 1 : 0)};
-    transition: opacity 2s;
-    top: ${(props) => (props.isSticky ? "240px" : 0)};
+    transition: opacity ${(props) => (props.isShow ? "2s" : "0.5s")};
+    position: fixed;
+    top: 240px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   @media screen and (min-width: 1800px) {
@@ -123,7 +127,6 @@ const Description = styled.div`
 `;
 
 const ThisYearTopic = () => {
-  const [isSticky, setIsSticky] = useState(false);
   const [isShowTitle, setIsShowTitle] = useState(false);
   const [isShowContent, setIsShowContent] = useState(false); //for big screen
   const [isShowF2E, setIShowF2E] = useState(false); //for small screen
@@ -132,20 +135,17 @@ const ThisYearTopic = () => {
   const { clientHeight, currentScrollArea, screenWidth } =
     useContext(LayoutContext);
 
-  /**
-   * 1. 過視窗3/4時，Title出現
-   * 2. 完整視窗時，show conetent
-   */
   useEffect(() => {
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
+
     if (scrollAreaName === "thisYearTopic") {
       if (screenWidth < 1200) {
         let showTitle = false,
           showF2E = false,
           showUI = false,
           showTeam = false;
-        if (scrollAreaOffset > 10 && scrollAreaOffset < 400) {
+        if (scrollAreaOffset >= 100 && scrollAreaOffset < 400) {
           showTitle = true;
         } else if (scrollAreaOffset >= 400 && scrollAreaOffset < 700) {
           showTitle = true;
@@ -165,32 +165,38 @@ const ThisYearTopic = () => {
         setIsShowUI(showUI);
         setIsShowTeam(showTeam);
       } else {
-        setIsSticky(true);
-        if (scrollAreaOffset < (clientHeight * 3) / 4) {
-          setIsShowTitle(false);
-          setIsShowContent(false);
-        } else if (
-          scrollAreaOffset >= (clientHeight * 3) / 4 &&
-          scrollAreaOffset < clientHeight
+        /**
+         * 100vh Title出現
+         * 100vh+600 show conetent
+         * 200vh++600 hide all
+         */
+        let showTitle = false,
+          showContent = false;
+        if (
+          scrollAreaOffset > clientHeight &&
+          scrollAreaOffset <= clientHeight + 600
         ) {
-          setIsShowTitle(true);
-        } else if (scrollAreaOffset >= clientHeight) {
-          setIsShowContent(true);
-          setIsShowTitle(true);
+          showTitle = true;
+        } else if (
+          scrollAreaOffset >= clientHeight + 600 &&
+          scrollAreaOffset < 2 * clientHeight + 600
+        ) {
+          showTitle = true;
+          showContent = true;
         }
+        setIsShowTitle(showTitle);
+        setIsShowContent(showContent);
       }
-    } else {
-      setIsSticky(false);
     }
   }, [clientHeight, currentScrollArea, screenWidth]);
   return (
-    <Container isChildSticky={isSticky} id="thisYearTopic">
-      <PageTitle
+    <Container id="thisYearTopic">
+      <FixedPageTitle
         titleText="本屆主題:互動式網頁設計"
         secondTitleText="以下兩個角色進行攜手合作"
         isShow={isShowTitle}
       />
-      <Content isSticky={isSticky} isShow={isShowContent}>
+      <Content isShow={isShowContent}>
         <F2E isShow={isShowF2E}>
           <ImageContainer>
             <Imagef2e src={iconCharacterf2e} />
