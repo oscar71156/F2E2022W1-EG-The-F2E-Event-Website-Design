@@ -3,20 +3,20 @@ import PageTitle from "./PageTitle";
 import iconWeek1 from "../assets/icon/week_1.png";
 import iconWeek2 from "../assets/icon/week_2.png";
 import iconWeek3 from "../assets/icon/week_3.png";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useMemo } from "react";
 import LayoutContext from "../contexts/Layout";
 
 const Container = styled.div`
   @media screen and (min-width: 1200px) {
-    height: calc(100vh + 1040px);
+    height: calc(200vh + 700px);
     position: relative;
   }
 `;
 
-const StickyPageTitle = styled(PageTitle)`
+const FixedPageTitle = styled(PageTitle)`
   @media screen and (min-width: 1200px) {
     top: 0;
-    position: sticky;
+    position: fixed;
   }
 `;
 
@@ -24,15 +24,14 @@ const Weeks = styled.div`
   @media screen and (min-width: 1200px) {
     position: static;
     flex-direction: column;
-
     display: flex;
     width: 100%;
     padding: 0 40px;
     margin: 0 auto 100px;
     padding: 0 200px;
 
-    /**For delay scroll disappearing */
-    transform: translateY(130px);
+    /**Wiat for competition animation compeletely */
+    transform: translateY(100vh);
   }
   @media screen and (min-width: 1800px) {
     padding: 0 240px;
@@ -43,9 +42,9 @@ const Week = styled.div`
   text-align: center;
   margin: 20px 0;
   opacity: ${(props) => props.opacity};
-  transition: opacity 1s;
+  transition: opacity 1.5s;
   @media screen and (min-width: 1200px) {
-    transition: opacity 0.1s;
+    transition: none;
     margin: 0;
     text-align: left;
   }
@@ -141,23 +140,26 @@ const ComingTopic = () => {
   const [week2Opacity, setWeek2Opacity] = useState(1);
   const [week3Opacity, setWeek3Opacity] = useState(1);
 
-  const { clientHeight, currentScrollArea, screenWidth } =
+  const { clientHeight, currentScrollArea, screenWidth, checkIsBelow } =
     useContext(LayoutContext);
 
+  const isBelowCurrentArea = useMemo(
+    () => checkIsBelow("comingTopic"),
+    [checkIsBelow]
+  );
   useEffect(() => {
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
+    let showTitle = false,
+      week1Opa = 0,
+      week2Opa = 0,
+      week3Opa = 0;
 
     if (scrollAreaName === "comingTopic") {
       if (screenWidth < 1200) {
-        let showTitle = false,
-          week1Opa = 0,
-          week2Opa = 0,
-          week3Opa = 0;
-
-        if (scrollAreaOffset > 10 && scrollAreaOffset < 500) {
+        if (scrollAreaOffset >= 100 && scrollAreaOffset < 400) {
           showTitle = true;
-        } else if (scrollAreaOffset >= 500 && scrollAreaOffset < 900) {
+        } else if (scrollAreaOffset >= 400 && scrollAreaOffset < 900) {
           showTitle = true;
           week1Opa = 1;
         } else if (scrollAreaOffset >= 900 && scrollAreaOffset < 1200) {
@@ -170,72 +172,134 @@ const ComingTopic = () => {
           week2Opa = 1;
           week3Opa = 1;
         }
-        setIsShowTitle(showTitle);
-        setWeek1Opacity(week1Opa);
-        setWeek2Opacity(week2Opa);
-        setWeek3Opacity(week3Opa);
       } else {
+        /**
+         *  scrollAreaOffset
+         *  100vh => show title(height 350px)
+         *  100vh + WeeksPart/4 =>  start to show week1
+         *  100vh + WeeksPart*3/4 => show week1 compeletely
+         *  100vh + WeeksPart + titleMarginBottom(40)  => start to hide week1
+         *  100vh + WeeksPart+ titleMarginBottom(40) + title/2 => hide week1 compeletely
+         *
+         *  week1 + 260 (height of one week) => week2 + 260 (height of one week) => week3
+         *
+         *  100vh + WeeksPart + 3 * 260 (height of one week)  => show title(height 350px)
+         *
+         *  WeeksPart(the remaining part which weeks would be showed): 100vh - 350(title height)
+         */
+
+        const weeksPartHeight = clientHeight - 350;
+        const pageTitleHeight = 350;
+        const pageTitleMarginBH = 40;
+        const oneWeekHeight = 260;
         if (
-          scrollAreaOffset >= (3 * clientHeight) / 4 &&
-          scrollAreaOffset <= clientHeight + 1040
+          scrollAreaOffset >= clientHeight &&
+          scrollAreaOffset < clientHeight + weeksPartHeight + 3 * oneWeekHeight
         ) {
-          setIsShowTitle(true);
+          showTitle = true;
         }
 
-        if (scrollAreaOffset < clientHeight) {
-          setWeek1Opacity(0);
-          setWeek2Opacity(0);
-          setWeek3Opacity(0);
-        } else if (
-          scrollAreaOffset >= clientHeight &&
-          scrollAreaOffset <= clientHeight + 260
+        const week1StartEmergePoint = clientHeight + weeksPartHeight / 4;
+        const week1EndEmergePoint = clientHeight + (weeksPartHeight * 3) / 4;
+        const week1StartFadePoint =
+          clientHeight + weeksPartHeight + pageTitleMarginBH;
+        const week1EndFadePoint =
+          clientHeight +
+          weeksPartHeight +
+          pageTitleMarginBH +
+          pageTitleHeight / 2;
+
+        if (
+          scrollAreaOffset >= week1StartEmergePoint &&
+          scrollAreaOffset < week1EndEmergePoint
         ) {
-          setWeek1Opacity(
-            (260 * (scrollAreaOffset - clientHeight)) / clientHeight
-          );
+          week1Opa =
+            (scrollAreaOffset - week1StartEmergePoint) /
+            (week1EndEmergePoint - week1StartEmergePoint);
         } else if (
-          scrollAreaOffset >= clientHeight + 260 &&
-          scrollAreaOffset <= clientHeight + 520
+          scrollAreaOffset >= week1EndEmergePoint &&
+          scrollAreaOffset < week1StartFadePoint
         ) {
-          setWeek1Opacity(
-            1 - (260 * (scrollAreaOffset - clientHeight - 260)) / clientHeight
-          );
-          setWeek2Opacity(
-            (260 * (scrollAreaOffset - clientHeight - 260)) / clientHeight
-          );
+          week1Opa = 1;
         } else if (
-          scrollAreaOffset >= clientHeight + 520 &&
-          scrollAreaOffset <= clientHeight + 780
+          scrollAreaOffset >= week1StartFadePoint &&
+          scrollAreaOffset < week1EndFadePoint
         ) {
-          setWeek2Opacity(
-            (1 - 520 * (scrollAreaOffset - clientHeight - 520)) / clientHeight
-          );
-          setWeek3Opacity(
-            (520 * (scrollAreaOffset - clientHeight - 520)) / clientHeight
-          );
+          week1Opa =
+            1 -
+            (scrollAreaOffset - week1StartFadePoint) /
+              (week1EndFadePoint - week1StartFadePoint);
+        }
+
+        const week2StartEmergePoint = week1StartEmergePoint + oneWeekHeight;
+        const week2EndEmergePoint = week1EndEmergePoint + oneWeekHeight;
+        const week2StartFadePoint = week1StartFadePoint + oneWeekHeight;
+        const week2EndFadePoint = week1EndFadePoint + oneWeekHeight;
+        if (
+          scrollAreaOffset >= week2StartEmergePoint &&
+          scrollAreaOffset < week2EndEmergePoint
+        ) {
+          week2Opa =
+            (scrollAreaOffset - week2StartEmergePoint) /
+            (week2EndEmergePoint - week2StartEmergePoint);
         } else if (
-          scrollAreaOffset >= clientHeight + 780 &&
-          scrollAreaOffset <= clientHeight + 1040
+          scrollAreaOffset >= week2EndEmergePoint &&
+          scrollAreaOffset < week2StartFadePoint
         ) {
-          setWeek3Opacity(
-            (1 - 780 * (scrollAreaOffset - clientHeight - 780)) / clientHeight
-          );
+          week2Opa = 1;
+        } else if (
+          scrollAreaOffset >= week2StartFadePoint &&
+          scrollAreaOffset < week2EndFadePoint
+        ) {
+          week2Opa =
+            1 -
+            (scrollAreaOffset - week2StartFadePoint) /
+              (week2EndFadePoint - week2StartFadePoint);
+        }
+
+        const week3StartEmergePoint = week2StartEmergePoint + oneWeekHeight;
+        const week3EndEmergePoint = week2EndEmergePoint + oneWeekHeight;
+        const week3StartFadePoint = week2StartFadePoint + oneWeekHeight;
+        const week3EndFadePoint = week2EndFadePoint + oneWeekHeight;
+        if (
+          scrollAreaOffset >= week3StartEmergePoint &&
+          scrollAreaOffset < week3EndEmergePoint
+        ) {
+          week3Opa =
+            (scrollAreaOffset - week3StartEmergePoint) /
+            (week3EndEmergePoint - week3StartEmergePoint);
+        } else if (
+          scrollAreaOffset >= week3EndEmergePoint &&
+          scrollAreaOffset < week3StartFadePoint
+        ) {
+          week3Opa = 1;
+        } else if (
+          scrollAreaOffset >= week3StartFadePoint &&
+          scrollAreaOffset < week3EndFadePoint
+        ) {
+          week3Opa =
+            1 -
+            (scrollAreaOffset - week3StartFadePoint) /
+              (week3EndFadePoint - week3StartFadePoint);
         }
       }
     } else {
-      if (screenWidth < 1200) {
-      } else {
-        setIsShowTitle(false);
-        setWeek1Opacity(0);
-        setWeek2Opacity(0);
-        setWeek3Opacity(0);
+      if (screenWidth < 1200 && isBelowCurrentArea) {
+        showTitle = true;
+        week1Opa = 1;
+        week2Opa = 1;
+        week3Opa = 1;
       }
     }
-  }, [clientHeight, currentScrollArea, screenWidth]);
+    setIsShowTitle(showTitle);
+    setWeek1Opacity(week1Opa);
+    setWeek2Opacity(week2Opa);
+    setWeek3Opacity(week3Opa);
+  }, [clientHeight, currentScrollArea, screenWidth, isBelowCurrentArea]);
 
   return (
     <Container id="comingTopic">
-      <StickyPageTitle
+      <FixedPageTitle
         titleText="年度最強合作，三大主題來襲"
         secondTitleText="各路廠商強強聯手<br/>共同設計出接地氣的網頁互動挑戰關卡"
         isShow={isShowTitle}
