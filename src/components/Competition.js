@@ -160,7 +160,6 @@ const Competition = () => {
   const [reducedRatio, setReducedRatio] = useState(1);
   const {
     clientHeight,
-    currentScrollArea,
     screenWidth,
     getPreScreenByName,
     scrollTop,
@@ -300,7 +299,6 @@ const Competition = () => {
             lastCompetitionP +
             ((currenttCompetitionP - lastCompetitionP) * maxScrollAreaOffset) /
               clientHeight;
-
           setReducedRatio(scaleNumber);
         }
         const currentScrollAreaFromBottom = screenNodesInforArray.find(
@@ -421,7 +419,13 @@ const Competition = () => {
         }));
       }
     }
-  }, [clientHeight, currentScrollArea, screenWidth, screenNodesInfor]);
+  }, [
+    clientHeight,
+    screenWidth,
+    screenNodesInfor,
+    screenNodesInforArray,
+    scrollTop,
+  ]);
 
   return (
     <CompetitionEnvir ref={ref} id="test" reducedRatio={reducedRatio}>
