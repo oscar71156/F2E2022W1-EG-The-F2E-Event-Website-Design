@@ -23,68 +23,63 @@ function LayoutProvider({ children }) {
 
   //設定螢幕寬度、高度及每個Screen的起點及高度。
   //Every screen Information: name, start, height, order(from 1)
-  const setScreenDimAndgetScreenInforArray = useCallback(
-    (scrollTop) => {
-      if (isScrollAreaReady) {
-        const screenNameArray = getScreenNameArray();
-        const screenNodes = [...scrollAreaRef.current.childNodes].filter(
-          (node) => screenNameArray.includes(node.id)
-        );
-        const screenHeight = window.innerHeight;
-        const screenWidth = window.innerWidth;
-        let order = 1;
+  const setScreenDimAndgetScreenInforArray = useCallback(() => {
+    if (isScrollAreaReady) {
+      const screenNameArray = getScreenNameArray();
+      const screenNodes = [...scrollAreaRef.current.childNodes].filter((node) =>
+        screenNameArray.includes(node.id)
+      );
+      const screenHeight = window.innerHeight;
+      const screenWidth = window.innerWidth;
+      let order = 1;
 
-        const screenNodesInfor = screenNodes.reduce((acc, curr) => {
-          const { top: screenNodeTop, height: screenNodeHeight } =
-            curr.getBoundingClientRect();
+      const screenNodesInfor = screenNodes.reduce((acc, curr) => {
+        const { top: screenNodeTop, height: screenNodeHeight } =
+          curr.getBoundingClientRect();
 
-          return [
-            ...acc,
-            {
-              name: curr.id,
-              start: Math.round(screenNodeTop + scrollTop), //當在特定scrollTop refresh時，之前的screen會變負的，必須加回去
-              height: Math.round(screenNodeHeight),
-              order: order++,
-            },
-          ];
-        }, []);
+        const currentScrollTop =
+          window.scrollY ||
+          window.pageYOffset ||
+          document.lastElementChild.scrollTop;
+        return [
+          ...acc,
+          {
+            name: curr.id,
+            start: Math.round(screenNodeTop + currentScrollTop), //當在特定scrollTop refresh時，之前的screen會變負的，必須加回去
+            height: Math.round(screenNodeHeight),
+            order: order++,
+          },
+        ];
+      }, []);
 
-        setScreenNodesInfor(screenNodesInfor);
-        setScreenDim({ height: screenHeight, width: screenWidth });
-      }
-    },
-    [isScrollAreaReady]
-  );
+      setScreenNodesInfor(screenNodesInfor);
+      setScreenDim({ height: screenHeight, width: screenWidth });
+    }
+  }, [isScrollAreaReady]);
 
   //初始時，設定螢幕寬度、高度及每個Screen的起點及高度。
   useEffect(() => {
     if (isScrollAreaReady) {
-      setScreenDimAndgetScreenInforArray(scrollTop);
+      setScreenDimAndgetScreenInforArray();
     }
-  }, [isScrollAreaReady, setScreenDimAndgetScreenInforArray, scrollTop]);
+  }, [isScrollAreaReady, setScreenDimAndgetScreenInforArray]);
 
   //當螢幕resize時，重新設定螢幕寬度、高度及每個Screen的起點及高度。
   const deHandleSizeChange = useCallback(
-    debounce((scrollTop) => {
-      setScreenDimAndgetScreenInforArray(scrollTop);
+    debounce(() => {
+      setScreenDimAndgetScreenInforArray();
     }, 1000),
     [setScreenDimAndgetScreenInforArray]
   );
   useEffect(() => {
     if (deHandleSizeChange) {
-      window.addEventListener(
-        "resize",
-        deHandleSizeChange.bind(this, scrollTop)
-      );
+      window.addEventListener("resize", deHandleSizeChange);
       setScrollBarWidth(getScrollBarWidth("scrollArea"));
     }
     return () => {
-      window.removeEventListener(
-        "resize",
-        deHandleSizeChange.bind(this, scrollTop)
-      );
+      window.removeEventListener("resize", deHandleSizeChange);
     };
-  }, [deHandleSizeChange, scrollTop]);
+  }, [deHandleSizeChange]);
 
   //當螢幕滾動時，設定目前ScrollTop
   const ttGetScrollPosition = useMemo(
