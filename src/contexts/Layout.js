@@ -179,6 +179,21 @@ function LayoutProvider({ children }) {
     return false;
   }, [screenNodesInfor, screenDim, isScrollAreaReady]);
 
+  const checkIsBelow = useCallback(
+    (checkAreaName) => {
+      if (!screenNodesInfor) {
+        return;
+      }
+      const currentAreaIndex = screenNodesInfor.findIndex(
+        ({ name }) => name === currentScrollArea.name
+      );
+      const checkAreaIndex = screenNodesInfor.findIndex(
+        ({ name }) => name === checkAreaName
+      );
+      return currentAreaIndex > checkAreaIndex;
+    },
+    [currentScrollArea.name, screenNodesInfor]
+  );
   return (
     <LayoutContext.Provider
       value={{
@@ -194,6 +209,7 @@ function LayoutProvider({ children }) {
         screenNodesInfor,
         isScreenStatisticReady,
         scrollTop,
+        checkIsBelow,
       }}
     >
       {children}

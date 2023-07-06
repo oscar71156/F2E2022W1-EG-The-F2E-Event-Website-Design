@@ -3,7 +3,7 @@ import PageTitle from "./PageTitle";
 import iconWeek1 from "../assets/icon/week_1.png";
 import iconWeek2 from "../assets/icon/week_2.png";
 import iconWeek3 from "../assets/icon/week_3.png";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useMemo } from "react";
 import LayoutContext from "../contexts/Layout";
 
 const Container = styled.div`
@@ -140,9 +140,13 @@ const ComingTopic = () => {
   const [week2Opacity, setWeek2Opacity] = useState(1);
   const [week3Opacity, setWeek3Opacity] = useState(1);
 
-  const { clientHeight, currentScrollArea, screenWidth } =
+  const { clientHeight, currentScrollArea, screenWidth, checkIsBelow } =
     useContext(LayoutContext);
 
+  const isBelowCurrentArea = useMemo(
+    () => checkIsBelow("comingTopic"),
+    [checkIsBelow]
+  );
   useEffect(() => {
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
@@ -150,6 +154,7 @@ const ComingTopic = () => {
       week1Opa = 0,
       week2Opa = 0,
       week3Opa = 0;
+
     if (scrollAreaName === "comingTopic") {
       if (screenWidth < 1200) {
         if (scrollAreaOffset >= 100 && scrollAreaOffset < 400) {
@@ -278,12 +283,19 @@ const ComingTopic = () => {
               (week3EndFadePoint - week3StartFadePoint);
         }
       }
+    } else {
+      if (screenWidth < 1200 && isBelowCurrentArea) {
+        showTitle = true;
+        week1Opa = 1;
+        week2Opa = 1;
+        week3Opa = 1;
+      }
     }
     setIsShowTitle(showTitle);
     setWeek1Opacity(week1Opa);
     setWeek2Opacity(week2Opa);
     setWeek3Opacity(week3Opa);
-  }, [clientHeight, currentScrollArea, screenWidth]);
+  }, [clientHeight, currentScrollArea, screenWidth, isBelowCurrentArea]);
 
   return (
     <Container id="comingTopic">
