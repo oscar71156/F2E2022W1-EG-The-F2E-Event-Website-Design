@@ -5,7 +5,7 @@ import iconDateLine from "../assets/icon/date_line.png";
 import iconWeekLine from "../assets/icon/date_weekLine.png";
 import PageTitle from "./PageTitle";
 import JoinButton from "./Join";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useMemo } from "react";
 import LayoutContext from "../contexts/Layout";
 const Container = styled.div`
   @media screen and (min-width: 1200px) {
@@ -13,7 +13,7 @@ const Container = styled.div`
   }
 `;
 
-const ConditionalPageTitle = styled(PageTitle)`
+const PageTitleM = styled(PageTitle)`
   @media screen and (min-width: 1200px) {
     display: none;
   }
@@ -23,12 +23,13 @@ const Content = styled.div`
   max-width: 1440px;
   margin: 0 auto;
   @media screen and (min-width: 1200px) {
-    transform: translateY(100px);
-    position: sticky;
+    transform: translateY(100px) translateX(-50%);
+    position: fixed;
     top: 0;
+    left: 50%;
   }
   @media screen and (min-width: 1800px) {
-    transform: translateY(20px);
+    transform: translateY(20px) translateX(-50%);
   }
 `;
 
@@ -87,9 +88,14 @@ const ImageDateLine = styled.img`
 const Schedule = styled.div`
   padding: 60px 0 20px;
   text-align: center;
+  opacity: ${(props) => props.opacity};
+  transition: opacity ${(props) => (props.opacity === 0 ? "0.5s" : "1.5s")};
   @media screen and (min-width: 1200px) {
     display: inline-block;
     position: relative;
+    transition: none;
+    /**originHeight*/
+    opacity: initial;
     > * {
       opacity: ${(props) => props.opacity};
     }
@@ -178,6 +184,7 @@ const ImageDateUpload = styled.img`
 
 const ScheduleDate = () => {
   const [dateLineWidth, setDateLineWidth] = useState(0);
+  const [isShowTitle, setIsShowTitle] = useState(false);
   const [signUpOriginHeight, setSignUpOriginHeight] = useState(0);
   const [signUpOpacity, setSignUpOpacity] = useState(0);
   const [startOriginHeight, setStartOriginHeight] = useState(0);
@@ -185,9 +192,12 @@ const ScheduleDate = () => {
   const [uploadOriginHeight, setUploadOriginHeight] = useState(0);
   const [uploadOpacity, setUploadOpacity] = useState(0);
 
-  const { currentScrollArea, clientHeight } = useContext(LayoutContext);
+  const { currentScrollArea, clientHeight, screenWidth, checkIsBelow } =
+    useContext(LayoutContext);
 
-  /**
+  /** 
+   * 
+   * In laptop screen
    * 1vh~ 2vh => dateLine grow
    * 2vh ~ 2vh + 300 => signUp origin grow 0=> 150
    * 2vh+300 ~ 2vh+700 => signUp opacity 0 => 1
@@ -199,104 +209,146 @@ const ScheduleDate = () => {
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
 
+    let showTitle = false;
+    let tDateLineWidth = 0;
+    let tSignUpOriginHeight = 0;
+    let tSignUpOpacity = 0;
+    let tStartOriginHeight = 0;
+    let tStartOpacity = 0;
+    let tUploadOriginHeight = 0;
+    let tUploadOpacity = 0;
     if (scrollAreaName === "scheduleDate") {
-      if (scrollAreaOffset <= clientHeight) {
-        setDateLineWidth(0);
-      } else if (
-        scrollAreaOffset > clientHeight &&
-        scrollAreaOffset <= 2 * clientHeight
-      ) {
-        const startPoint = clientHeight;
-        const endPoint = 2 * clientHeight;
-        setDateLineWidth(
-          (100 * (scrollAreaOffset - startPoint)) / clientHeight
-        );
+      if (screenWidth < 1200) {
+        if (scrollAreaOffset >= 100 && scrollAreaOffset < 400) {
+          showTitle = true;
+        } else if (scrollAreaOffset >= 400 && scrollAreaOffset < 770) {
+          showTitle = true;
+          tSignUpOpacity = 1;
+        } else if (scrollAreaOffset >= 770 && scrollAreaOffset < 1200) {
+          showTitle = true;
+          tSignUpOpacity = 1;
+          tStartOpacity = 1;
+        } else if (scrollAreaOffset >= 1200) {
+          showTitle = true;
+          tSignUpOpacity = 1;
+          tStartOpacity = 1;
+          tUploadOpacity = 1;
+        }
       } else {
-        setDateLineWidth(100);
-      }
+        if (scrollAreaOffset <= clientHeight) {
+          tDateLineWidth = 0;
+        } else if (
+          scrollAreaOffset > clientHeight &&
+          scrollAreaOffset <= 2 * clientHeight
+        ) {
+          const startPoint = clientHeight;
+          tDateLineWidth =
+            (100 * (scrollAreaOffset - startPoint)) / clientHeight;
+        } else {
+          tDateLineWidth = 100;
+        }
 
-      if (scrollAreaOffset <= 2 * clientHeight) {
-        setSignUpOriginHeight(0);
-      } else if (
-        scrollAreaOffset > 2 * clientHeight &&
-        scrollAreaOffset <= clientHeight * 2 + 300
-      ) {
-        //height 0=> 150
-        //translateY => 150 =>  0
-        setSignUpOriginHeight((scrollAreaOffset - 2 * clientHeight) * 0.5);
-        setSignUpOpacity(0);
-      } else if (
-        scrollAreaOffset > 2 * clientHeight + 300 &&
-        scrollAreaOffset <= clientHeight * 2 + 700
-      ) {
-        setSignUpOriginHeight(150);
+        if (scrollAreaOffset <= 2 * clientHeight) {
+          tSignUpOriginHeight = 0;
+          tSignUpOriginHeight = 0;
+          tSignUpOpacity = 0;
+          tStartOriginHeight = 0;
+          tStartOpacity = 0;
+          tUploadOriginHeight = 0;
+          tUploadOpacity = 0;
+        } else if (
+          scrollAreaOffset > 2 * clientHeight &&
+          scrollAreaOffset <= clientHeight * 2 + 300
+        ) {
+          //height 0=> 150
+          tSignUpOriginHeight = (scrollAreaOffset - 2 * clientHeight) * 0.5;
+        } else if (
+          scrollAreaOffset > 2 * clientHeight + 300 &&
+          scrollAreaOffset <= clientHeight * 2 + 700
+        ) {
+          tSignUpOriginHeight = 150;
 
-        //opacity 0 => 1
-        setSignUpOpacity((scrollAreaOffset - 2 * clientHeight - 300) * 0.0025);
+          //opacity 0 => 1
+          tSignUpOpacity = (scrollAreaOffset - 2 * clientHeight - 300) * 0.0025;
+        } else if (
+          scrollAreaOffset > 2 * clientHeight + 700 &&
+          scrollAreaOffset <= clientHeight * 2 + 1000
+        ) {
+          tSignUpOriginHeight = 150;
+          tSignUpOpacity = 1;
 
-        setStartOriginHeight(0);
-      } else if (
-        scrollAreaOffset > 2 * clientHeight + 700 &&
-        scrollAreaOffset <= clientHeight * 2 + 1000
-      ) {
-        setSignUpOpacity(1);
+          /**0 => 105 */
+          tStartOriginHeight =
+            0.35 * (scrollAreaOffset - 2 * clientHeight - 700);
+        } else if (
+          scrollAreaOffset > 2 * clientHeight + 1000 &&
+          scrollAreaOffset <= clientHeight * 2 + 1400
+        ) {
+          tSignUpOriginHeight = 150;
+          tSignUpOpacity = 1;
+          tStartOriginHeight = 105;
 
-        /**0 => 105 */
-        setStartOriginHeight(
-          0.35 * (scrollAreaOffset - 2 * clientHeight - 700)
-        );
+          /**0=>1 */
+          tStartOpacity = (scrollAreaOffset - 2 * clientHeight - 1000) * 0.0025;
+        } else if (
+          scrollAreaOffset > 2 * clientHeight + 1400 &&
+          scrollAreaOffset <= clientHeight * 2 + 1700
+        ) {
+          tSignUpOriginHeight = 150;
+          tSignUpOpacity = 1;
+          tStartOriginHeight = 105;
+          tStartOpacity = 1;
 
-        setStartOpacity(0);
-      } else if (
-        scrollAreaOffset > 2 * clientHeight + 1000 &&
-        scrollAreaOffset <= clientHeight * 2 + 1400
-      ) {
-        setStartOriginHeight(105);
+          // 0=>171
+          tUploadOriginHeight =
+            (scrollAreaOffset - 2 * clientHeight - 1400) * 0.57;
+        } else if (
+          scrollAreaOffset > 2 * clientHeight + 1700 &&
+          scrollAreaOffset <= clientHeight * 2 + 2100
+        ) {
+          tSignUpOriginHeight = 150;
+          tSignUpOpacity = 1;
+          tStartOriginHeight = 105;
+          tStartOpacity = 1;
+          tUploadOriginHeight = 171;
 
-        /**0=>1 */
-        setStartOpacity((scrollAreaOffset - 2 * clientHeight - 1000) * 0.0025);
-
-        setUploadOriginHeight(0);
-      } else if (
-        scrollAreaOffset > 2 * clientHeight + 1400 &&
-        scrollAreaOffset <= clientHeight * 2 + 1700
-      ) {
-        setStartOpacity(1);
-
-        // 0=>171
-        setUploadOriginHeight(
-          (scrollAreaOffset - 2 * clientHeight - 1400) * 0.57
-        );
-      } else if (
-        scrollAreaOffset > 2 * clientHeight + 1700 &&
-        scrollAreaOffset <= clientHeight * 2 + 2100
-      ) {
-        setUploadOriginHeight(171);
-
-        // 0=>1
-        setUploadOpacity((scrollAreaOffset - 2 * clientHeight - 2100) * 0.25);
-      } else {
-        setDateLineWidth(100);
-        setSignUpOriginHeight(150);
-        setSignUpOpacity(1);
-        setStartOriginHeight(105);
-        setStartOpacity(1);
-        setUploadOriginHeight(171);
-        setUploadOpacity(1);
+          // 0=>1
+          tUploadOpacity = (scrollAreaOffset - 2 * clientHeight - 1700) / 400;
+        } else {
+          tDateLineWidth = 100;
+          tSignUpOriginHeight = 150;
+          tSignUpOpacity = 1;
+          tStartOriginHeight = 105;
+          tStartOpacity = 1;
+          tUploadOriginHeight = 171;
+          tUploadOpacity = 1;
+        }
       }
     } else {
-      setDateLineWidth(0);
-      setSignUpOriginHeight(0);
-      setSignUpOpacity(0);
-      setStartOriginHeight(0);
-      setStartOpacity(0);
-      setUploadOriginHeight(0);
-      setUploadOpacity(0);
+      if (screenWidth < 1200 && isBelowCurrentArea) {
+        showTitle = true;
+        tSignUpOpacity = 1;
+        tStartOpacity = 1;
+        tUploadOpacity = 1;
+      }
     }
+    setIsShowTitle(showTitle);
+    setDateLineWidth(tDateLineWidth);
+    setSignUpOriginHeight(tSignUpOriginHeight);
+    setSignUpOpacity(tSignUpOpacity);
+    setStartOriginHeight(tStartOriginHeight);
+    setStartOpacity(tStartOpacity);
+    setUploadOriginHeight(tUploadOriginHeight);
+    setUploadOpacity(tUploadOpacity);
   }, [currentScrollArea, clientHeight]);
+
+  const isBelowCurrentArea = useMemo(
+    () => checkIsBelow("scheduleDate"),
+    [checkIsBelow]
+  );
   return (
     <Container id="scheduleDate">
-      <ConditionalPageTitle titleText="重要時程" />
+      <PageTitleM titleText="重要時程" isShow={isShowTitle} />
       <Content>
         <Schedules>
           <Signup originHeight={signUpOriginHeight} opacity={signUpOpacity}>
