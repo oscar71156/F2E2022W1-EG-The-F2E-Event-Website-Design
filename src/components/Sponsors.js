@@ -8,26 +8,31 @@ import iconDecorate4 from "../assets/icon/bg/bg_decorate_04.png";
 import iconDecorate8 from "../assets/icon/bg/bg_decorate_08.png";
 
 import PageTitle from "./PageTitle";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useMemo } from "react";
 import LayoutContext from "../contexts/Layout";
 
 const Name = "sponsors";
 const Container = styled.div`
   @media screen and (min-width: 1200px) {
-    height: calc(100vh + 1000px);
-    position: relative;
-    > * {
-      position: ${(props) => (props.isSticky ? "sticky" : "relative")};
-      top: ${(props) => (props.isSticky ? 0 : 1000)}px;
-    }
+    height: 500vh;
+  }
+`;
+
+const FixedPageTitle = styled(PageTitle)`
+  @media screen and (min-width: 1200px) {
+    top: 0;
+    position: fixed;
   }
 `;
 
 const Content = styled.div`
   @media screen and (min-width: 1200px) {
+    position: fixed;
     width: max-content;
     margin: 0 auto;
-    top: ${(props) => (props.isSticky ? 165 : 1000)}px;
+    top: 165px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 `;
 
@@ -55,12 +60,15 @@ const Sponsor = styled.div`
   & + div {
     margin: 40px auto;
   }
+
+  transform: translateY(${(props) => (props.isShow ? 0 : "200")}px);
+  opacity: ${(props) => (props.isShow ? 1 : 0)};
+  transition-property: opacity, transform;
+  transition-duration: 0.5s, 1s;
+  transition-delay: 0s;
   @media screen and (min-width: 1200px) {
     display: inline-block;
-    transform: translateY(${(props) => (props.isShow ? 0 : "200")}px);
-    opacity: ${(props) => (props.isShow ? 1 : 0)};
-    transition-property: opacity, transform;
-    transition-duration: 1s;
+    transition-duration: opacity: ${(props) => (props.isShow ? "1s" : "0s")};
     transition-delay: 0, 2s;
 
     &:not(:nth-last-child(2)) + div {
@@ -129,10 +137,8 @@ const ImageBgDecorate4 = styled.img`
     width: auto;
     display: block;
     position: fixed;
-    ${"" /* bottom:px; */}
-    left:400px;
+    left: 400px;
     bottom: 0px;
-    top: initial;
     transform: scale(${(props) => props.tStyle.scale})
       translateX(${(props) => props.tStyle.translateX}px)
       translateY(${(props) => props.tStyle.translateY}px);
@@ -161,13 +167,15 @@ const ImageBgDecorate8 = styled.img`
     opacity: ${(props) => props.tStyle.opacity};
   }
 `;
+const bgHiddenStyle = { translateX: 0, scale: 0, opacity: 0, translateY: 0 };
 
 const Sponsors = () => {
-  const [isShowContent, setIsShowContent] = useState(false);
   const [isShowTitle, setIsShowTitle] = useState(false);
-  const { currentScrollArea, clientHeight, getScreenInforByName } =
+  const [isShowSPBS, setIsShowSPBS] = useState(false);
+  const [isShowSPKM, setIsShowSPKM] = useState(false);
+  const [isShowSPTS, setIsShowSPTS] = useState(false);
+  const { currentScrollArea, clientHeight, screenWidth, checkIsBelow } =
     useContext(LayoutContext);
-  const [isSticky, setIsSticky] = useState(false);
   const [bgD4TStyle, setBgD4TStyle] = useState({
     translateX: -2000,
     scale: 1.5,
@@ -181,152 +189,204 @@ const Sponsors = () => {
     translateY: 600,
   });
 
-  /**
-   *
-   * like running through tree
-   *
-   * ovh
-   *      title not show
-   *      content not show
-   *      bg4 opacity 0, scale 1.5, x inifitely small(2000), y inifitely big(1000)
-   *      bg8 opacity 0, scale 1.4, x inifitely big(2000), y inifitely big(1000)
-   *      title disappear
-   *
-   * 50vh
-   *      show title
-   *      bg4 opacity 0->1,  x -750 -> -150, y 1000->0
-   *      bg8 opacity 0->1,  x 750 -> 150, y 1000->0
-   *      content disappear
-   *
-   * 100vh
-   *
-   *      show content
-   *      bg4 x -150 -> 0, scale 1.5 -> 1
-   *      bg8 x 150 -> 0, scale 1.4 -> 1
-   *
-   * 100vh+500
-   *      bg4 x 0, scale 1->0, opacity 1->0
-   *      bg8 x 0, scale 1->0, opacity 1->0
-   *
-   * 100vh+900
-   *
-   *    title show
-   *      content show
-   *
-   */
+  const isBelowCurrentArea = useMemo(() => checkIsBelow(Name), [checkIsBelow]);
   useEffect(() => {
-    const {
-      name: scrollAreaName,
-      offset: scrollAreaOffset,
-      order: scrollAreaOrder,
-    } = currentScrollArea;
+    const { name: scrollAreaName, offset: scrollAreaOffset } =
+      currentScrollArea;
+
+    let showTitle = false;
+    let showSPBS = false,
+      showSPKM = false,
+      showSPTS = false;
+    let bgD4AdedStyle = {
+      translateX: -2000,
+      scale: 2,
+      opacity: 1,
+      translateY: 1000,
+    };
+    let bgD8AdedStyle = {
+      translateX: 2000,
+      scale: 1.4,
+      opacity: 1,
+      translateY: 1000,
+    };
 
     if (scrollAreaName === Name) {
-      setIsSticky(true);
-
-      if (
-        scrollAreaOffset >= clientHeight / 2 &&
-        scrollAreaOffset < clientHeight
-      ) {
-        setIsShowTitle(true);
-      } else if (scrollAreaOffset >= clientHeight) {
-        setIsShowContent(true);
-      }
-
-      if (scrollAreaOffset < clientHeight / 2) {
-        setBgD4TStyle({
-          translateX: -2000,
-          scale: 2,
-          opacity: 1,
-          translateY: 1000,
-        });
-        setBgD8TStyle({
-          translateX: 2000,
-          scale: 1.4,
-          opacity: 1,
-          translateY: 1000,
-        });
-      } else if (
-        scrollAreaOffset >= clientHeight / 2 &&
-        scrollAreaOffset < clientHeight
-      ) {
-        setBgD4TStyle((pre) => ({
-          ...pre,
-          scale:
-            2 -
-            (0.5 * (scrollAreaOffset - clientHeight / 2) * 2) / clientHeight,
-          translateX:
-            -750 +
-            (600 * (scrollAreaOffset - clientHeight / 2) * 2) / clientHeight,
-          translateY:
-            1000 -
-            (1000 * (scrollAreaOffset - clientHeight / 2) * 2) / clientHeight,
-        }));
-        setBgD8TStyle((pre) => ({
-          ...pre,
-          scale:
-            2 -
-            (0.6 * (scrollAreaOffset - clientHeight / 2) * 2) / clientHeight,
-          translateX:
-            750 -
-            (600 * (scrollAreaOffset - clientHeight / 2) * 2) / clientHeight,
-          translateY:
-            1000 -
-            (1000 * (scrollAreaOffset - clientHeight / 2) * 2) / clientHeight,
-        }));
-      } else if (
-        scrollAreaOffset >= clientHeight &&
-        scrollAreaOffset < clientHeight + 500
-      ) {
-        setBgD4TStyle((pre) => ({
-          ...pre,
-          translateX: -150 + (150 * (scrollAreaOffset - clientHeight)) / 500,
-          translateY: 0,
-          scale: 1.5 - (0.5 * (scrollAreaOffset - clientHeight)) / 500,
-        }));
-        setBgD8TStyle((pre) => ({
-          ...pre,
-          translateX: 150 - (150 * (scrollAreaOffset - clientHeight)) / 500,
-          translateY: 0,
-          scale: 1.4 - (0.4 * (scrollAreaOffset - clientHeight)) / 500,
-        }));
-      } else if (
-        scrollAreaOffset > clientHeight + 500 &&
-        scrollAreaOffset < clientHeight + 900
-      ) {
-        setBgD4TStyle((pre) => ({
-          ...pre,
-          scale: 1 - (1 * (scrollAreaOffset - clientHeight - 500)) / 400,
-          opacity: 1 - (1 * (scrollAreaOffset - clientHeight - 500)) / 400,
-        }));
-        setBgD8TStyle((pre) => ({
-          ...pre,
-          scale: 1 - (1 * (scrollAreaOffset - clientHeight - 500)) / 400,
-          opacity: 1 - (1 * (scrollAreaOffset - clientHeight - 500)) / 400,
-        }));
+      if (screenWidth < 1200) {
+        if (scrollAreaOffset > 100 && scrollAreaOffset <= clientHeight / 2) {
+          showTitle = true;
+        } else if (
+          scrollAreaOffset > clientHeight / 2 &&
+          scrollAreaOffset <= clientHeight / 2 + 300
+        ) {
+          showTitle = true;
+          showSPBS = true;
+        } else if (
+          scrollAreaOffset > clientHeight / 2 + 300 &&
+          scrollAreaOffset <= clientHeight / 2 + 550
+        ) {
+          showTitle = true;
+          showSPBS = true;
+          showSPTS = true;
+        } else if (scrollAreaOffset > clientHeight / 2 + 550) {
+          showTitle = true;
+          showSPBS = true;
+          showSPTS = true;
+          showSPKM = true;
+        }
       } else {
-        setBgD4TStyle({ translateX: 0, scale: 0, opacity: 0, translateY: 0 });
-        setBgD8TStyle({ translateX: 0, scale: 0, opacity: 0, translateY: 0 });
+        /**
+         * like running through tree
+         *
+         * 0vh
+         *      competition scale
+         *      title not show
+         *      bg4 opacity 0, scale 1.5, x inifitely small(2000), y inifitely big(1000)
+         *      bg8 opacity 0, scale 1.4, x inifitely big(2000), y inifitely big(1000)
+         *      three sponsors not show
+         * 100vh
+         *      title show
+         *      bg4 opacity 0->1,  x -750 -> -150, y 1000->0
+         *      bg8 opacity 0->1,  x 750 -> 150, y 1000->0
+         *      three sponsors not show
+         *
+         * 200vh
+         *      show title
+         *      bg4 x -150 -> 0, scale 1.5 -> 1
+         *      bg8 x 150 -> 0, scale 1.4 -> 1
+         *      three sponsors show
+         * 300vh
+         *      show title
+         *      bg4 x 0, scale 1->0, opacity 1->0
+         *      bg4 x 0, scale 1->0, opacity 1->0
+         *      three sponsors show
+         *
+         * 400vh
+         *      show title
+         *      bg4 hide x 0, scale 0, opacity 0
+         *      bg8 hide x 0, scale 0, opacity 0
+         *      three sponsors show
+         * 500vh
+         *      all hide
+         *
+         *
+         *
+         */
+
+        if (
+          scrollAreaOffset > clientHeight &&
+          scrollAreaOffset <= clientHeight * 2
+        ) {
+          showTitle = true;
+          bgD4AdedStyle = {
+            scale: 2 - (0.5 * (scrollAreaOffset - clientHeight)) / clientHeight,
+            translateX:
+              -750 + (600 * (scrollAreaOffset - clientHeight)) / clientHeight,
+            translateY:
+              1000 - (1000 * (scrollAreaOffset - clientHeight)) / clientHeight,
+            opacity: 1,
+          };
+          bgD8AdedStyle = {
+            scale: 2 - (0.6 * (scrollAreaOffset - clientHeight)) / clientHeight,
+            translateX:
+              750 - (600 * (scrollAreaOffset - clientHeight)) / clientHeight,
+            translateY:
+              1000 - (1000 * (scrollAreaOffset - clientHeight)) / clientHeight,
+            opacity: 1,
+          };
+        } else if (
+          scrollAreaOffset > clientHeight * 2 &&
+          scrollAreaOffset <= clientHeight * 3
+        ) {
+          showTitle = true;
+          bgD4AdedStyle = {
+            translateX:
+              -150 +
+              (150 * (scrollAreaOffset - clientHeight * 2)) / clientHeight,
+            translateY: 0,
+            scale:
+              1.5 -
+              (0.5 * (scrollAreaOffset - clientHeight * 2)) / clientHeight,
+          };
+          bgD8AdedStyle = {
+            translateX:
+              150 -
+              (150 * (scrollAreaOffset - clientHeight * 2)) / clientHeight,
+            translateY: 0,
+            scale:
+              1.4 -
+              (0.4 * (scrollAreaOffset - clientHeight * 2)) / clientHeight,
+          };
+        } else if (
+          scrollAreaOffset > clientHeight * 3 &&
+          scrollAreaOffset <= clientHeight * 4
+        ) {
+          showTitle = true;
+          showSPBS = showSPKM = showSPTS = true;
+
+          bgD4AdedStyle = {
+            scale:
+              1 - (1 * (scrollAreaOffset - clientHeight * 3)) / clientHeight,
+            opacity:
+              1 - (1 * (scrollAreaOffset - clientHeight * 3)) / clientHeight,
+          };
+          bgD8AdedStyle = {
+            scale:
+              1 - (1 * (scrollAreaOffset - clientHeight * 3)) / clientHeight,
+            opacity:
+              1 - (1 * (scrollAreaOffset - clientHeight * 4)) / clientHeight,
+          };
+        } else if (
+          scrollAreaOffset > clientHeight * 4 &&
+          scrollAreaOffset <= clientHeight * 5
+        ) {
+          showTitle = true;
+          showSPBS = true;
+          showSPKM = true;
+          showSPTS = true;
+          bgD4AdedStyle = {
+            ...bgHiddenStyle,
+          };
+          bgD8AdedStyle = {
+            ...bgHiddenStyle,
+          };
+        } else {
+          bgD4AdedStyle = {
+            ...bgHiddenStyle,
+          };
+          bgD8AdedStyle = {
+            ...bgHiddenStyle,
+          };
+        }
       }
     } else {
-      setBgD4TStyle({ translateX: 0, scale: 0, opacity: 0, translateY: 0 });
-      setBgD8TStyle({ translateX: 0, scale: 0, opacity: 0, translateY: 0 });
-      setIsSticky(false);
-      const sponsorsScreen = getScreenInforByName("sponsors");
-      if (scrollAreaOrder < sponsorsScreen?.order) {
-        setIsShowContent(false);
-        setIsShowTitle(false);
+      if (screenWidth < 1200) {
+        if (isBelowCurrentArea) {
+          showTitle = true;
+          showSPBS = true;
+          showSPKM = true;
+          showSPTS = true;
+        }
+      } else {
+        bgD4AdedStyle = { translateX: 0, scale: 0, opacity: 0, translateY: 0 };
+        bgD8AdedStyle = { translateX: 0, scale: 0, opacity: 0, translateY: 0 };
       }
     }
+    setIsShowTitle(showTitle);
+    setIsShowSPBS(showSPBS);
+    setIsShowSPKM(showSPKM);
+    setIsShowSPTS(showSPTS);
+    setBgD4TStyle((pre) => ({ ...pre, ...bgD4AdedStyle }));
+    setBgD8TStyle((pre) => ({ ...pre, ...bgD8AdedStyle }));
   }, [currentScrollArea, clientHeight]);
 
   return (
-    <Container isSticky={isSticky} id="sponsors">
-      <PageTitle isShow={isShowTitle} titleText="贊助單位" />
+    <Container id="sponsors">
+      <FixedPageTitle isShow={isShowTitle} titleText="贊助單位" />
       <ImageBgDecorate4 src={iconDecorate4} tStyle={bgD4TStyle} />
       <ImageBgDecorate8 src={iconDecorate8} tStyle={bgD8TStyle} />
-      <Content isSticky={isSticky}>
-        <SponsorBS isShow={isShowContent}>
+      <Content>
+        <SponsorBS isShow={isShowSPBS}>
           <SponsorIconBTN>
             <a
               href="https://kdanmobile.teamdoor.io/"
@@ -338,19 +398,7 @@ const Sponsors = () => {
           </SponsorIconBTN>
           <SponsorTitle>#版塊設計</SponsorTitle>
         </SponsorBS>
-        <SponsorTS isShow={isShowContent}>
-          <SponsorIconBTN>
-            <a
-              href="https://www.titansoft.com/tw/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <ImageLogoKDAN src={iconLogoKDAN} />
-            </a>
-          </SponsorIconBTN>
-          <SponsorTitle>#鈦坦科技</SponsorTitle>
-        </SponsorTS>
-        <SponsorKM isShow={isShowContent}>
+        <SponsorTS isShow={isShowSPTS}>
           <SponsorIconBTN>
             <a
               href="https://blockstudio.tw/career/"
@@ -358,6 +406,18 @@ const Sponsors = () => {
               rel="noopener noreferrer"
             >
               <ImageLogoTitan src={iconLogoTS} />
+            </a>
+          </SponsorIconBTN>
+          <SponsorTitle>#鈦坦科技</SponsorTitle>
+        </SponsorTS>
+        <SponsorKM isShow={isShowSPKM}>
+          <SponsorIconBTN>
+            <a
+              href="https://www.titansoft.com/tw/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <ImageLogoKDAN src={iconLogoKDAN} />
             </a>
           </SponsorIconBTN>
           <SponsorTitle>#凱鈿科技</SponsorTitle>
