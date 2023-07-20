@@ -11,55 +11,65 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   @media screen and (min-width: 1200px) {
-    height: calc(100vh + 1000px);
+    height: 100vh;
   }
 `;
 
-const Content = styled.div`
-  @media screen and (max-height: 700px) {
-    transform: translateY(-50px);
-  }
-  @media screen and (min-width: 1200px) {
-    opacity: ${(props) => props.tStyle.opacity};
-    transform: translateY(500px);
-  }
-`;
 const Title = styled.h2`
   color: var(--highlight-color-default);
   text-align: center;
+`;
+const SignUpBTNWrapper = styled.div`
+  opacity: ${(props) => (props.isShow ? 1 : 0)};
+  transition: opacity ${(props) => (props.isShow ? "1s" : "0s")}
+    ${(props) => (props.isShow ? "1s" : "0s")};
 `;
 
 const ImageBigLogo = styled.img`
   width: 226px;
   height: auto;
+  transform: translateY(${(props) => (props.isShow ? 0 : "500")}px);
+  opacity: ${(props) => (props.isShow ? 1 : 0)};
+  transition-property: opacity, transform;
+  transition-duration: 0.5s, 1s;
   @media screen and (min-width: 601px) {
     width: 520px;
   }
 `;
 
 function SignUp() {
-  const [contentTStyle, setContentTStyle] = useState({ opacity: 0 });
-  const { clientHeight, currentScrollArea } = useContext(LayoutContext);
-
+  const [isShowBigLogo, setIsShowBigLogo] = useState(false);
+  const [isShowBTN, setIsShowBTN] = useState(false);
+  const { clientHeight, currentScrollArea, screenWidth } =
+    useContext(LayoutContext);
   useEffect(() => {
     const { name: scrollAreaName, offset: scrollAreaOffset } =
       currentScrollArea;
+    let showBigLogo = false;
+    let showBTN = false;
     if (scrollAreaName === "signUp") {
-      if (scrollAreaOffset >= 200 + clientHeight) {
-        setContentTStyle((pre) => ({
-          ...pre,
-          opacity: 0 + (scrollAreaOffset - clientHeight - 200) / 400,
-        }));
+      if (screenWidth < 1200) {
+        if (scrollAreaOffset >= clientHeight / 2) {
+          showBigLogo = true;
+          showBTN = true;
+        }
+      } else {
+        if (scrollAreaOffset >= clientHeight / 2) {
+          showBigLogo = true;
+          showBTN = true;
+        }
       }
     }
+    setIsShowBigLogo(showBigLogo);
+    setIsShowBTN(showBTN);
   }, [currentScrollArea, clientHeight]);
   return (
     <Container id="signUp">
-      <Content tStyle={contentTStyle}>
-        <ImageBigLogo src={iconLogo} />
+      <ImageBigLogo src={iconLogo} isShow={isShowBigLogo} />
+      <SignUpBTNWrapper isShow={isShowBTN}>
         <JoinButton isShowHand />
         <Title>立即報名</Title>
-      </Content>
+      </SignUpBTNWrapper>
     </Container>
   );
 }
